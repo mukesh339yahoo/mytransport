@@ -1,0 +1,95 @@
+{
+ "app": "mytransport",
+ "charts": [],
+ "content": "[{\"id\":\"o36a8LX6Lb\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Welcome to the Transport workspace</span>\",\"col\":12}},{\"id\":\"jZAxKkBnah\",\"type\":\"paragraph\",\"data\":{\"text\":\"Click on \\n\\t\\t\\t\\n\\t\\t\\t\\n\\t\\t to edit\",\"col\":12}},{\"id\":\"XsHzxAZLS0\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Lorry Receipt\",\"col\":3}},{\"id\":\"pOXZxEm6o0\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Challan\",\"col\":3}},{\"id\":\"sBy2VH51yC\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Invoice\",\"col\":3}},{\"id\":\"BwDc80bnNX\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Expense Voucher\",\"col\":3}},{\"id\":\"bDKOX3avdH\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Money Receipt\",\"col\":3}},{\"id\":\"faB-d93fxB\",\"type\":\"paragraph\",\"data\":{\"text\":\"Reports\",\"col\":12}},{\"id\":\"GHKRl4Qw3r\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Lr Register\",\"col\":3}},{\"id\":\"zZFm11KiPJ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Lr Status Report\",\"col\":3}},{\"id\":\"ksGD5E6Wll\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Challan Costing Report\",\"col\":3}}]",
+ "creation": "2026-06-07 16:34:37.015105",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "hide_custom": 0,
+ "icon": "truck",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Transport",
+ "link_type": "DocType",
+ "links": [],
+ "modified": "2026-06-07 16:52:20.219924",
+ "modified_by": "Administrator",
+ "module": "Mytransport",
+ "name": "Transport",
+ "number_cards": [],
+ "owner": "Administrator",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 0.0,
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Lorry Receipt",
+   "link_to": "Lorry Receipt",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Challan",
+   "link_to": "Challan",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Sales Invoice",
+   "link_to": "Sales Invoice",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Expense Voucher",
+   "link_to": "Expense Voucher",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Money Receipt",
+   "link_to": "Money Receipt",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Lr Register",
+   "link_to": "LR Register",
+   "report_ref_doctype": "Lorry Receipt",
+   "type": "Report"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Lr Status Report",
+   "link_to": "LR Status Report",
+   "report_ref_doctype": "Lorry Receipt",
+   "type": "Report"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Challan Costing Report",
+   "link_to": "Challan Costing Report",
+   "report_ref_doctype": "Challan",
+   "type": "Report"
+  }
+ ],
+ "title": "Transport",
+ "type": "Workspace"
+}
