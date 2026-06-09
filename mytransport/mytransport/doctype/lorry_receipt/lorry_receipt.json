@@ -15,9 +15,13 @@
   "payment_terms",
   "party_details_sec",
   "consignor",
+  "consignor_address",
+  "consignor_gst_no",
   "from_city",
   "column_break_1",
   "consignee",
+  "consignee_address",
+  "consignee_gst_no",
   "to_city",
   "vehicle_details_sec",
   "challan_number",
@@ -92,6 +96,20 @@
    "reqd": 1
   },
   {
+   "fieldname": "consignor_address",
+   "fieldtype": "Small Text",
+   "label": "Consignor Address",
+   "fetch_from": "consignor.primary_address",
+   "read_only": 1
+  },
+  {
+   "fieldname": "consignor_gst_no",
+   "fieldtype": "Data",
+   "label": "Consignor GST No",
+   "fetch_from": "consignor.tax_id",
+   "read_only": 1
+  },
+  {
    "fieldname": "from_city",
    "fieldtype": "Link",
    "label": "From City",
@@ -108,6 +126,20 @@
    "label": "Consignee",
    "options": "Customer",
    "reqd": 1
+  },
+  {
+   "fieldname": "consignee_address",
+   "fieldtype": "Small Text",
+   "label": "Consignee Address",
+   "fetch_from": "consignee.primary_address",
+   "read_only": 1
+  },
+  {
+   "fieldname": "consignee_gst_no",
+   "fieldtype": "Data",
+   "label": "Consignee GST No",
+   "fetch_from": "consignee.tax_id",
+   "read_only": 1
   },
   {
    "fieldname": "to_city",
