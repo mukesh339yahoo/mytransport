@@ -40,6 +40,14 @@
   "other_charges",
   "total_amount",
   "billing_sec",
+  "credit_account",
+  "invoice_number",
+  "invoice_value",
+  "gst_paid_by",
+  "column_break_4",
+  "delivery_at",
+  "remarks",
+  "challan_remarks",
   "sales_invoice",
   "receipt_status",
   "paid_amount",
@@ -239,6 +247,52 @@
    "fieldname": "billing_sec",
    "fieldtype": "Section Break",
    "label": "Billing Details"
+  },
+  {
+   "fieldname": "credit_account",
+   "fieldtype": "Link",
+   "label": "Credit A/c",
+   "options": "Account",
+   "read_only": 1
+  },
+  {
+   "fieldname": "invoice_number",
+   "fieldtype": "Data",
+   "label": "Invoice Number",
+   "read_only": 1
+  },
+  {
+   "fieldname": "invoice_value",
+   "fieldtype": "Currency",
+   "label": "Invoice Value",
+   "read_only": 1
+  },
+  {
+   "fieldname": "gst_paid_by",
+   "fieldtype": "Select",
+   "label": "GST Paid By",
+   "options": "Consignor\nConsignee\nTransporter"
+  },
+  {
+   "fieldname": "column_break_4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "delivery_at",
+   "fieldtype": "Select",
+   "label": "Delivery At",
+   "options": "Door Delivery\nGodown Delivery"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "challan_remarks",
+   "fieldtype": "Small Text",
+   "label": "Challan Remarks",
+   "read_only": 1
   },
   {
    "fieldname": "sales_invoice",
