@@ -48,7 +48,7 @@
   "delivery_at",
   "remarks",
   "challan_remarks",
-  "sales_invoice",
+  "transport_invoice",
   "receipt_status",
   "paid_amount",
   "outstanding_amount",
@@ -295,10 +295,10 @@
    "read_only": 1
   },
   {
-   "fieldname": "sales_invoice",
+   "fieldname": "transport_invoice",
    "fieldtype": "Link",
-   "label": "Sales Invoice",
-   "options": "Sales Invoice",
+   "label": "Transport Invoice",
+   "options": "Transport Invoice",
    "read_only": 1
   },
   {

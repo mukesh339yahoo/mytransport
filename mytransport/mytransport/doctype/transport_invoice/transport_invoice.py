@@ -48,12 +48,12 @@ class TransportInvoice(Document):
                 lr = frappe.get_doc("Lorry Receipt", item.lorry_receipt)
                 if is_submit:
                     lr.status = "Billed"
-                    lr.sales_invoice = self.name
+                    lr.transport_invoice = self.name
                     lr.invoice_number = self.name
                     lr.invoice_value = self.total_amount
                 else:
                     lr.status = "Unbilled"
-                    lr.sales_invoice = None
+                    lr.transport_invoice = None
                     lr.invoice_number = None
                     lr.invoice_value = 0
                 lr.save(ignore_permissions=True)
