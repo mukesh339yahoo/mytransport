@@ -2,6 +2,11 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on('Money Receipt', {
+    onload: function(frm) {
+        if (frm.is_new() && !frm.doc.company) {
+            frm.set_value("company", frappe.defaults.get_default("Company"));
+        }
+    },
     setup: function(frm) {
         frm.set_query("deposit_account", function() {
             let ac_type = frm.doc.payment_mode === "Cash" ? "Cash" : "Bank";
