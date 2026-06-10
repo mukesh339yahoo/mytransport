@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Effective Date:** [Insert Date]
+**Effective Date:** June 10, 2026
 
 Welcome to **MyTransport**. We are committed to protecting your personal information and your right to privacy. If you have any questions or concerns about this privacy notice or our practices with regard to your personal information, please contact us.
 
@@ -36,5 +36,5 @@ Depending on your location, you may have the right to request access to the pers
 We may update this privacy notice from time to time. The updated version will be indicated by an updated "Effective Date" and the updated version will be effective as soon as it is accessible.
 
 ## 8. Contact Us
-If you have questions or comments about this notice, you may email us at [Insert Email Address] or by post to:
+If you have questions or comments about this notice, you may email us at ridhiratech@gmail.com or by post to:
 [Insert Company Address]
