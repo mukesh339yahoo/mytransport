@@ -25,7 +25,12 @@
   "outstanding_amount",
   "terms_section",
   "remarks",
-  "terms_and_conditions"
+  "terms_and_conditions",
+  "accounting_section",
+  "company",
+  "debit_to",
+  "column_break_accounting",
+  "income_account"
  ],
  "fields": [
   {
@@ -135,13 +140,43 @@
    "fieldname": "terms_and_conditions",
    "fieldtype": "Text Editor",
    "label": "Terms and Conditions"
+  },
+  {
+   "fieldname": "accounting_section",
+   "fieldtype": "Section Break",
+   "label": "Accounting"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "debit_to",
+   "fieldtype": "Link",
+   "label": "Debit To",
+   "options": "Account",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_accounting",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "income_account",
+   "fieldtype": "Link",
+   "label": "Income Account",
+   "options": "Account",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-06-10 15:31:02.684743",
+ "modified": "2026-06-10 16:29:07.060953",
  "modified_by": "Administrator",
  "module": "Mytransport",
  "name": "Transport Invoice",

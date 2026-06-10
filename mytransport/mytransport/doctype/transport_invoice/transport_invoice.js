@@ -2,10 +2,48 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("Transport Invoice", {
+	setup: function(frm) {
+		frm.set_query("debit_to", function() {
+			return {
+				filters: {
+					"company": frm.doc.company,
+					"account_type": "Receivable",
+					"is_group": 0
+				}
+			};
+		});
+		frm.set_query("income_account", function() {
+			return {
+				filters: {
+					"company": frm.doc.company,
+					"root_type": "Income",
+					"is_group": 0
+				}
+			};
+		});
+	},
+
 	refresh(frm) {
 		if (frm.doc.docstatus === 0 && !frm.is_new()) {
 			frm.add_custom_button(__("Get Unbilled LRs"), function() {
 				frm.events.get_unbilled_lrs(frm);
+			});
+		}
+	},
+	
+	company: function(frm) {
+		if (frm.doc.company) {
+			frappe.db.get_value('Company', frm.doc.company, 'default_receivable_account')
+			.then(r => {
+				if (r.message && !frm.doc.debit_to) {
+					frm.set_value('debit_to', r.message.default_receivable_account);
+				}
+			});
+			frappe.db.get_value('Company', frm.doc.company, 'default_income_account')
+			.then(r => {
+				if (r.message && !frm.doc.income_account) {
+					frm.set_value('income_account', r.message.default_income_account);
+				}
 			});
 		}
 	},
