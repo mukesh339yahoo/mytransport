@@ -161,8 +161,9 @@
   },
   {
    "fieldname": "vehicle_number",
-   "fieldtype": "Data",
-   "label": "Vehicle Number"
+   "fieldtype": "Link",
+   "label": "Vehicle Number",
+   "options": "Hired Vehicle"
   },
   {
    "fieldname": "column_break_2",
@@ -171,7 +172,8 @@
   {
    "fieldname": "driver_name",
    "fieldtype": "Data",
-   "label": "Driver Name"
+   "label": "Driver Name",
+   "fetch_from": "vehicle_number.driver_name"
   },
   {
    "fieldname": "items_sec",
