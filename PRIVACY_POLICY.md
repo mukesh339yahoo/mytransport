@@ -37,4 +37,4 @@ We may update this privacy notice from time to time. The updated version will be
 
 ## 8. Contact Us
 If you have questions or comments about this notice, you may email us at ridhiratech@gmail.com or by post to:
-[Insert Company Address]
+B-307, Mahduvan 6, Pune - 411060

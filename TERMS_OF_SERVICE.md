@@ -34,4 +34,4 @@ We reserve the right, at our sole discretion, to modify or replace these Terms a
 ## 9. Contact Us
 If you have any questions about these Terms, please contact us:
 - Email: ridhiratech@gmail.com
-- Phone: [Insert Phone Number]
+- Phone: +91-820-841-1979
