@@ -22,7 +22,7 @@ class MoneyReceipt(Document):
         if self.date:
             pe.reference_date = self.date
 
-        # Group allocations by Sales Invoice
+        # Group allocations by Transport Invoice
         invoice_allocations = {}
         for item in self.allocated_lrs:
             lr_doc = frappe.get_doc("Lorry Receipt", item.lorry_receipt)
@@ -31,12 +31,12 @@ class MoneyReceipt(Document):
             lr_doc.paid_amount += item.allocated_amount
             lr_doc.save(ignore_permissions=True)
             
-            if not lr_doc.sales_invoice:
-                frappe.throw(f"LR {lr_doc.name} is not associated with a Sales Invoice. Cannot allocate payment.")
+            if not lr_doc.transport_invoice:
+                frappe.throw(f"LR {lr_doc.name} is not associated with a Transport Invoice. Cannot allocate payment.")
                 
-            if lr_doc.sales_invoice not in invoice_allocations:
-                invoice_allocations[lr_doc.sales_invoice] = 0
-            invoice_allocations[lr_doc.sales_invoice] += item.allocated_amount
+            if lr_doc.transport_invoice not in invoice_allocations:
+                invoice_allocations[lr_doc.transport_invoice] = 0
+            invoice_allocations[lr_doc.transport_invoice] += item.allocated_amount
 
         # Set Party Account
         pe.paid_from = frappe.db.get_value("Customer", self.customer, "default_account")
@@ -47,7 +47,7 @@ class MoneyReceipt(Document):
         # Add references to Payment Entry
         for inv, amount in invoice_allocations.items():
             pe.append("references", {
-                "reference_doctype": "Sales Invoice",
+                "reference_doctype": "Transport Invoice",
                 "reference_name": inv,
                 "allocated_amount": amount
             })
