@@ -1,0 +1,79 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "creation": "2026-06-10 15:30:58.816716",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "lorry_receipt",
+  "date",
+  "from_city",
+  "to_city",
+  "vehicle_number",
+  "amount"
+ ],
+ "fields": [
+  {
+   "fieldname": "lorry_receipt",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Lorry Receipt",
+   "options": "Lorry Receipt",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "lorry_receipt.date",
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Date",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "lorry_receipt.from_city",
+   "fieldname": "from_city",
+   "fieldtype": "Data",
+   "label": "From City",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "lorry_receipt.to_city",
+   "fieldname": "to_city",
+   "fieldtype": "Data",
+   "label": "To City",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "lorry_receipt.vehicle_number",
+   "fieldname": "vehicle_number",
+   "fieldtype": "Data",
+   "label": "Vehicle Number",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "lorry_receipt.total_amount",
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Amount",
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-06-10 15:30:58.816716",
+ "modified_by": "Administrator",
+ "module": "Mytransport",
+ "name": "Transport Invoice Item",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}
