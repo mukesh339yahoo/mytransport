@@ -2,6 +2,11 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("Expense Voucher", {
+    onload: function(frm) {
+        if (frm.is_new() && !frm.doc.company) {
+            frm.set_value("company", frappe.defaults.get_default("Company"));
+        }
+    },
     setup: function(frm) {
         frm.set_query("payment_account", function() {
             return {
