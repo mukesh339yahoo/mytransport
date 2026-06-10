@@ -33,8 +33,11 @@
   "freight_details_sec",
   "basic_freight",
   "hamali_charges",
+  "detention_charges",
   "column_break_3",
   "bilty_charges",
+  "rto_charges",
+  "other_charges",
   "total_amount",
   "billing_sec",
   "sales_invoice",
@@ -202,6 +205,11 @@
    "label": "Hamali / Loading"
   },
   {
+   "fieldname": "detention_charges",
+   "fieldtype": "Currency",
+   "label": "Detention Charges"
+  },
+  {
    "fieldname": "column_break_3",
    "fieldtype": "Column Break"
   },
@@ -209,6 +217,16 @@
    "fieldname": "bilty_charges",
    "fieldtype": "Currency",
    "label": "Bilty / Docket Charges"
+  },
+  {
+   "fieldname": "rto_charges",
+   "fieldtype": "Currency",
+   "label": "RTO Charges"
+  },
+  {
+   "fieldname": "other_charges",
+   "fieldtype": "Currency",
+   "label": "Other Charges"
   },
   {
    "fieldname": "total_amount",
