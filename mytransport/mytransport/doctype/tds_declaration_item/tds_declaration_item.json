@@ -1,0 +1,50 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "creation": "2026-06-12 15:35:38.761252",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "financial_year",
+  "tds_declaration_challan",
+  "tds_challan_date"
+ ],
+ "fields": [
+  {
+   "fieldname": "financial_year",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Financial Year",
+   "reqd": 1
+  },
+  {
+   "fieldname": "tds_declaration_challan",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "TDS Declaration Challan"
+  },
+  {
+   "fieldname": "tds_challan_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "TDS Challan Date"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-06-12 15:55:53.846119",
+ "modified_by": "Administrator",
+ "module": "Mytransport",
+ "name": "TDS Declaration Item",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

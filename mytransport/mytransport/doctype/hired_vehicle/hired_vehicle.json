@@ -16,9 +16,7 @@
   "owner_phone_no",
   "owner_address",
   "owner_pan_no",
-  "tds_declaration",
-  "tds_declaration_challan",
-  "tds_challan_date",
+  "tds_declarations",
   "driver_details",
   "driver_name",
   "driver_mobile_no"
@@ -70,12 +68,6 @@
    "label": "Owner PAN No"
   },
   {
-   "default": "0",
-   "fieldname": "tds_declaration",
-   "fieldtype": "Check",
-   "label": "TDS Declaration"
-  },
-  {
    "fieldname": "driver_details",
    "fieldtype": "Section Break",
    "label": "Driver Details"
@@ -92,22 +84,16 @@
    "label": "Driver Mobile No"
   },
   {
-   "fieldname": "tds_declaration_challan",
-   "fieldtype": "Data",
-   "label": "TDS Declaration Challan",
-   "depends_on": "eval:doc.tds_declaration==1"
-  },
-  {
-   "fieldname": "tds_challan_date",
-   "fieldtype": "Date",
-   "label": "TDS Challan Date",
-   "depends_on": "eval:doc.tds_declaration==1"
+   "fieldname": "tds_declarations",
+   "fieldtype": "Table",
+   "label": "TDS Declarations",
+   "options": "TDS Declaration Item"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-06-10 09:31:00.693313",
+ "modified": "2026-06-12 15:35:41.977737",
  "modified_by": "Administrator",
  "module": "Mytransport",
  "name": "Hired Vehicle",
