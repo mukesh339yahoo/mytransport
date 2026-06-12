@@ -28,21 +28,36 @@ frappe.ui.form.on("Lorry Receipt", {
 
 frappe.ui.form.on("LR Item", {
 	lorry_freight: function(frm, cdt, cdn) {
-		calculate_basic_freight(frm);
+		calculate_item_totals(frm);
+	},
+	qty: function(frm, cdt, cdn) {
+		calculate_item_totals(frm);
+	},
+	actual_weight: function(frm, cdt, cdn) {
+		calculate_item_totals(frm);
 	},
 	items_remove: function(frm) {
-		calculate_basic_freight(frm);
+		calculate_item_totals(frm);
 	}
 });
 
-function calculate_basic_freight(frm) {
+function calculate_item_totals(frm) {
 	let total_basic = 0;
+	let total_weight = 0;
+	let total_packages = 0;
+	
 	if (frm.doc.items) {
 		frm.doc.items.forEach(function(item) {
 			total_basic += flt(item.lorry_freight);
+			total_weight += flt(item.actual_weight);
+			total_packages += cint(item.qty);
 		});
 	}
+	
 	frm.set_value("basic_freight", total_basic);
+	frm.set_value("total_weight", total_weight);
+	frm.set_value("total_packages", total_packages);
+	
 	calculate_total_amount(frm);
 }
 

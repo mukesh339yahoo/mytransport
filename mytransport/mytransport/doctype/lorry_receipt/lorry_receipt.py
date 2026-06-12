@@ -7,8 +7,10 @@ from frappe.utils import flt
 
 class LorryReceipt(Document):
     def before_save(self):
-        # Calculate Basic Freight from items
+        # Calculate totals from items
         self.basic_freight = sum([flt(item.lorry_freight) for item in self.get("items")])
+        self.total_weight = sum([flt(item.actual_weight) for item in self.get("items")])
+        self.total_packages = sum([frappe.utils.cint(item.qty) for item in self.get("items")])
         
         # Calculate Total Amount from freight charges
         self.total_amount = (

@@ -33,6 +33,8 @@
   "items_sec",
   "items",
   "freight_details_sec",
+  "total_weight",
+  "total_packages",
   "basic_freight",
   "hamali_charges",
   "detention_charges",
@@ -341,6 +343,18 @@
   {
    "fieldname": "column_break_top_2",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total_weight",
+   "fieldtype": "Float",
+   "label": "Total Weight",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_packages",
+   "fieldtype": "Int",
+   "label": "Total Packages",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
