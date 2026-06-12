@@ -8,7 +8,6 @@ frappe.ui.form.on("Challan", {
 	advance: function(frm) {
 		calculate_balance(frm);
 	},
-
 	vehicle_number: function(frm) {
 		if (frm.doc.vehicle_number) {
 			frappe.db.get_doc("Hired Vehicle", frm.doc.vehicle_number)
@@ -40,7 +39,12 @@ frappe.ui.form.on("Challan", {
 						frm.set_value("tds_percent", 1);
 						frm.set_value("tds_challan", "");
 					}
-				
+				});
+		}
+	},
+	tds_percent: function(frm) {
+		calculate_tds(frm);
+	},
 	tds_declaration: function(frm) {
 		if (frm.doc.tds_declaration && !frm.doc.tds_challan) {
 			frm.set_value("tds_percent", 0);
@@ -85,13 +89,6 @@ frappe.ui.form.on("Challan", {
 					});
 			});
 		}
-	},
-
-});
-		}
-	},
-	tds_percent: function(frm) {
-		calculate_tds(frm);
 	}
 });
 
@@ -162,9 +159,7 @@ function get_current_financial_year() {
 	}
 	
 	return start_year + "-" + end_year;
-
 }
-
 
 function calculate_balance(frm) {
 	let total_hire_amount = flt(frm.doc.total_hire_amount);
