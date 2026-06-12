@@ -7,7 +7,7 @@ frappe.ui.form.on("Challan", {
 	},
 	advance: function(frm) {
 		calculate_balance(frm);
-	}
+	},
 
 	vehicle_number: function(frm) {
 		if (frm.doc.vehicle_number) {
