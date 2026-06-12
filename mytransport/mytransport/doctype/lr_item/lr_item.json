@@ -8,18 +8,20 @@
  "engine": "InnoDB",
  "field_order": [
   "item_description",
+  "packaging_type",
+  "load_type",
   "qty",
   "actual_weight",
   "charged_weight",
-  "rate",
-  "amount"
+  "lorry_freight"
  ],
  "fields": [
   {
    "fieldname": "item_description",
-   "fieldtype": "Data",
+   "fieldtype": "Select",
    "in_list_view": 1,
-   "label": "Item Description"
+   "label": "Item Description",
+   "options": "Oil\nPlastic Dana\nGenerator"
   },
   {
    "fieldname": "qty",
@@ -36,19 +38,28 @@
   {
    "fieldname": "charged_weight",
    "fieldtype": "Float",
-   "label": "Charged Weight"
+   "label": "Charged Weight",
+   "in_list_view": 1
   },
   {
-   "fieldname": "rate",
-   "fieldtype": "Currency",
-   "in_list_view": 1,
-   "label": "Rate"
+   "fieldname": "packaging_type",
+   "fieldtype": "Select",
+   "label": "Packaging Type",
+   "options": "Loose\nCarton\nPallet\nDrum",
+   "in_list_view": 1
   },
   {
-   "fieldname": "amount",
+   "fieldname": "load_type",
+   "fieldtype": "Select",
+   "label": "Load Type",
+   "options": "9MT\n16 MT\n21 MT\n32 MT",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "lorry_freight",
    "fieldtype": "Currency",
-   "in_list_view": 1,
-   "label": "Amount"
+   "label": "Lorry Freight",
+   "in_list_view": 1
   }
  ],
  "grid_page_length": 50,

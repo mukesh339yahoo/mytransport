@@ -27,7 +27,7 @@ frappe.ui.form.on("Lorry Receipt", {
 });
 
 frappe.ui.form.on("LR Item", {
-	amount: function(frm, cdt, cdn) {
+	lorry_freight: function(frm, cdt, cdn) {
 		calculate_basic_freight(frm);
 	},
 	items_remove: function(frm) {
@@ -39,7 +39,7 @@ function calculate_basic_freight(frm) {
 	let total_basic = 0;
 	if (frm.doc.items) {
 		frm.doc.items.forEach(function(item) {
-			total_basic += flt(item.amount);
+			total_basic += flt(item.lorry_freight);
 		});
 	}
 	frm.set_value("basic_freight", total_basic);
