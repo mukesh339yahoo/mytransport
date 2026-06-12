@@ -8,9 +8,9 @@
  "engine": "InnoDB",
  "field_order": [
   "item_description",
+  "qty",
   "packaging_type",
   "load_type",
-  "qty",
   "actual_weight",
   "charged_weight",
   "lorry_freight"
