@@ -142,7 +142,10 @@ function calculate_lr_totals(frm) {
 function calculate_tds(frm) {
 	let total = flt(frm.doc.total_amount);
 	let percent = flt(frm.doc.tds_percent);
-	frm.set_value("total_tds", (total * percent) / 100);
+	let tds = (total * percent) / 100;
+	frm.set_value("total_tds", tds);
+	
+	frm.set_value("total_hire_amount", total - tds);
 }
 
 function get_current_financial_year() {
