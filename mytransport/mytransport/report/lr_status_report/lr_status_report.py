@@ -13,7 +13,7 @@ def get_columns():
         {"fieldname": "consignor", "label": _("Consignor"), "fieldtype": "Link", "options": "Customer", "width": 150},
         {"fieldname": "consignee", "label": _("Consignee"), "fieldtype": "Link", "options": "Customer", "width": 150},
         {"fieldname": "challan_number", "label": _("Challan Number"), "fieldtype": "Link", "options": "Challan", "width": 120},
-        {"fieldname": "sales_invoice", "label": _("Sales Invoice"), "fieldtype": "Link", "options": "Sales Invoice", "width": 120},
+        {"fieldname": "transport_invoice", "label": _("Transport Invoice"), "fieldtype": "Link", "options": "Transport Invoice", "width": 120},
         {"fieldname": "status", "label": _("Billed Status"), "fieldtype": "Data", "width": 100},
         {"fieldname": "receipt_status", "label": _("Receipt Status"), "fieldtype": "Data", "width": 120},
         {"fieldname": "total_amount", "label": _("Total Freight"), "fieldtype": "Currency", "width": 120},
@@ -45,7 +45,7 @@ def get_data(filters):
     
     data = frappe.db.sql(f"""
         SELECT 
-            name as lr_number, date, consignor, consignee, challan_number, sales_invoice,
+            name as lr_number, date, consignor, consignee, challan_number, transport_invoice,
             status, receipt_status, total_amount, paid_amount, outstanding_amount
         FROM `tabLorry Receipt`
         WHERE {{where_clause}} AND docstatus < 2
