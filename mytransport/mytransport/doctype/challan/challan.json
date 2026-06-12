@@ -62,7 +62,8 @@
   "column_break_3",
   "advance",
   "balance_amount",
-  "amended_from"
+  "amended_from",
+  "update_vehicle_tds"
  ],
  "fields": [
   {
@@ -367,6 +368,12 @@
    "fieldtype": "Select",
    "label": "TDS Payable By",
    "options": "Owner\nBroker\nCompany"
+  },
+  {
+   "fieldname": "update_vehicle_tds",
+   "fieldtype": "Check",
+   "label": "Update Vehicle TDS",
+   "hidden": 1
   }
  ],
  "grid_page_length": 50,

@@ -40,7 +40,54 @@ frappe.ui.form.on("Challan", {
 						frm.set_value("tds_percent", 1);
 						frm.set_value("tds_challan", "");
 					}
-				});
+				
+	tds_declaration: function(frm) {
+		if (frm.doc.tds_declaration && !frm.doc.tds_challan) {
+			frm.set_value("tds_percent", 0);
+		} else if (!frm.doc.tds_declaration) {
+			frm.set_value("tds_challan", "");
+			frm.set_value("tds_percent", 1);
+		}
+	},
+	before_submit: function(frm) {
+		if (frm.doc.tds_declaration && frm.doc.vehicle_number) {
+			return new Promise(resolve => {
+				frappe.db.get_doc("Hired Vehicle", frm.doc.vehicle_number)
+					.then(doc => {
+						let current_fy = get_current_financial_year();
+						let has_declaration = false;
+						
+						if (doc.tds_declarations) {
+							for (let i = 0; i < doc.tds_declarations.length; i++) {
+								if (doc.tds_declarations[i].financial_year == current_fy) {
+									has_declaration = true;
+									break;
+								}
+							}
+						}
+						
+						if (!has_declaration) {
+							frappe.confirm(
+								'TDS Declaration is checked. Do you want to submit this TDS Declaration to the Hired Vehicle master record?',
+								() => {
+									frm.doc.update_vehicle_tds = 1;
+									resolve();
+								},
+								() => {
+									frm.doc.update_vehicle_tds = 0;
+									resolve();
+								}
+							);
+						} else {
+							frm.doc.update_vehicle_tds = 0;
+							resolve();
+						}
+					});
+			});
+		}
+	},
+
+});
 		}
 	},
 	tds_percent: function(frm) {
