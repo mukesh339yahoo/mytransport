@@ -127,9 +127,10 @@
   },
   {
    "fieldname": "vehicle_number",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Vehicle Number"
+   "label": "Vehicle Number",
+   "options": "Hired Vehicle"
   },
   {
    "fieldname": "driver_name",
