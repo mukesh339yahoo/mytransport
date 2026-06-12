@@ -10,8 +10,10 @@
  "field_order": [
   "lr_number",
   "status",
+  "column_break_top_1",
   "branch",
   "date",
+  "column_break_top_2",
   "payment_terms",
   "party_details_sec",
   "consignor",
@@ -331,6 +333,14 @@
    "print_hide": 1,
    "read_only": 1,
    "search_index": 1
+  },
+  {
+   "fieldname": "column_break_top_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_top_2",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
