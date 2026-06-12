@@ -16,7 +16,9 @@
   "owner_phone_no",
   "owner_address",
   "owner_pan_no",
-  "tds_exemption",
+  "tds_declaration",
+  "tds_declaration_challan",
+  "tds_challan_date",
   "driver_details",
   "driver_name",
   "driver_mobile_no"
@@ -69,9 +71,9 @@
   },
   {
    "default": "0",
-   "fieldname": "tds_exemption",
+   "fieldname": "tds_declaration",
    "fieldtype": "Check",
-   "label": "TDS Exemption"
+   "label": "TDS Declaration"
   },
   {
    "fieldname": "driver_details",
@@ -88,6 +90,18 @@
    "fieldname": "driver_mobile_no",
    "fieldtype": "Data",
    "label": "Driver Mobile No"
+  },
+  {
+   "fieldname": "tds_declaration_challan",
+   "fieldtype": "Data",
+   "label": "TDS Declaration Challan",
+   "depends_on": "eval:doc.tds_declaration==1"
+  },
+  {
+   "fieldname": "tds_challan_date",
+   "fieldtype": "Date",
+   "label": "TDS Challan Date",
+   "depends_on": "eval:doc.tds_declaration==1"
   }
  ],
  "grid_page_length": 50,
