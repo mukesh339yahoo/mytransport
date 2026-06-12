@@ -31,6 +31,22 @@ class ExpenseVoucher(Document):
             "reference_name": self.name
         })
         
+        
+        # Update Challan Advance Details
+        if self.challan:
+            challan_doc = frappe.get_doc("Challan", self.challan)
+            challan_doc.db_set("voucher_no", self.name)
+            challan_doc.db_set("name_field", self.paid_to)
+            challan_doc.db_set("remarks", self.remarks)
+            
+            if self.voucher_type == "Cash":
+                challan_doc.db_set("cash_amount", self.amount)
+            else:
+                challan_doc.db_set("cheque_amount", self.amount)
+                challan_doc.db_set("cheque_no", self.payment_reference)
+                challan_doc.db_set("cheque_date", self.date)
+                challan_doc.db_set("bank", self.payment_account)
+
         je.insert(ignore_permissions=True)
         je.submit()
         

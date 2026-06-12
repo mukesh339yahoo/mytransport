@@ -8,11 +8,18 @@
  "engine": "InnoDB",
  "field_order": [
   "lr_number",
-  "consignor",
-  "consignee",
+  "lr_date",
   "from_city",
   "to_city",
-  "total_amount"
+  "total_packages",
+  "total_weight",
+  "basic_freight",
+  "hamali_charges",
+  "detention_charges",
+  "rto_charges",
+  "other_charges",
+  "total_amount",
+  "vehicle_number"
  ],
  "fields": [
   {
@@ -22,22 +29,6 @@
    "label": "LR Number",
    "options": "Lorry Receipt",
    "reqd": 1
-  },
-  {
-   "fetch_from": "lr_number.consignor",
-   "fieldname": "consignor",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Consignor",
-   "read_only": 1
-  },
-  {
-   "fetch_from": "lr_number.consignee",
-   "fieldname": "consignee",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Consignee",
-   "read_only": 1
   },
   {
    "fetch_from": "lr_number.from_city",
@@ -64,6 +55,73 @@
    "in_list_view": 1,
    "label": "Total Amount",
    "read_only": 1
+  },
+  {
+   "fieldname": "lr_date",
+   "fieldtype": "Date",
+   "label": "LR Date",
+   "fetch_from": "lr_number.date",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "total_packages",
+   "fieldtype": "Int",
+   "label": "Total Packages",
+   "fetch_from": "lr_number.total_packages",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "total_weight",
+   "fieldtype": "Float",
+   "label": "Total Weight",
+   "fetch_from": "lr_number.total_weight",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "basic_freight",
+   "fieldtype": "Currency",
+   "label": "Basic Freight",
+   "fetch_from": "lr_number.basic_freight",
+   "read_only": 1
+  },
+  {
+   "fieldname": "hamali_charges",
+   "fieldtype": "Currency",
+   "label": "Hamali Charges",
+   "fetch_from": "lr_number.hamali_charges",
+   "read_only": 1
+  },
+  {
+   "fieldname": "detention_charges",
+   "fieldtype": "Currency",
+   "label": "Detention Charges",
+   "fetch_from": "lr_number.detention_charges",
+   "read_only": 1
+  },
+  {
+   "fieldname": "rto_charges",
+   "fieldtype": "Currency",
+   "label": "RTO Charges",
+   "fetch_from": "lr_number.rto_charges",
+   "read_only": 1
+  },
+  {
+   "fieldname": "other_charges",
+   "fieldtype": "Currency",
+   "label": "Other Charges",
+   "fetch_from": "lr_number.other_charges",
+   "read_only": 1
+  },
+  {
+   "fieldname": "vehicle_number",
+   "fieldtype": "Data",
+   "label": "Vehicle Number",
+   "fetch_from": "lr_number.vehicle_number",
+   "read_only": 1,
+   "in_list_view": 1
   }
  ],
  "grid_page_length": 50,
