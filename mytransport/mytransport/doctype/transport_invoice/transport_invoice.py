@@ -132,6 +132,10 @@ def get_unbilled_lrs(customer, invoice_name=None):
             "consignor": customer,
             "consignee": customer
         },
-        fields=["name"]
+        fields=[
+            "name", "date", "from_city", "to_city", "total_packages", "total_weight",
+            "basic_freight", "bilty_charges", "detention_narration", "detention_charges",
+            "hamali_narration", "hamali_charges", "other_charge_narration", "other_charges"
+        ]
     )
     return lrs

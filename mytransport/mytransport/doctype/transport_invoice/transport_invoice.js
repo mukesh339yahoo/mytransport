@@ -101,7 +101,22 @@ frappe.ui.form.on("Transport Invoice", {
 					r.message.forEach(function(lr) {
 						let row = frm.add_child("items");
 						row.lr_number = lr.name;
+						row.lr_date = lr.date;
+						row.from_city = lr.from_city;
+						row.to_city = lr.to_city;
+						row.total_packages = lr.total_packages;
+						row.total_weight = lr.total_weight;
+						row.basic_freight = lr.basic_freight;
+						row.st_charge = lr.bilty_charges;
+						row.detention_narration = lr.detention_narration;
+						row.detention_charges = lr.detention_charges;
+						row.hamali_narration = lr.hamali_narration;
+						row.hamali_charges = lr.hamali_charges;
+						row.other_charge_narration = lr.other_charge_narration;
+						row.other_charges = lr.other_charges;
 					});
+					
+					calculate_totals(frm);
 					frm.refresh_field("items");
 					frappe.msgprint(__("Successfully fetched {0} Lorry Receipts.", [r.message.length]));
 				} else {
