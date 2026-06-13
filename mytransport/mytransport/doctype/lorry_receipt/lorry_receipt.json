@@ -37,11 +37,14 @@
   "total_packages",
   "basic_freight",
   "hamali_charges",
+  "hamali_narration",
   "detention_charges",
+  "detention_narration",
   "column_break_3",
   "bilty_charges",
   "rto_charges",
   "other_charges",
+  "other_charge_narration",
   "total_amount",
   "billing_sec",
   "credit_account",
@@ -355,6 +358,24 @@
    "fieldtype": "Int",
    "label": "Total Packages",
    "read_only": 1
+  },
+  {
+   "fieldname": "detention_narration",
+   "fieldtype": "Small Text",
+   "label": "Detention Narration",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "hamali_narration",
+   "fieldtype": "Small Text",
+   "label": "Hamali Narration",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "other_charge_narration",
+   "fieldtype": "Small Text",
+   "label": "Other Charge Narration",
+   "allow_on_submit": 1
   }
  ],
  "grid_page_length": 50,

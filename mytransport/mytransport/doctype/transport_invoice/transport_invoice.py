@@ -16,11 +16,26 @@ class TransportInvoice(Document):
             frappe.throw("Income Account is mandatory")
         
     def calculate_totals(self):
-        total = 0.0
+        tf = 0.0
+        ts = 0.0
+        td = 0.0
+        th = 0.0
+        to = 0.0
+        
         for item in self.get("items"):
-            total += flt(item.amount)
+            tf += flt(item.basic_freight)
+            ts += flt(item.st_charge)
+            td += flt(item.detention_charges)
+            th += flt(item.hamali_charges)
+            to += flt(item.other_charges)
             
-        self.total_amount = total
+        self.total_freight = tf
+        self.total_st_charge = ts
+        self.total_detention_charge = td
+        self.total_hamali_charge = th
+        self.total_other_charges = to
+        
+        self.total_amount = tf + ts + td + th + to
         self.outstanding_amount = self.total_amount - flt(self.paid_amount)
         
         if self.paid_amount == 0:
@@ -44,8 +59,8 @@ class TransportInvoice(Document):
 
     def update_lorry_receipts(self, is_submit):
         for item in self.get("items"):
-            if item.lorry_receipt:
-                lr = frappe.get_doc("Lorry Receipt", item.lorry_receipt)
+            if item.lr_number:
+                lr = frappe.get_doc("Lorry Receipt", item.lr_number)
                 if is_submit:
                     lr.status = "Billed"
                     lr.transport_invoice = self.name
@@ -117,6 +132,6 @@ def get_unbilled_lrs(customer, invoice_name=None):
             "consignor": customer,
             "consignee": customer
         },
-        fields=["name", "date", "from_city", "to_city", "vehicle_number", "total_amount"]
+        fields=["name"]
     )
     return lrs

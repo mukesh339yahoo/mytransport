@@ -23,6 +23,18 @@ frappe.ui.form.on("Transport Invoice", {
 		});
 	},
 
+	onload: function(frm) {
+		if (frm.is_new() && frm.doc.date && !frm.doc.due_date) {
+			frm.set_value("due_date", frappe.datetime.add_days(frm.doc.date, 30));
+		}
+	},
+
+	date: function(frm) {
+		if (frm.doc.date && !frm.doc.due_date) {
+			frm.set_value("due_date", frappe.datetime.add_days(frm.doc.date, 30));
+		}
+	},
+
 	refresh(frm) {
 		if (frm.doc.docstatus === 0 && !frm.is_new()) {
 			frm.add_custom_button(__("Get Unbilled LRs"), function() {
@@ -31,6 +43,29 @@ frappe.ui.form.on("Transport Invoice", {
 		}
 	},
 	
+	customer: function(frm) {
+		if (frm.doc.customer) {
+			frappe.db.get_value("Customer", frm.doc.customer, ["customer_primary_address", "gstin"])
+				.then(r => {
+					if (r.message) {
+						if (r.message.gstin) {
+							frm.set_value("customer_gst_no", r.message.gstin);
+						}
+						if (r.message.customer_primary_address) {
+							frappe.call({
+								method: 'frappe.contacts.doctype.address.address.get_address_display',
+								args: { address_dict: r.message.customer_primary_address }
+							}).then(res => {
+								if (res.message) {
+									frm.set_value("customer_address", res.message);
+								}
+							});
+						}
+					}
+				});
+		}
+	},
+
 	company: function(frm) {
 		if (frm.doc.company) {
 			frappe.db.get_value('Company', frm.doc.company, 'default_receivable_account')
@@ -65,12 +100,7 @@ frappe.ui.form.on("Transport Invoice", {
 					frm.clear_table("items");
 					r.message.forEach(function(lr) {
 						let row = frm.add_child("items");
-						row.lorry_receipt = lr.name;
-						row.date = lr.date;
-						row.from_city = lr.from_city;
-						row.to_city = lr.to_city;
-						row.vehicle_number = lr.vehicle_number;
-						row.amount = lr.total_amount;
+						row.lr_number = lr.name;
 					});
 					frm.refresh_field("items");
 					frappe.msgprint(__("Successfully fetched {0} Lorry Receipts.", [r.message.length]));
@@ -83,7 +113,7 @@ frappe.ui.form.on("Transport Invoice", {
 });
 
 frappe.ui.form.on("Transport Invoice Item", {
-	amount: function(frm, cdt, cdn) {
+	lr_number: function(frm, cdt, cdn) {
 		calculate_totals(frm);
 	},
 	items_remove: function(frm) {
@@ -92,12 +122,23 @@ frappe.ui.form.on("Transport Invoice Item", {
 });
 
 function calculate_totals(frm) {
-	let total = 0;
+	let tf = 0, ts = 0, td = 0, th = 0, to = 0;
 	if (frm.doc.items) {
 		frm.doc.items.forEach(function(item) {
-			total += flt(item.amount);
+			tf += flt(item.basic_freight);
+			ts += flt(item.st_charge);
+			td += flt(item.detention_charges);
+			th += flt(item.hamali_charges);
+			to += flt(item.other_charges);
 		});
 	}
+	frm.set_value("total_freight", tf);
+	frm.set_value("total_st_charge", ts);
+	frm.set_value("total_detention_charge", td);
+	frm.set_value("total_hamali_charge", th);
+	frm.set_value("total_other_charges", to);
+	
+	let total = tf + ts + td + th + to;
 	frm.set_value("total_amount", total);
 	frm.set_value("outstanding_amount", total - flt(frm.doc.paid_amount));
 }

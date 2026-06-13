@@ -7,57 +7,132 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "lorry_receipt",
-  "date",
+  "lr_number",
+  "lr_date",
   "from_city",
   "to_city",
-  "vehicle_number",
-  "amount"
+  "total_packages",
+  "total_weight",
+  "rate_per_mt",
+  "basic_freight",
+  "st_charge",
+  "detention_narration",
+  "detention_charges",
+  "hamali_narration",
+  "hamali_charges",
+  "other_charge_narration",
+  "other_charges"
  ],
  "fields": [
   {
-   "fieldname": "lorry_receipt",
+   "fieldname": "lr_number",
    "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Lorry Receipt",
+   "label": "LR Number",
    "options": "Lorry Receipt",
+   "in_list_view": 1,
    "reqd": 1
   },
   {
-   "fetch_from": "lorry_receipt.date",
-   "fieldname": "date",
+   "fieldname": "lr_date",
    "fieldtype": "Date",
-   "in_list_view": 1,
-   "label": "Date",
-   "read_only": 1
+   "label": "LR Date",
+   "fetch_from": "lr_number.date",
+   "read_only": 1,
+   "in_list_view": 1
   },
   {
-   "fetch_from": "lorry_receipt.from_city",
    "fieldname": "from_city",
    "fieldtype": "Data",
-   "label": "From City",
-   "read_only": 1
+   "label": "From",
+   "fetch_from": "lr_number.from_city",
+   "read_only": 1,
+   "in_list_view": 1
   },
   {
-   "fetch_from": "lorry_receipt.to_city",
    "fieldname": "to_city",
    "fieldtype": "Data",
-   "label": "To City",
-   "read_only": 1
+   "label": "To",
+   "fetch_from": "lr_number.to_city",
+   "read_only": 1,
+   "in_list_view": 1
   },
   {
-   "fetch_from": "lorry_receipt.vehicle_number",
-   "fieldname": "vehicle_number",
-   "fieldtype": "Data",
-   "label": "Vehicle Number",
-   "read_only": 1
+   "fieldname": "total_packages",
+   "fieldtype": "Int",
+   "label": "No of Pkgs",
+   "fetch_from": "lr_number.total_packages",
+   "read_only": 1,
+   "in_list_view": 1
   },
   {
-   "fetch_from": "lorry_receipt.total_amount",
-   "fieldname": "amount",
+   "fieldname": "total_weight",
+   "fieldtype": "Float",
+   "label": "Weight",
+   "fetch_from": "lr_number.total_weight",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "rate_per_mt",
+   "fieldtype": "Select",
+   "label": "Rate per MT",
+   "options": "\nFix",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "basic_freight",
    "fieldtype": "Currency",
-   "in_list_view": 1,
-   "label": "Amount",
+   "label": "Freight",
+   "fetch_from": "lr_number.basic_freight",
+   "read_only": 1
+  },
+  {
+   "fieldname": "st_charge",
+   "fieldtype": "Currency",
+   "label": "St Charge",
+   "fetch_from": "lr_number.bilty_charges",
+   "read_only": 1
+  },
+  {
+   "fieldname": "detention_narration",
+   "fieldtype": "Small Text",
+   "label": "Detention Narration",
+   "fetch_from": "lr_number.detention_narration",
+   "read_only": 1
+  },
+  {
+   "fieldname": "detention_charges",
+   "fieldtype": "Currency",
+   "label": "Detention Amount",
+   "fetch_from": "lr_number.detention_charges",
+   "read_only": 1
+  },
+  {
+   "fieldname": "hamali_narration",
+   "fieldtype": "Small Text",
+   "label": "Hamali Narration",
+   "fetch_from": "lr_number.hamali_narration",
+   "read_only": 1
+  },
+  {
+   "fieldname": "hamali_charges",
+   "fieldtype": "Currency",
+   "label": "Hamali Amount",
+   "fetch_from": "lr_number.hamali_charges",
+   "read_only": 1
+  },
+  {
+   "fieldname": "other_charge_narration",
+   "fieldtype": "Small Text",
+   "label": "Other Charge Narration",
+   "fetch_from": "lr_number.other_charge_narration",
+   "read_only": 1
+  },
+  {
+   "fieldname": "other_charges",
+   "fieldtype": "Currency",
+   "label": "Other Charge Amount",
+   "fetch_from": "lr_number.other_charges",
    "read_only": 1
   }
  ],
