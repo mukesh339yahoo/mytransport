@@ -45,11 +45,11 @@ frappe.ui.form.on("Transport Invoice", {
 	
 	customer: function(frm) {
 		if (frm.doc.customer) {
-			frappe.db.get_value("Customer", frm.doc.customer, ["customer_primary_address", "gstin"])
+			frappe.db.get_value("Customer", frm.doc.customer, ["customer_primary_address", "tax_id"])
 				.then(r => {
 					if (r.message) {
-						if (r.message.gstin) {
-							frm.set_value("customer_gst_no", r.message.gstin);
+						if (r.message.tax_id) {
+							frm.set_value("customer_gst_no", r.message.tax_id);
 						}
 						if (r.message.customer_primary_address) {
 							frappe.call({
