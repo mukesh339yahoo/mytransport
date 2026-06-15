@@ -1,0 +1,99 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "creation": "2026-06-15 14:08:42.477036",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "challan",
+  "challan_no",
+  "challan_date",
+  "vehicle_no",
+  "vendor",
+  "total_amt",
+  "balance",
+  "paid_amt"
+ ],
+ "fields": [
+  {
+   "fieldname": "challan",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Challan Ref",
+   "options": "Challan",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "challan.challan_number",
+   "fieldname": "challan_no",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Challan No",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "challan.date",
+   "fieldname": "challan_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Challan Date",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "challan.vehicle_number",
+   "fieldname": "vehicle_no",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Vehicle No",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "challan.broker",
+   "fieldname": "vendor",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Vendor",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "challan.total_hire_amount",
+   "fieldname": "total_amt",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Total Amt",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "challan.balance_amount",
+   "fieldname": "balance",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Balance",
+   "read_only": 1
+  },
+  {
+   "fieldname": "paid_amt",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Paid Amt",
+   "reqd": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-06-15 14:08:42.477036",
+ "modified_by": "Administrator",
+ "module": "Mytransport",
+ "name": "Allocated Challan",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

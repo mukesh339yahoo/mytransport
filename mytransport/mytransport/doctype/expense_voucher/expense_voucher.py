@@ -8,9 +8,9 @@ class ExpenseVoucher(Document):
         je.voucher_type = "Cash Entry" if self.voucher_type == "Cash" else "Bank Entry"
         je.company = self.company
         je.posting_date = self.date
-        je.cheque_no = self.payment_reference
-        if self.voucher_type == "Bank" and self.date:
-            je.cheque_date = self.date
+        je.cheque_no = getattr(self, "cheque_no", None)
+        if self.voucher_type == "Bank" and getattr(self, "cheque_date", None):
+            je.cheque_date = self.cheque_date
         
         user_remark = self.remarks or ""
         je.user_remark = f"Expense Voucher: {self.name}. {user_remark}"
@@ -18,7 +18,7 @@ class ExpenseVoucher(Document):
         # Credit the payment account (Bank/Cash)
         je.append("accounts", {
             "account": self.payment_account,
-            "credit_in_account_currency": self.amount,
+            "credit_in_account_currency": self.total_paid_amt,
             "reference_type": "Expense Voucher",
             "reference_name": self.name
         })
@@ -26,26 +26,27 @@ class ExpenseVoucher(Document):
         # Debit the expense account
         je.append("accounts", {
             "account": self.expense_account,
-            "debit_in_account_currency": self.amount,
+            "debit_in_account_currency": self.total_paid_amt,
             "reference_type": "Expense Voucher",
             "reference_name": self.name
         })
         
-        
         # Update Challan Advance Details
-        if self.challan:
-            challan_doc = frappe.get_doc("Challan", self.challan)
-            challan_doc.db_set("voucher_no", self.name)
-            challan_doc.db_set("name_field", self.paid_to)
-            challan_doc.db_set("remarks", self.remarks)
+        for item in self.get("allocated_challans", []):
+            challan_doc = frappe.get_doc("Challan", item.challan)
             
-            if self.voucher_type == "Cash":
-                challan_doc.db_set("cash_amount", self.amount)
-            else:
-                challan_doc.db_set("cheque_amount", self.amount)
-                challan_doc.db_set("cheque_no", self.payment_reference)
-                challan_doc.db_set("cheque_date", self.date)
-                challan_doc.db_set("bank", self.payment_account)
+            # Increase the advance amount by the paid amount
+            current_advance = frappe.utils.flt(challan_doc.advance)
+            new_advance = current_advance + frappe.utils.flt(item.paid_amt)
+            
+            # Recalculate balance
+            total_hire = frappe.utils.flt(challan_doc.total_hire_amount)
+            new_balance = total_hire - new_advance
+            
+            frappe.db.set_value("Challan", item.challan, {
+                "advance": new_advance,
+                "balance_amount": new_balance
+            })
 
         je.insert(ignore_permissions=True)
         je.submit()
@@ -59,3 +60,20 @@ class ExpenseVoucher(Document):
             if je.docstatus == 1:
                 je.cancel()
             frappe.msgprint(f"Journal Entry {je.name} cancelled.")
+            
+        # Revert Challan Advance Details
+        for item in self.get("allocated_challans", []):
+            challan_doc = frappe.get_doc("Challan", item.challan)
+            
+            # Decrease the advance amount by the paid amount
+            current_advance = frappe.utils.flt(challan_doc.advance)
+            new_advance = current_advance - frappe.utils.flt(item.paid_amt)
+            
+            # Recalculate balance
+            total_hire = frappe.utils.flt(challan_doc.total_hire_amount)
+            new_balance = total_hire - new_advance
+            
+            frappe.db.set_value("Challan", item.challan, {
+                "advance": new_advance,
+                "balance_amount": new_balance
+            })
