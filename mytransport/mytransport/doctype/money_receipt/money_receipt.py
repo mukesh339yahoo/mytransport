@@ -41,7 +41,12 @@ class MoneyReceipt(Document):
             invoice_allocations[item.transport_invoice] = item.paid_amt
 
         # Set Party Account
-        pe.paid_from = frappe.db.get_value("Customer", self.customer, "default_account")
+        from erpnext.accounts.party import get_party_account
+        try:
+            pe.paid_from = get_party_account("Customer", self.customer, self.company)
+        except Exception:
+            pe.paid_from = None
+            
         if not pe.paid_from:
             # Fallback to fetching default receivable account for company
             pe.paid_from = frappe.db.get_value("Company", self.company, "default_receivable_account")
