@@ -51,13 +51,7 @@ class MoneyReceipt(Document):
             # Fallback to fetching default receivable account for company
             pe.paid_from = frappe.db.get_value("Company", self.company, "default_receivable_account")
 
-        # Add references to Payment Entry
-        for inv, amount in invoice_allocations.items():
-            pe.append("references", {
-                "reference_doctype": "Transport Invoice",
-                "reference_name": inv,
-                "allocated_amount": amount
-            })
+        pe.remarks = f"Payment received via Money Receipt: {self.name}"
 
         pe.insert(ignore_permissions=True)
         pe.submit()
