@@ -60,18 +60,20 @@ class TransportInvoice(Document):
     def update_lorry_receipts(self, is_submit):
         for item in self.get("items"):
             if item.lr_number:
-                lr = frappe.get_doc("Lorry Receipt", item.lr_number)
                 if is_submit:
-                    lr.status = "Billed"
-                    lr.transport_invoice = self.name
-                    lr.invoice_number = self.name
-                    lr.invoice_value = self.total_amount
+                    frappe.db.set_value("Lorry Receipt", item.lr_number, {
+                        "status": "Billed",
+                        "transport_invoice": self.name,
+                        "invoice_number": self.name,
+                        "invoice_value": self.total_amount
+                    })
                 else:
-                    lr.status = "Unbilled"
-                    lr.transport_invoice = None
-                    lr.invoice_number = None
-                    lr.invoice_value = 0
-                lr.save(ignore_permissions=True)
+                    frappe.db.set_value("Lorry Receipt", item.lr_number, {
+                        "status": "Unbilled",
+                        "transport_invoice": None,
+                        "invoice_number": None,
+                        "invoice_value": 0
+                    })
 
     def make_gl_entries(self, cancel=False):
         if not self.total_amount:
@@ -106,6 +108,8 @@ class TransportInvoice(Document):
         make_gl_entries(gl_entries, cancel=cancel, update_outstanding="No", merge_entries=False)
         
     def get_gl_dict(self, args):
+        cost_center = frappe.get_cached_value('Company', self.company, 'cost_center')
+        
         gl_dict = frappe._dict({
             "posting_date": self.date,
             "transaction_date": self.date,
@@ -113,7 +117,8 @@ class TransportInvoice(Document):
             "voucher_no": self.name,
             "company": self.company,
             "remarks": self.remarks or f"Accounting Entry for Transport Invoice {self.name}",
-            "is_opening": "No"
+            "is_opening": "No",
+            "cost_center": cost_center
         })
         gl_dict.update(args)
         return gl_dict

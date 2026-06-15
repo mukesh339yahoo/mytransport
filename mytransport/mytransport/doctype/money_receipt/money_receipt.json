@@ -14,15 +14,19 @@
   "cb1",
   "payment_mode",
   "deposit_account",
-  "payment_reference",
   "sb1",
-  "allocated_lrs",
   "sb2",
-  "total_amount_received",
-  "cb2",
-  "unallocated_amount",
+  "cheque_no",
   "payment_entry",
-  "amended_from"
+  "cheque_date",
+  "amended_from",
+  "on_account",
+  "amount_in_words",
+  "get_unpaid_bills",
+  "allocated_invoices",
+  "sb3",
+  "total_amount",
+  "remarks"
  ],
  "fields": [
   {
@@ -70,42 +74,14 @@
    "reqd": 1
   },
   {
-   "depends_on": "eval:in_list(['Bank', 'Cheque', 'UPI'], doc.payment_mode)",
-   "fieldname": "payment_reference",
-   "fieldtype": "Data",
-   "label": "Payment Reference"
-  },
-  {
    "fieldname": "sb1",
    "fieldtype": "Section Break",
    "label": "Allocation"
   },
   {
-   "fieldname": "allocated_lrs",
-   "fieldtype": "Table",
-   "label": "Allocated LRs",
-   "options": "Money Receipt Item"
-  },
-  {
    "fieldname": "sb2",
    "fieldtype": "Section Break",
-   "label": "Totals"
-  },
-  {
-   "fieldname": "total_amount_received",
-   "fieldtype": "Currency",
-   "label": "Total Amount Received",
-   "reqd": 1
-  },
-  {
-   "fieldname": "cb2",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "unallocated_amount",
-   "fieldtype": "Currency",
-   "label": "Unallocated Amount",
-   "read_only": 1
+   "label": "Totals & Remarks"
   },
   {
    "fieldname": "payment_entry",
@@ -124,13 +100,64 @@
    "print_hide": 1,
    "read_only": 1,
    "search_index": 1
+  },
+  {
+   "depends_on": "eval:in_list(['Cheque'], doc.payment_mode)",
+   "fieldname": "cheque_no",
+   "fieldtype": "Data",
+   "label": "Cheque No"
+  },
+  {
+   "depends_on": "eval:in_list(['Cheque'], doc.payment_mode)",
+   "fieldname": "cheque_date",
+   "fieldtype": "Date",
+   "label": "Cheque Date"
+  },
+  {
+   "default": "0",
+   "fieldname": "on_account",
+   "fieldtype": "Data",
+   "label": "On Account"
+  },
+  {
+   "fieldname": "amount_in_words",
+   "fieldtype": "Small Text",
+   "label": "Amount in Words",
+   "read_only": 1
+  },
+  {
+   "fieldname": "get_unpaid_bills",
+   "fieldtype": "Button",
+   "label": "Get Unpaid Bills"
+  },
+  {
+   "fieldname": "allocated_invoices",
+   "fieldtype": "Table",
+   "label": "Allocated Transport Invoices",
+   "options": "Allocated Transport Invoice"
+  },
+  {
+   "fieldname": "total_amount",
+   "fieldtype": "Currency",
+   "label": "Total Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "sb3",
+   "fieldtype": "Section Break",
+   "label": "Additional Information"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-06-06 20:12:50.018261",
+ "modified": "2026-06-15 11:10:51.934419",
  "modified_by": "Administrator",
  "module": "Mytransport",
  "name": "Money Receipt",

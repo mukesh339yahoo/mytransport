@@ -1,10 +1,10 @@
 import frappe
 from frappe.model.document import Document
+from frappe.utils import flt, money_in_words
 
 class MoneyReceipt(Document):
     def validate(self):
-        if self.unallocated_amount < 0:
-            frappe.throw("Unallocated amount cannot be negative. Please check your allocations.")
+        pass
 
     def on_submit(self):
         # Create Payment Entry
@@ -16,27 +16,29 @@ class MoneyReceipt(Document):
         pe.posting_date = self.date
         pe.mode_of_payment = self.payment_mode
         pe.paid_to = self.deposit_account
-        pe.paid_amount = self.total_amount_received
-        pe.received_amount = self.total_amount_received
-        pe.reference_no = self.payment_reference
-        if self.date:
-            pe.reference_date = self.date
+        pe.paid_amount = self.total_amount
+        pe.received_amount = self.total_amount
+        
+        if getattr(self, "cheque_no", None):
+            pe.reference_no = self.cheque_no
+        if getattr(self, "cheque_date", None):
+            pe.reference_date = self.cheque_date
 
-        # Group allocations by Transport Invoice
+        # Update Transport Invoices
         invoice_allocations = {}
-        for item in self.allocated_lrs:
-            lr_doc = frappe.get_doc("Lorry Receipt", item.lorry_receipt)
+        for item in self.get("allocated_invoices", []):
+            inv_doc = frappe.get_doc("Transport Invoice", item.transport_invoice)
+            new_paid = flt(inv_doc.paid_amount) + flt(item.paid_amt)
+            new_out = flt(inv_doc.total_amount) - new_paid
+            new_status = "Paid" if new_out <= 0 else "Partially Paid"
             
-            # Update LR balances
-            lr_doc.paid_amount += item.allocated_amount
-            lr_doc.save(ignore_permissions=True)
+            frappe.db.set_value("Transport Invoice", item.transport_invoice, {
+                "paid_amount": new_paid,
+                "outstanding_amount": new_out,
+                "status": new_status
+            })
             
-            if not lr_doc.transport_invoice:
-                frappe.throw(f"LR {lr_doc.name} is not associated with a Transport Invoice. Cannot allocate payment.")
-                
-            if lr_doc.transport_invoice not in invoice_allocations:
-                invoice_allocations[lr_doc.transport_invoice] = 0
-            invoice_allocations[lr_doc.transport_invoice] += item.allocated_amount
+            invoice_allocations[item.transport_invoice] = item.paid_amt
 
         # Set Party Account
         pe.paid_from = frappe.db.get_value("Customer", self.customer, "default_account")
@@ -59,14 +61,25 @@ class MoneyReceipt(Document):
         frappe.msgprint(f"Payment Entry {pe.name} created successfully.")
 
     def on_cancel(self):
-        if self.payment_entry:
+        if getattr(self, "payment_entry", None):
             pe = frappe.get_doc("Payment Entry", self.payment_entry)
             if pe.docstatus == 1:
                 pe.cancel()
-            frappe.msgprint(f"Payment Entry {pe.name} cancelled.")
+            frappe.msgprint(f"Payment Entry {self.payment_entry} cancelled.")
             
-        # Revert LR balances
-        for item in self.allocated_lrs:
-            lr_doc = frappe.get_doc("Lorry Receipt", item.lorry_receipt)
-            lr_doc.paid_amount -= item.allocated_amount
-            lr_doc.save(ignore_permissions=True)
+        # Revert Transport Invoice balances
+        for item in self.get("allocated_invoices", []):
+            inv_doc = frappe.get_doc("Transport Invoice", item.transport_invoice)
+            new_paid = flt(inv_doc.paid_amount) - flt(item.paid_amt)
+            new_out = flt(inv_doc.total_amount) - new_paid
+            new_status = "Unpaid" if new_paid <= 0 else "Partially Paid"
+            
+            frappe.db.set_value("Transport Invoice", item.transport_invoice, {
+                "paid_amount": new_paid,
+                "outstanding_amount": new_out,
+                "status": new_status
+            })
+
+@frappe.whitelist()
+def get_money_in_words(amount, currency):
+    return money_in_words(amount, currency)

@@ -24,114 +24,148 @@ frappe.ui.form.on('Money Receipt', {
         frm.set_value("deposit_account", null);
     },
 
-    total_amount_received: function(frm) {
-        calculate_unallocated(frm);
-    },
+    get_unpaid_bills: function(frm) {
+        if (!frm.doc.customer || frm.doc.docstatus !== 0) {
+            frappe.msgprint("Please select a customer first.");
+            return;
+        }
 
-    refresh: function(frm) {
-        if (!frm.doc.customer || frm.doc.docstatus !== 0) return;
+        frappe.call({
+            method: "frappe.client.get_list",
+            args: {
+                doctype: "Transport Invoice",
+                filters: [
+                    ["status", "in", ["Unpaid", "Partially Paid"]],
+                    ["docstatus", "=", 1],
+                    ["customer", "=", frm.doc.customer]
+                ],
+                fields: ["name", "bill_no", "date", "total_amount", "outstanding_amount"]
+            },
+            callback: function(r) {
+                if (r.message && r.message.length > 0) {
+                    let bills = r.message;
+                    
+                    let d = new frappe.ui.Dialog({
+                        title: 'Select Unpaid Bills',
+                        fields: [
+                            {
+                                fieldtype: 'Table',
+                                fieldname: 'bills',
+                                fields: [
+                                    {fieldtype: 'Check', fieldname: 'select', label: 'Select', in_list_view: 1},
+                                    {fieldtype: 'Data', fieldname: 'name', label: 'Invoice Ref', read_only: 1, in_list_view: 1, hidden: 1},
+                                    {fieldtype: 'Data', fieldname: 'manual_bill_no', label: 'Bill No', read_only: 1, in_list_view: 1},
+                                    {fieldtype: 'Date', fieldname: 'bill_date', label: 'Bill Date', read_only: 1, in_list_view: 1},
+                                    {fieldtype: 'Currency', fieldname: 'total_amount', label: 'Total Amount', read_only: 1, in_list_view: 1},
+                                    {fieldtype: 'Currency', fieldname: 'outstanding_amount', label: 'Balance', read_only: 1, in_list_view: 1},
+                                    {fieldtype: 'Currency', fieldname: 'allocate', label: 'Pay Now', in_list_view: 1}
+                                ],
+                                data: bills.map(b => ({
+                                    name: b.name,
+                                    manual_bill_no: b.bill_no,
+                                    bill_date: b.date,
+                                    total_amount: b.total_amount,
+                                    outstanding_amount: b.outstanding_amount,
+                                    allocate: b.outstanding_amount,
+                                    select: 0
+                                })),
+                                get_data: () => d.fields_dict.bills.grid.get_data()
+                            }
+                        ],
+                        primary_action_label: 'Add to Receipt',
+                        primary_action(values) {
+                            let selected = values.bills.filter(b => b.select);
+                            if (!selected.length) {
+                                frappe.msgprint("Please select at least one Bill.");
+                                return;
+                            }
 
-        frm.add_custom_button(__('Get Billed LRs'), function() {
-            frappe.call({
-                method: "frappe.client.get_list",
-                args: {
-                    doctype: "Lorry Receipt",
-                    filters: [
-                        ["status", "=", "Billed"],
-                        ["receipt_status", "!=", "Paid"],
-                        ["docstatus", "=", 1]
-                    ],
-                    or_filters: [
-                        ["consignor", "=", frm.doc.customer],
-                        ["consignee", "=", frm.doc.customer]
-                    ],
-                    fields: ["name", "date", "from_city", "to_city", "outstanding_amount", "total_amount"]
-                },
-                callback: function(r) {
-                    if (r.message && r.message.length > 0) {
-                        let lrs = r.message;
-                        
-                        let d = new frappe.ui.Dialog({
-                            title: 'Select Unpaid LRs',
-                            fields: [
-                                {
-                                    fieldtype: 'Table',
-                                    fieldname: 'lrs',
-                                    fields: [
-                                        {fieldtype: 'Check', fieldname: 'select', label: 'Select', in_list_view: 1},
-                                        {fieldtype: 'Data', fieldname: 'lr_number', label: 'LR Number', read_only: 1, in_list_view: 1},
-                                        {fieldtype: 'Currency', fieldname: 'total_amount', label: 'Total Freight', read_only: 1, in_list_view: 1},
-                                        {fieldtype: 'Currency', fieldname: 'outstanding_amount', label: 'Outstanding Amount', read_only: 1, in_list_view: 1},
-                                        {fieldtype: 'Currency', fieldname: 'allocate', label: 'Allocate Now', in_list_view: 1}
-                                    ],
-                                    data: lrs.map(lr => ({
-                                        lr_number: lr.name,
-                                        total_amount: lr.total_amount,
-                                        outstanding_amount: lr.outstanding_amount,
-                                        allocate: lr.outstanding_amount,
-                                        select: 0
-                                    })),
-                                    get_data: () => d.fields_dict.lrs.grid.get_data()
-                                }
-                            ],
-                            primary_action_label: 'Add to Receipt',
-                            primary_action(values) {
-                                let selected = values.lrs.filter(d => d.select);
-                                if (!selected.length) {
-                                    frappe.msgprint("Please select at least one Lorry Receipt.");
+                            selected.forEach(sel => {
+                                if (sel.allocate > sel.outstanding_amount) {
+                                    frappe.msgprint("Cannot allocate more than outstanding amount for Bill " + (sel.manual_bill_no || sel.name));
                                     return;
                                 }
-
-                                selected.forEach(sel => {
-                                    if (sel.allocate > sel.outstanding_amount) {
-                                        frappe.msgprint("Cannot allocate more than outstanding amount for LR " + sel.lr_number);
-                                        return;
-                                    }
-                                    let row = frm.add_child("allocated_lrs");
-                                    row.lorry_receipt = sel.lr_number;
-                                    row.total_freight = sel.total_amount;
-                                    row.outstanding_amount = sel.outstanding_amount;
-                                    row.allocated_amount = sel.allocate;
-                                });
-                                
-                                frm.refresh_field("allocated_lrs");
-                                calculate_unallocated(frm);
-                                d.hide();
-                            }
-                        });
-                        
-                        d.show();
-                    } else {
-                        frappe.msgprint("No unpaid billed LRs found for this customer.");
-                    }
+                                let row = frm.add_child("allocated_invoices");
+                                row.transport_invoice = sel.name;
+                                row.bill_no = sel.manual_bill_no;
+                                row.bill_date = sel.bill_date;
+                                row.total_amt = sel.total_amount;
+                                row.balance = sel.outstanding_amount;
+                                row.paid_amt = sel.allocate;
+                                row.deduct_amt = 0;
+                                row.tds_amt = 0;
+                            });
+                            
+                            frm.refresh_field("allocated_invoices");
+                            calculate_totals(frm);
+                            d.hide();
+                        }
+                    });
+                    
+                    d.show();
+                } else {
+                    frappe.msgprint("No unpaid bills found for this customer.");
                 }
-            });
-        }, __('Get Items From'));
+            }
+        });
     }
 });
 
-frappe.ui.form.on('Money Receipt Item', {
-    allocated_amount: function(frm, cdt, cdn) {
-        let row = frappe.get_doc(cdt, cdn);
-        if (row.allocated_amount > row.outstanding_amount) {
-            frappe.msgprint("Allocated amount cannot exceed Outstanding Amount.");
-            frappe.model.set_value(cdt, cdn, "allocated_amount", row.outstanding_amount);
-        }
-        calculate_unallocated(frm);
+frappe.ui.form.on('Allocated Transport Invoice', {
+    paid_amt: function(frm, cdt, cdn) {
+        validate_and_calculate(frm, cdt, cdn);
     },
-    allocated_lrs_remove: function(frm) {
-        calculate_unallocated(frm);
+    deduct_amt: function(frm, cdt, cdn) {
+        validate_and_calculate(frm, cdt, cdn);
+    },
+    tds_amt: function(frm, cdt, cdn) {
+        validate_and_calculate(frm, cdt, cdn);
+    },
+    allocated_invoices_remove: function(frm) {
+        calculate_totals(frm);
     }
 });
 
-function calculate_unallocated(frm) {
-    let total_allocated = 0;
-    if (frm.doc.allocated_lrs) {
-        frm.doc.allocated_lrs.forEach(row => {
-            total_allocated += row.allocated_amount;
+function validate_and_calculate(frm, cdt, cdn) {
+    let row = frappe.get_doc(cdt, cdn);
+    let total_deductions = flt(row.paid_amt) + flt(row.deduct_amt) + flt(row.tds_amt);
+    
+    if (total_deductions > flt(row.balance)) {
+        frappe.msgprint("Total applied amount (Paid + Deduct + TDS) cannot exceed the Balance.");
+        frappe.model.set_value(cdt, cdn, "paid_amt", 0);
+        frappe.model.set_value(cdt, cdn, "deduct_amt", 0);
+        frappe.model.set_value(cdt, cdn, "tds_amt", 0);
+    } else {
+        frappe.model.set_value(cdt, cdn, "outstanding_amt", flt(row.balance) - total_deductions);
+    }
+    calculate_totals(frm);
+}
+
+function calculate_totals(frm) {
+    let total_paid = 0;
+    if (frm.doc.allocated_invoices) {
+        frm.doc.allocated_invoices.forEach(row => {
+            total_paid += flt(row.paid_amt);
         });
     }
     
-    let total_received = frm.doc.total_amount_received || 0;
-    frm.set_value("unallocated_amount", total_received - total_allocated);
+    frm.set_value("total_amount", total_paid);
+    
+    // Convert to words if frappe has the utility, sometimes frappe.utils.money_in_words is available
+    if (total_paid > 0) {
+        frappe.call({
+            method: 'mytransport.mytransport.doctype.money_receipt.money_receipt.get_money_in_words',
+            args: {
+                amount: total_paid,
+                currency: frappe.defaults.get_default("Currency") || "INR"
+            },
+            callback: function(r) {
+                if(r.message) {
+                    frm.set_value("amount_in_words", r.message);
+                }
+            }
+        });
+    } else {
+        frm.set_value("amount_in_words", "");
+    }
 }
