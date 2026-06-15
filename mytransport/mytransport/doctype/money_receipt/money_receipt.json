@@ -26,7 +26,8 @@
   "allocated_invoices",
   "sb3",
   "total_amount",
-  "remarks"
+  "remarks",
+  "mr_no"
  ],
  "fields": [
   {
@@ -151,13 +152,18 @@
    "fieldname": "sb3",
    "fieldtype": "Section Break",
    "label": "Additional Information"
+  },
+  {
+   "fieldname": "mr_no",
+   "fieldtype": "Data",
+   "label": "MR No"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-06-15 11:10:51.934419",
+ "modified": "2026-06-15 11:29:25.226456",
  "modified_by": "Administrator",
  "module": "Mytransport",
  "name": "Money Receipt",
