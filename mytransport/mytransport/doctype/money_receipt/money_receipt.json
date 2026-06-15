@@ -8,6 +8,7 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "mr_no",
   "company",
   "customer",
   "date",
@@ -26,8 +27,7 @@
   "allocated_invoices",
   "sb3",
   "total_amount",
-  "remarks",
-  "mr_no"
+  "remarks"
  ],
  "fields": [
   {
