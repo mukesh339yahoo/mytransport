@@ -18,17 +18,13 @@ class ExpenseVoucher(Document):
         # Credit the payment account (Bank/Cash)
         je.append("accounts", {
             "account": self.payment_account,
-            "credit_in_account_currency": self.total_paid_amt,
-            "reference_type": "Expense Voucher",
-            "reference_name": self.name
+            "credit_in_account_currency": self.total_paid_amt
         })
         
         # Debit the expense account
         je.append("accounts", {
             "account": self.expense_account,
-            "debit_in_account_currency": self.total_paid_amt,
-            "reference_type": "Expense Voucher",
-            "reference_name": self.name
+            "debit_in_account_currency": self.total_paid_amt
         })
         
         # Update Challan Advance Details
