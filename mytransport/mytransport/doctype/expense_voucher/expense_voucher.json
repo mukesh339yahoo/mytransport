@@ -8,6 +8,7 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "voucher_no",
   "company",
   "date",
   "cb1",
@@ -19,7 +20,6 @@
   "paid_to",
   "sb2",
   "remarks",
-  "voucher_no",
   "journal_entry",
   "vendor",
   "amended_from",
@@ -32,6 +32,11 @@
   "on_account"
  ],
  "fields": [
+  {
+   "fieldname": "voucher_no",
+   "fieldtype": "Data",
+   "label": "Voucher No"
+  },
   {
    "fieldname": "company",
    "fieldtype": "Link",
@@ -120,11 +125,6 @@
    "print_hide": 1,
    "read_only": 1,
    "search_index": 1
-  },
-  {
-   "fieldname": "voucher_no",
-   "fieldtype": "Data",
-   "label": "Voucher No"
   },
   {
    "fieldname": "vendor",
