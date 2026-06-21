@@ -1,7 +1,7 @@
 {
  "app": "mytransport",
  "charts": [],
- "content": "[{\"id\": \"o36a8LX6Lb\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\">Welcome to the Transport workspace</span>\", \"col\": 12}}, {\"id\": \"jZAxKkBnah\", \"type\": \"paragraph\", \"data\": {\"text\": \"Click on \\n\\t\\t\\t\\n\\t\\t\\t\\n\\t\\t to edit\", \"col\": 12}}, {\"id\": \"XsHzxAZLS0\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Lorry Receipt\", \"col\": 3}}, {\"id\": \"pOXZxEm6o0\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Challan\", \"col\": 3}}, {\"id\": \"sBy2VH51yC\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Sales Invoice\", \"col\": 3}}, {\"id\": \"BwDc80bnNX\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Expense Voucher\", \"col\": 3}}, {\"id\": \"bDKOX3avdH\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Money Receipt\", \"col\": 3}}, {\"id\": \"faB-d93fxB\", \"type\": \"paragraph\", \"data\": {\"text\": \"Reports\", \"col\": 12}}, {\"id\": \"GHKRl4Qw3r\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Lr Register\", \"col\": 3}}, {\"id\": \"zZFm11KiPJ\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Lr Status Report\", \"col\": 3}}, {\"id\": \"ksGD5E6Wll\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Challan Costing Report\", \"col\": 3}}, {\"id\": \"01b098acf9\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Challan Register\", \"col\": 3}}]",
+ "content": "[{\"id\":\"o36a8LX6Lb\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Welcome to the Transport workspace</span>\",\"col\":12}},{\"id\":\"jZAxKkBnah\",\"type\":\"paragraph\",\"data\":{\"text\":\"Shortcuts\",\"col\":12}},{\"id\":\"XsHzxAZLS0\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Lorry Receipt\",\"col\":3}},{\"id\":\"pOXZxEm6o0\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Challan\",\"col\":3}},{\"id\":\"RAdwLI1KzD\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Transport Invoice\",\"col\":3}},{\"id\":\"lvI3CnoEDZ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Money Receipt\",\"col\":3}},{\"id\":\"xPO9t5cKOh\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Expense Voucher\",\"col\":3}},{\"id\":\"faB-d93fxB\",\"type\":\"paragraph\",\"data\":{\"text\":\"Reports\",\"col\":12}},{\"id\":\"GHKRl4Qw3r\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Lr Register\",\"col\":3}},{\"id\":\"zZFm11KiPJ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Lr Status Report\",\"col\":3}},{\"id\":\"ksGD5E6Wll\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Challan Costing Report\",\"col\":3}},{\"id\":\"01b098acf9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Challan Register\",\"col\":3}}]",
  "creation": "2026-06-07 16:34:37.015105",
  "custom_blocks": [],
  "docstatus": 0,
@@ -14,7 +14,7 @@
  "label": "Transport",
  "link_type": "DocType",
  "links": [],
- "modified": "2026-06-07 17:12:40.948509",
+ "modified": "2026-06-21 06:44:10.503074",
  "modified_by": "Administrator",
  "module": "Mytransport",
  "name": "Transport",
@@ -28,24 +28,16 @@
   {
    "color": "Grey",
    "doc_view": "List",
-   "label": "Lorry Receipt",
-   "link_to": "Lorry Receipt",
+   "label": "Transport Invoice",
+   "link_to": "Transport Invoice",
    "stats_filter": "[]",
    "type": "DocType"
   },
   {
    "color": "Grey",
    "doc_view": "List",
-   "label": "Challan",
-   "link_to": "Challan",
-   "stats_filter": "[]",
-   "type": "DocType"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Sales Invoice",
-   "link_to": "Sales Invoice",
+   "label": "Money Receipt",
+   "link_to": "Money Receipt",
    "stats_filter": "[]",
    "type": "DocType"
   },
@@ -60,8 +52,16 @@
   {
    "color": "Grey",
    "doc_view": "List",
-   "label": "Money Receipt",
-   "link_to": "Money Receipt",
+   "label": "Lorry Receipt",
+   "link_to": "Lorry Receipt",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Challan",
+   "link_to": "Challan",
    "stats_filter": "[]",
    "type": "DocType"
   },

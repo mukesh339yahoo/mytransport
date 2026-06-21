@@ -48,6 +48,8 @@
   "total_amount",
   "billing_sec",
   "credit_account",
+  "party_invoice_number",
+  "party_invoice_value",
   "invoice_number",
   "invoice_value",
   "gst_paid_by",
@@ -117,15 +119,13 @@
    "fieldname": "consignor_address",
    "fieldtype": "Small Text",
    "label": "Consignor Address",
-   "fetch_from": "consignor.primary_address",
-   "read_only": 1
+   "fetch_from": "consignor.primary_address"
   },
   {
    "fieldname": "consignor_gst_no",
    "fieldtype": "Data",
    "label": "Consignor GST No",
-   "fetch_from": "consignor.tax_id",
-   "read_only": 1
+   "fetch_from": "consignor.tax_id"
   },
   {
    "fieldname": "from_city",
@@ -149,15 +149,13 @@
    "fieldname": "consignee_address",
    "fieldtype": "Small Text",
    "label": "Consignee Address",
-   "fetch_from": "consignee.primary_address",
-   "read_only": 1
+   "fetch_from": "consignee.primary_address"
   },
   {
    "fieldname": "consignee_gst_no",
    "fieldtype": "Data",
    "label": "Consignee GST No",
-   "fetch_from": "consignee.tax_id",
-   "read_only": 1
+   "fetch_from": "consignee.tax_id"
   },
   {
    "fieldname": "to_city",
@@ -258,9 +256,18 @@
   {
    "fieldname": "credit_account",
    "fieldtype": "Link",
-   "label": "Credit A/c",
-   "options": "Account",
-   "read_only": 1
+   "label": "Credit Account",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "party_invoice_number",
+   "fieldtype": "Data",
+   "label": "Party Invoice Number"
+  },
+  {
+   "fieldname": "party_invoice_value",
+   "fieldtype": "Data",
+   "label": "Party Invoice Value"
   },
   {
    "fieldname": "invoice_number",
@@ -350,7 +357,7 @@
   {
    "fieldname": "total_weight",
    "fieldtype": "Float",
-   "label": "Total Weight",
+   "label": "Total Weight (MT)",
    "read_only": 1
   },
   {

@@ -4,6 +4,24 @@
 frappe.ui.form.on("Lorry Receipt", {
 	setup: function(frm) {
 		// Calculate totals on setup if needed
+		$('<style>').text(`
+			div[data-fieldname="consignor_address"] textarea,
+			div[data-fieldname="consignee_address"] textarea,
+			div[data-fieldname="consignor_address"] .control-value,
+			div[data-fieldname="consignee_address"] .control-value {
+				height: 80px !important;
+				max-height: 80px !important;
+				min-height: 80px !important;
+				resize: none !important;
+				overflow-y: auto !important;
+			}
+		`).appendTo('head');
+	},
+
+	consignor: function(frm) {
+		if (frm.doc.consignor && !frm.doc.credit_account) {
+			frm.set_value("credit_account", frm.doc.consignor);
+		}
 	},
 
 	basic_freight: function(frm) {

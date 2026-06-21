@@ -33,12 +33,12 @@
    "fieldname": "actual_weight",
    "fieldtype": "Float",
    "in_list_view": 1,
-   "label": "Actual Weight"
+   "label": "Act Wgt (MT)"
   },
   {
    "fieldname": "charged_weight",
    "fieldtype": "Float",
-   "label": "Charged Weight",
+   "label": "Chrg Wgt (MT)",
    "in_list_view": 1
   },
   {

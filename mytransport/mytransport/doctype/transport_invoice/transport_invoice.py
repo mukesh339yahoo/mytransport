@@ -125,17 +125,13 @@ class TransportInvoice(Document):
 
 @frappe.whitelist()
 def get_unbilled_lrs(customer, invoice_name=None):
-    # Fetch Lorry Receipts that are Unbilled and belong to this customer
-    # The customer could be Consignor or Consignee, we check either
+    # Fetch Lorry Receipts that are Unbilled and where Credit Account matches the customer
     lrs = frappe.get_all(
         "Lorry Receipt",
         filters={
             "status": "Unbilled",
-            "docstatus": 1
-        },
-        or_filters={
-            "consignor": customer,
-            "consignee": customer
+            "docstatus": 1,
+            "credit_account": customer
         },
         fields=[
             "name", "date", "from_city", "to_city", "total_packages", "total_weight",
