@@ -9,47 +9,51 @@
  "engine": "InnoDB",
  "field_order": [
   "challan_number",
+  "column_break_top_1",
   "branch",
+  "column_break_top_2",
   "date",
+  "lrs_sec",
+  "get_unmapped_lrs",
+  "lrs",
   "location_sec",
   "from_location",
+  "eway_bill_no",
   "column_break_1",
   "to_location",
+  "eway_bill_expiry_date",
   "vehicle_details_sec",
   "broker",
   "vehicle_number",
-  "driver_name",
   "column_break_2",
-  "driver_phone",
-  "lrs_sec",
-  "lrs",
+  "driver_name",
   "truck_freight_sec",
   "total_lrs",
+  "total_weight",
+  "total_packages",
+  "column_break_tf_1",
   "basic_freight",
   "hamali_charges",
   "detention_charges",
-  "column_break_tf_1",
+  "column_break_tf_2",
   "rto_charges",
   "other_charges",
   "total_amount",
-  "column_break_tf_2",
-  "total_weight",
-  "total_packages",
   "advance_details_sec",
-  "pan_no",
-  "name_field",
-  "cheque_no",
   "bank",
-  "cheque_date",
   "column_break_ad_1",
+  "cheque_no",
+  "cheque_date",
   "cheque_amount",
   "voucher_no",
+  "column_break_ad_2",
   "cash_amount",
   "utr_rtgs_no",
   "e_pay_amount",
-  "column_break_ad_2",
   "remarks",
   "tds_details_sec",
+  "pan_no",
+  "name_field",
   "tds_declaration",
   "tds_challan",
   "column_break_tds_1",
@@ -140,11 +144,6 @@
   {
    "fieldname": "column_break_2",
    "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "driver_phone",
-   "fieldtype": "Data",
-   "label": "Driver Phone"
   },
   {
    "fieldname": "lrs_sec",
@@ -375,6 +374,30 @@
    "fieldtype": "Check",
    "label": "Update Vehicle TDS",
    "hidden": 1
+  },
+  {
+   "fieldname": "column_break_top_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_top_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "eway_bill_no",
+   "fieldtype": "Data",
+   "label": "Eway Bill No"
+  },
+  {
+   "fieldname": "eway_bill_expiry_date",
+   "fieldtype": "Date",
+   "label": "Eway Bill Expiry Date"
+  },
+  {
+   "fieldname": "get_unmapped_lrs",
+   "fieldtype": "Button",
+   "label": "Get Unmapped LRs",
+   "depends_on": "eval:doc.docstatus==0"
   }
  ],
  "grid_page_length": 50,

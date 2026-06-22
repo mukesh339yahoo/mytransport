@@ -8,17 +8,18 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "customer",
-  "customer_gst_no",
-  "customer_address",
-  "customer_reference",
-  "category",
   "bill_no",
   "date",
   "due_date",
-  "column_break_1",
   "status",
+  "column_break_main_2",
+  "customer",
+  "customer_address",
+  "customer_gst_no",
+  "column_break_1",
+  "category",
   "branch",
+  "customer_reference",
   "amended_from",
   "items_section",
   "get_unbilled_lrs",
@@ -235,6 +236,10 @@
    "fieldtype": "Currency",
    "label": "Total Other Charges",
    "read_only": 1
+  },
+  {
+   "fieldname": "column_break_main_2",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,

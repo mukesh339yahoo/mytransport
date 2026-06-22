@@ -45,12 +45,17 @@ frappe.ui.form.on("Transport Invoice", {
 	
 	customer: function(frm) {
 		if (frm.doc.customer) {
+			// First clear the fields so they update immediately
+			frm.set_value("customer_address", "");
+			frm.set_value("customer_gst_no", "");
+			
 			frappe.db.get_value("Customer", frm.doc.customer, ["customer_primary_address", "tax_id"])
 				.then(r => {
 					if (r.message) {
 						if (r.message.tax_id) {
 							frm.set_value("customer_gst_no", r.message.tax_id);
 						}
+						
 						if (r.message.customer_primary_address) {
 							frappe.call({
 								method: 'frappe.contacts.doctype.address.address.get_address_display',
@@ -63,6 +68,9 @@ frappe.ui.form.on("Transport Invoice", {
 						}
 					}
 				});
+		} else {
+			frm.set_value("customer_address", "");
+			frm.set_value("customer_gst_no", "");
 		}
 	},
 
@@ -106,7 +114,7 @@ frappe.ui.form.on("Transport Invoice", {
 						row.to_city = lr.to_city;
 						row.total_packages = lr.total_packages;
 						row.total_weight = lr.total_weight;
-						row.basic_freight = lr.basic_freight;
+						row.rate_type = "Fix";
 						row.st_charge = lr.bilty_charges;
 						row.detention_narration = lr.detention_narration;
 						row.detention_charges = lr.detention_charges;
@@ -132,6 +140,27 @@ frappe.ui.form.on("Transport Invoice Item", {
 		calculate_totals(frm);
 	},
 	items_remove: function(frm) {
+		calculate_totals(frm);
+	},
+	rate_type: function(frm, cdt, cdn) {
+		let row = locals[cdt][cdn];
+		if (row.rate_type === "Per MT") {
+			let rate = flt(row.rate_per_mt);
+			if (rate > 0) {
+				frappe.model.set_value(cdt, cdn, "basic_freight", rate * flt(row.total_weight));
+			}
+		}
+	},
+	rate_per_mt: function(frm, cdt, cdn) {
+		let row = locals[cdt][cdn];
+		if (row.rate_type === "Per MT") {
+			let rate = flt(row.rate_per_mt);
+			if (rate > 0) {
+				frappe.model.set_value(cdt, cdn, "basic_freight", rate * flt(row.total_weight));
+			}
+		}
+	},
+	basic_freight: function(frm, cdt, cdn) {
 		calculate_totals(frm);
 	}
 });

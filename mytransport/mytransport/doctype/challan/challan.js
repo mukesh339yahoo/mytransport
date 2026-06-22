@@ -2,6 +2,102 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("Challan", {
+	get_unmapped_lrs: function(frm) {
+		let msd = new frappe.ui.form.MultiSelectDialog({
+			doctype: "Lorry Receipt",
+			target: frm,
+			setters: {
+				from_city: frm.doc.from_location,
+				to_city: frm.doc.to_location
+			},
+			add_filters_group: 1,
+			date_field: "date",
+			get_query() {
+				let filters = {
+					"challan_status": "Pending",
+					"docstatus": 1
+				};
+				
+				let existing_lrs = (frm.doc.lrs || []).map(row => row.lr_number).filter(Boolean);
+				if (existing_lrs.length > 0) {
+					filters["name"] = ["not in", existing_lrs];
+				}
+				
+				return {
+					filters: filters
+				};
+			},
+			action(selections) {
+				if (selections.length === 0) {
+					return;
+				}
+				
+				frappe.call({
+					method: "mytransport.mytransport.doctype.challan.challan.get_lr_details",
+					args: {
+						lr_names: JSON.stringify(selections)
+					},
+					callback: function(r) {
+						if (r.message && r.message.length > 0) {
+							let vehicle_numbers = new Set();
+							
+							r.message.forEach(function(lr, index) {
+								let row = frm.add_child("lrs");
+								row.lr_number = lr.name;
+								row.lr_date = lr.date;
+								row.from_city = lr.from_city;
+								row.to_city = lr.to_city;
+								row.total_packages = lr.total_packages;
+								row.total_weight = lr.total_weight;
+								row.basic_freight = lr.basic_freight;
+								row.hamali_charges = lr.hamali_charges;
+								row.detention_charges = lr.detention_charges;
+								row.rto_charges = lr.rto_charges;
+								row.other_charges = lr.other_charges;
+								row.total_amount = lr.total_amount;
+								row.vehicle_number = lr.vehicle_number;
+								
+								if (lr.vehicle_number) {
+									vehicle_numbers.add(lr.vehicle_number);
+								}
+								
+								if (index === 0) {
+									if (lr.from_city) frm.set_value("from_location", lr.from_city);
+									if (lr.to_city) frm.set_value("to_location", lr.to_city);
+									if (lr.vehicle_number) frm.set_value("vehicle_number", lr.vehicle_number);
+									if (lr.driver_name) frm.set_value("driver_name", lr.driver_name);
+								}
+							});
+							
+							if (vehicle_numbers.size > 1) {
+								frappe.msgprint({
+									title: __('Warning'),
+									indicator: 'orange',
+									message: __('The selected LRs have different Vehicle Numbers! Please review them.')
+								});
+							}
+							
+							calculate_lr_totals(frm);
+							frm.refresh_field("lrs");
+							
+							cur_dialog.hide();
+						}
+					}
+				});
+			}
+		});
+		
+		// Frappe MultiSelectDialog bug workaround: 
+		// if field is empty, it falls back to the initial setters object. 
+		// We set them to empty string after initialization so manual clears actually work.
+		msd.setters.from_city = '';
+		msd.setters.to_city = '';
+		
+		msd.dialog.$wrapper.find('.clear-filters').on('click', function() {
+			msd.dialog.set_value('from_city', '');
+			msd.dialog.set_value('to_city', '');
+		});
+	},
 	total_hire_amount: function(frm) {
 		calculate_balance(frm);
 	},

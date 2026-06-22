@@ -10,6 +10,7 @@
  "field_order": [
   "lr_number",
   "status",
+  "challan_status",
   "column_break_top_1",
   "branch",
   "date",
@@ -173,7 +174,8 @@
    "fieldname": "challan_number",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Challan Number"
+   "label": "Challan Number",
+   "read_only": 1
   },
   {
    "fieldname": "vehicle_number",
@@ -383,6 +385,16 @@
    "fieldtype": "Small Text",
    "label": "Other Charge Narration",
    "allow_on_submit": 1
+  },
+  {
+   "fieldname": "challan_status",
+   "fieldtype": "Select",
+   "label": "Challan Status",
+   "options": "Pending\nChallan Created",
+   "default": "Pending",
+   "read_only": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
   }
  ],
  "grid_page_length": 50,

@@ -25,6 +25,8 @@ class Challan(Document):
 		self.total_tds = (flt(self.total_amount) * flt(self.tds_percent)) / 100.0
 
 	def on_submit(self):
+		self.update_lr_status(True)
+		
 		if self.update_vehicle_tds and self.tds_declaration and self.vehicle_number:
 			vehicle = frappe.get_doc("Hired Vehicle", self.vehicle_number)
 			
@@ -57,3 +59,40 @@ class Challan(Document):
 				
 			# Also set tds_challan locally so the form is completely accurate upon submit
 			self.db_set('tds_challan', self.name)
+
+	def on_cancel(self):
+		self.update_lr_status(False)
+
+	def update_lr_status(self, is_submit):
+		for row in self.get("lrs"):
+			if row.lr_number:
+				frappe.db.set_value("Lorry Receipt", row.lr_number, {
+					"challan_status": "Challan Created" if is_submit else "Pending",
+					"challan_number": self.name if is_submit else ""
+				})
+
+@frappe.whitelist()
+def get_lr_details(lr_names):
+	import json
+	lr_list = json.loads(lr_names)
+	
+	if not lr_list:
+		return []
+		
+	lrs = frappe.get_all("Lorry Receipt", filters={"name": ("in", lr_list)},
+		fields=[
+			"name", "date", "from_city", "to_city", "total_packages", "total_weight",
+			"basic_freight", "hamali_charges", "detention_charges", "rto_charges", "other_charges",
+			"total_amount", "vehicle_number"
+		])
+		
+	for lr in lrs:
+		if lr.vehicle_number:
+			vehicle = frappe.get_value("Hired Vehicle", lr.vehicle_number, ["driver_name"], as_dict=True)
+			if vehicle:
+				lr.driver_name = vehicle.driver_name
+		if not lr.get("driver_name"):
+			lr.driver_name = ""
+			
+	return lrs
+

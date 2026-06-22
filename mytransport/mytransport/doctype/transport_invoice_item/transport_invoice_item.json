@@ -13,6 +13,7 @@
   "to_city",
   "total_packages",
   "total_weight",
+  "rate_type",
   "rate_per_mt",
   "basic_freight",
   "st_charge",
@@ -37,8 +38,7 @@
    "fieldtype": "Date",
    "label": "LR Date",
    "fetch_from": "lr_number.date",
-   "read_only": 1,
-   "in_list_view": 1
+   "read_only": 1
   },
   {
    "fieldname": "from_city",
@@ -61,8 +61,7 @@
    "fieldtype": "Int",
    "label": "No of Pkgs",
    "fetch_from": "lr_number.total_packages",
-   "read_only": 1,
-   "in_list_view": 1
+   "read_only": 1
   },
   {
    "fieldname": "total_weight",
@@ -73,18 +72,27 @@
    "in_list_view": 1
   },
   {
-   "fieldname": "rate_per_mt",
+   "fieldname": "rate_type",
    "fieldtype": "Select",
+   "label": "Rate Type",
+   "options": "Fix\nPer MT",
+   "in_list_view": 1,
+   "columns": 1,
+   "default": "Fix"
+  },
+  {
+   "fieldname": "rate_per_mt",
+   "fieldtype": "Float",
    "label": "Rate per MT",
-   "options": "\nFix",
-   "in_list_view": 1
+   "in_list_view": 1,
+   "depends_on": "eval:doc.rate_type==\"Per MT\""
   },
   {
    "fieldname": "basic_freight",
    "fieldtype": "Currency",
-   "label": "Freight",
-   "fetch_from": "lr_number.basic_freight",
-   "read_only": 1
+   "in_list_view": 1,
+   "columns": 2,
+   "label": "Freight"
   },
   {
    "fieldname": "st_charge",
