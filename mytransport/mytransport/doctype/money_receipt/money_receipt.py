@@ -3,6 +3,11 @@ from frappe.model.document import Document
 from frappe.utils import flt, money_in_words
 
 class MoneyReceipt(Document):
+    def before_insert(self):
+        from mytransport.mytransport.branch_numbering import get_next_branch_number
+        if not self.mr_no:
+            self.mr_no = get_next_branch_number(self.branch, "Money Receipt", self.date)
+
     def validate(self):
         pass
 

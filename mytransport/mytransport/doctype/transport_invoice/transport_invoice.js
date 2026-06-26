@@ -30,8 +30,19 @@ frappe.ui.form.on("Transport Invoice", {
 	},
 
 	date: function(frm) {
+		if (frm.doc.date > frappe.datetime.get_today()) {
+			frappe.msgprint(__("Transport Invoice Date cannot be a future date."));
+			frm.set_value("date", frappe.datetime.get_today());
+		}
 		if (frm.doc.date && !frm.doc.due_date) {
 			frm.set_value("due_date", frappe.datetime.add_days(frm.doc.date, 30));
+		}
+	},
+
+	validate: function(frm) {
+		if (frm.doc.date > frappe.datetime.get_today()) {
+			frappe.msgprint(__("Transport Invoice Date cannot be a future date."));
+			frappe.validated = false;
 		}
 	},
 

@@ -6,6 +6,11 @@ from frappe.model.document import Document
 from frappe.utils import flt, cint
 
 class Challan(Document):
+	def before_insert(self):
+		from mytransport.mytransport.branch_numbering import get_next_branch_number
+		if not self.challan_number:
+			self.challan_number = get_next_branch_number(self.branch, "Challan", self.date)
+
 	def before_save(self):
 		self.calculate_lr_totals()
 		self.calculate_tds()

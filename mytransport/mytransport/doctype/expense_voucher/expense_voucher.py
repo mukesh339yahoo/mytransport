@@ -2,6 +2,11 @@ import frappe
 from frappe.model.document import Document
 
 class ExpenseVoucher(Document):
+    def before_insert(self):
+        from mytransport.mytransport.branch_numbering import get_next_branch_number
+        if not self.voucher_no:
+            self.voucher_no = get_next_branch_number(self.branch, "Expense Voucher", self.date)
+
     def on_submit(self):
         # Create Journal Entry
         je = frappe.new_doc("Journal Entry")

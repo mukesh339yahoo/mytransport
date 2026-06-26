@@ -6,7 +6,16 @@ from frappe.model.document import Document
 from frappe.utils import flt
 
 class TransportInvoice(Document):
+    def before_insert(self):
+        from mytransport.mytransport.branch_numbering import get_next_branch_number
+        if not self.bill_no:
+            self.bill_no = get_next_branch_number(self.branch, "Transport Invoice", self.date)
+
     def validate(self):
+        from frappe.utils import getdate, nowdate
+        if self.date and getdate(self.date) > getdate(nowdate()):
+            frappe.throw("Transport Invoice Date cannot be a future date")
+        
         self.calculate_totals()
         if not self.company:
             frappe.throw("Company is mandatory for accounting entries")
