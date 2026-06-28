@@ -6,7 +6,7 @@ class MoneyReceipt(Document):
     def before_insert(self):
         from mytransport.branch_numbering import get_next_branch_number, update_branch_number_counter
         if not self.mr_no:
-			self.mr_no = get_next_branch_number(self.branch, "Money Receipt", self.date)
+            self.mr_no = get_next_branch_number(self.branch, "Money Receipt", self.date)
 
     def validate(self):
         pass

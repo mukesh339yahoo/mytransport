@@ -9,7 +9,7 @@ class TransportInvoice(Document):
     def before_insert(self):
         from mytransport.branch_numbering import get_next_branch_number, update_branch_number_counter
         if not self.bill_no:
-			self.bill_no = get_next_branch_number(self.branch, "Transport Invoice", self.date)
+            self.bill_no = get_next_branch_number(self.branch, "Transport Invoice", self.date)
 
     def validate(self):
         from frappe.utils import getdate, nowdate
@@ -48,11 +48,11 @@ class TransportInvoice(Document):
         self.outstanding_amount = self.total_amount - flt(self.paid_amount)
         
         if self.paid_amount == 0:
-			self.status = "Draft" if self.docstatus == 0 else "Unpaid"
+            self.status = "Draft" if self.docstatus == 0 else "Unpaid"
         elif self.outstanding_amount <= 0:
-			self.status = "Paid"
-		else:
-			self.status = "Partially Paid"
+            self.status = "Paid"
+        else:
+            self.status = "Partially Paid"
 
     def on_submit(self):
         self.update_lorry_receipts(is_submit=True)
@@ -76,7 +76,7 @@ class TransportInvoice(Document):
                         "invoice_number": self.name,
                         "invoice_value": self.total_amount
                     })
-        		else:
+                else:
                     frappe.db.set_value("Lorry Receipt", item.lr_number, {
                         "status": "Unbilled",
                         "transport_invoice": None,
@@ -94,7 +94,7 @@ class TransportInvoice(Document):
         
         # 1. Debit the Customer Account (Accounts Receivable)
         gl_entries.append(
-			self.get_gl_dict({
+            self.get_gl_dict({
                 "account": self.debit_to,
                 "party_type": "Customer",
                 "party": self.customer,
@@ -106,7 +106,7 @@ class TransportInvoice(Document):
         
         # 2. Credit the Income Account
         gl_entries.append(
-			self.get_gl_dict({
+            self.get_gl_dict({
                 "account": self.income_account,
                 "credit": self.total_amount,
                 "credit_in_account_currency": self.total_amount,
