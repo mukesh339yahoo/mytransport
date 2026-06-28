@@ -6,6 +6,12 @@ frappe.ui.form.on("Expense Voucher", {
         if (frm.is_new() && !frm.doc.company) {
             frm.set_value("company", frappe.defaults.get_default("Company"));
         }
+        if (frm.is_new() && !frm.doc.branch) {
+            let default_branch = frappe.defaults.get_default("branch") || frappe.defaults.get_default("Branch");
+            if (default_branch) {
+                frm.set_value("branch", default_branch);
+            }
+        }
     },
     setup: function(frm) {
         frm.set_query("payment_account", function() {

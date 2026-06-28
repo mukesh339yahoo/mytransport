@@ -2,6 +2,14 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("Challan", {
+	onload: function(frm) {
+		if (frm.is_new() && !frm.doc.branch) {
+			let default_branch = frappe.defaults.get_default("branch") || frappe.defaults.get_default("Branch");
+			if (default_branch) {
+				frm.set_value("branch", default_branch);
+			}
+		}
+	},
 	get_unmapped_lrs: function(frm) {
 		let msd = new frappe.ui.form.MultiSelectDialog({
 			doctype: "Lorry Receipt",
@@ -287,6 +295,14 @@ function peek_branch_number(frm, doc_type, fieldname) {
 }
 
 frappe.ui.form.on("Challan", {
+	onload: function(frm) {
+		if (frm.is_new() && !frm.doc.branch) {
+			let default_branch = frappe.defaults.get_default("branch") || frappe.defaults.get_default("Branch");
+			if (default_branch) {
+				frm.set_value("branch", default_branch);
+			}
+		}
+	},
 	refresh: function(frm) {
 		peek_branch_number(frm, "Challan", "challan_number");
 	},

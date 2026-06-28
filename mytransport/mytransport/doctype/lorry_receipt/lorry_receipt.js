@@ -2,6 +2,14 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("Lorry Receipt", {
+	onload: function(frm) {
+		if (frm.is_new() && !frm.doc.branch) {
+			let default_branch = frappe.defaults.get_default("branch") || frappe.defaults.get_default("Branch");
+			if (default_branch) {
+				frm.set_value("branch", default_branch);
+			}
+		}
+	},
 	setup: function(frm) {
 		// Calculate totals on setup if needed
 		$('<style>').text(`
@@ -108,6 +116,14 @@ function peek_branch_number(frm, doc_type, fieldname) {
 }
 
 frappe.ui.form.on("Lorry Receipt", {
+	onload: function(frm) {
+		if (frm.is_new() && !frm.doc.branch) {
+			let default_branch = frappe.defaults.get_default("branch") || frappe.defaults.get_default("Branch");
+			if (default_branch) {
+				frm.set_value("branch", default_branch);
+			}
+		}
+	},
 	refresh: function(frm) {
 		peek_branch_number(frm, "Lorry Receipt", "lr_number");
 	},

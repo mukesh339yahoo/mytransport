@@ -27,6 +27,12 @@ frappe.ui.form.on("Transport Invoice", {
 		if (frm.is_new() && frm.doc.date && !frm.doc.due_date) {
 			frm.set_value("due_date", frappe.datetime.add_days(frm.doc.date, 30));
 		}
+		if (frm.is_new() && !frm.doc.branch) {
+			let default_branch = frappe.defaults.get_default("branch") || frappe.defaults.get_default("Branch");
+			if (default_branch) {
+				frm.set_value("branch", default_branch);
+			}
+		}
 	},
 
 	date: function(frm) {
