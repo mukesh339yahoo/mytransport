@@ -9,9 +9,9 @@ class LorryReceipt(Document):
     def autoname(self):
         from mytransport.branch_numbering import get_next_branch_number, update_branch_number_counter
         if not self.lr_number:
-            self.lr_number = str(get_next_branch_number(self.branch, "Lorry Receipt", self.date))
-        else:
-            update_branch_number_counter(self.branch, "Lorry Receipt", self.date, self.lr_number)
+			self.lr_number = str(get_next_branch_number(self.branch, "Lorry Receipt", self.date))
+		else:
+			update_branch_number_counter(self.branch, "Lorry Receipt", self.date, self.lr_number)
         self.name = self.lr_number
 
     def before_save(self):
@@ -31,13 +31,13 @@ class LorryReceipt(Document):
         )
 
         if not self.paid_amount:
-            self.paid_amount = 0
+			self.paid_amount = 0
             
         self.outstanding_amount = self.total_amount - self.paid_amount
             
         if self.paid_amount == 0:
-            self.receipt_status = "Unpaid"
+			self.receipt_status = "Unpaid"
         elif self.outstanding_amount <= 0:
-            self.receipt_status = "Paid"
-        else:
-            self.receipt_status = "Partially Paid"
+			self.receipt_status = "Paid"
+		else:
+			self.receipt_status = "Partially Paid"
