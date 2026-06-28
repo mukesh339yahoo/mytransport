@@ -66,8 +66,7 @@
   {
    "fieldname": "total_weight",
    "fieldtype": "Float",
-   "label": "Weight",
-   "fetch_from": "lr_number.total_weight",
+   "label": "Chrg Wgt",
    "read_only": 1,
    "in_list_view": 1
   },

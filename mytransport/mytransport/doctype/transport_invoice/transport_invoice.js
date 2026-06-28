@@ -134,7 +134,7 @@ frappe.ui.form.on("Transport Invoice", {
 						row.from_city = lr.from_city;
 						row.to_city = lr.to_city;
 						row.total_packages = lr.total_packages;
-						row.total_weight = lr.total_weight;
+						row.total_weight = lr.total_charged_weight;
 						row.rate_type = "Fix";
 						row.st_charge = lr.bilty_charges;
 						row.detention_narration = lr.detention_narration;

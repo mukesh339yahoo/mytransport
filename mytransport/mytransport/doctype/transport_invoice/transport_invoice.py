@@ -148,4 +148,9 @@ def get_unbilled_lrs(customer, invoice_name=None):
             "hamali_narration", "hamali_charges", "other_charge_narration", "other_charges"
         ]
     )
+    
+    for lr in lrs:
+        items = frappe.get_all("LR Item", filters={"parent": lr.name}, fields=["charged_weight"])
+        lr.total_charged_weight = sum(flt(item.charged_weight) for item in items)
+        
     return lrs
