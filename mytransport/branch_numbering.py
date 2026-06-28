@@ -84,3 +84,19 @@ def update_branch_number_counter(branch, document_type, date, assigned_number):
         current_number = frappe.db.get_value("Branch Numbering Settings", settings_name, "current_number") or 0
         if assigned_int > current_number:
             frappe.db.set_value("Branch Numbering Settings", settings_name, "current_number", assigned_int)
+
+@frappe.whitelist()
+def get_default_branch():
+	user = frappe.session.user
+	# First check user permissions directly to bypass Administrator limitations
+	default_branch = frappe.db.get_value("User Permission", {
+		"user": user,
+		"allow": "Branch",
+		"is_default": 1
+	}, "for_value")
+	
+	if not default_branch:
+		# Fallback to standard defaults
+		default_branch = frappe.db.get_default("Branch") or frappe.db.get_default("branch")
+		
+	return default_branch

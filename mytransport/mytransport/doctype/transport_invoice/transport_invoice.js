@@ -28,10 +28,14 @@ frappe.ui.form.on("Transport Invoice", {
 			frm.set_value("due_date", frappe.datetime.add_days(frm.doc.date, 30));
 		}
 		if (frm.is_new() && !frm.doc.branch) {
-			let default_branch = frappe.defaults.get_default("branch") || frappe.defaults.get_default("Branch");
-			if (default_branch) {
-				frm.set_value("branch", default_branch);
-			}
+			frappe.call({
+				method: "mytransport.branch_numbering.get_default_branch",
+				callback: function(r) {
+					if (r.message && !frm.doc.branch) {
+						frm.set_value("branch", r.message);
+					}
+				}
+			});
 		}
 	},
 

@@ -4,10 +4,14 @@
 frappe.ui.form.on("Challan", {
 	onload: function(frm) {
 		if (frm.is_new() && !frm.doc.branch) {
-			let default_branch = frappe.defaults.get_default("branch") || frappe.defaults.get_default("Branch");
-			if (default_branch) {
-				frm.set_value("branch", default_branch);
-			}
+			frappe.call({
+				method: "mytransport.branch_numbering.get_default_branch",
+				callback: function(r) {
+					if (r.message && !frm.doc.branch) {
+						frm.set_value("branch", r.message);
+					}
+				}
+			});
 		}
 	},
 	get_unmapped_lrs: function(frm) {
@@ -297,10 +301,14 @@ function peek_branch_number(frm, doc_type, fieldname) {
 frappe.ui.form.on("Challan", {
 	onload: function(frm) {
 		if (frm.is_new() && !frm.doc.branch) {
-			let default_branch = frappe.defaults.get_default("branch") || frappe.defaults.get_default("Branch");
-			if (default_branch) {
-				frm.set_value("branch", default_branch);
-			}
+			frappe.call({
+				method: "mytransport.branch_numbering.get_default_branch",
+				callback: function(r) {
+					if (r.message && !frm.doc.branch) {
+						frm.set_value("branch", r.message);
+					}
+				}
+			});
 		}
 	},
 	refresh: function(frm) {
