@@ -31,7 +31,8 @@
    "label": "LR Number",
    "options": "Lorry Receipt",
    "in_list_view": 1,
-   "reqd": 1
+   "reqd": 1,
+   "columns": 2
   },
   {
    "fieldname": "lr_date",
@@ -46,7 +47,8 @@
    "label": "From",
    "fetch_from": "lr_number.from_city",
    "read_only": 1,
-   "in_list_view": 1
+   "in_list_view": 1,
+   "columns": 1
   },
   {
    "fieldname": "to_city",
@@ -54,7 +56,8 @@
    "label": "To",
    "fetch_from": "lr_number.to_city",
    "read_only": 1,
-   "in_list_view": 1
+   "in_list_view": 1,
+   "columns": 1
   },
   {
    "fieldname": "total_packages",
@@ -68,7 +71,8 @@
    "fieldtype": "Float",
    "label": "Chrg Wgt",
    "read_only": 1,
-   "in_list_view": 1
+   "in_list_view": 1,
+   "columns": 1
   },
   {
    "fieldname": "rate_type",
@@ -84,7 +88,8 @@
    "fieldtype": "Float",
    "label": "Rate per MT",
    "in_list_view": 1,
-   "depends_on": "eval:doc.rate_type==\"Per MT\""
+   "depends_on": "eval:doc.rate_type==\"Per MT\"",
+   "columns": 2
   },
   {
    "fieldname": "basic_freight",
