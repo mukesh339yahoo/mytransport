@@ -126,28 +126,71 @@ frappe.ui.form.on("Transport Invoice", {
 			},
 			callback: function(r) {
 				if (r.message && r.message.length > 0) {
-					frm.clear_table("items");
-					r.message.forEach(function(lr) {
-						let row = frm.add_child("items");
-						row.lr_number = lr.name;
-						row.lr_date = lr.date;
-						row.from_city = lr.from_city;
-						row.to_city = lr.to_city;
-						row.total_packages = lr.total_packages;
-						row.total_weight = lr.total_charged_weight;
-						row.rate_type = "Fix";
-						row.st_charge = lr.bilty_charges;
-						row.detention_narration = lr.detention_narration;
-						row.detention_charges = lr.detention_charges;
-						row.hamali_narration = lr.hamali_narration;
-						row.hamali_charges = lr.hamali_charges;
-						row.other_charge_narration = lr.other_charge_narration;
-						row.other_charges = lr.other_charges;
+					let lrs = r.message;
+					
+					let d = new frappe.ui.Dialog({
+						title: 'Select Unbilled LRs',
+						fields: [
+							{
+								fieldtype: 'Table',
+								fieldname: 'lrs',
+								fields: [
+									{fieldtype: 'Check', fieldname: 'select', label: 'Select', in_list_view: 1},
+									{fieldtype: 'Data', fieldname: 'name', label: 'LR No', read_only: 1, in_list_view: 1},
+									{fieldtype: 'Date', fieldname: 'date', label: 'LR Date', read_only: 1, in_list_view: 1},
+									{fieldtype: 'Data', fieldname: 'from_city', label: 'From', read_only: 1, in_list_view: 1},
+									{fieldtype: 'Data', fieldname: 'to_city', label: 'To', read_only: 1, in_list_view: 1},
+									{fieldtype: 'Float', fieldname: 'total_charged_weight', label: 'Chrg Wgt', read_only: 1, in_list_view: 1},
+									{fieldtype: 'Currency', fieldname: 'basic_freight', label: 'Basic Freight', read_only: 1, in_list_view: 1}
+								],
+								data: lrs.map(lr => ({
+									name: lr.name,
+									date: lr.date,
+									from_city: lr.from_city,
+									to_city: lr.to_city,
+									total_charged_weight: lr.total_charged_weight,
+									basic_freight: lr.basic_freight,
+									select: 0
+								})),
+								get_data: () => d.fields_dict.lrs.grid.get_data()
+							}
+						],
+						primary_action_label: 'Add to Invoice',
+						primary_action(values) {
+							let selected = values.lrs.filter(b => b.select);
+							if (!selected.length) {
+								frappe.msgprint("Please select at least one LR.");
+								return;
+							}
+
+							selected.forEach(sel => {
+								let lr = lrs.find(x => x.name === sel.name);
+								if(lr) {
+									let row = frm.add_child("items");
+									row.lr_number = lr.name;
+									row.lr_date = lr.date;
+									row.from_city = lr.from_city;
+									row.to_city = lr.to_city;
+									row.total_packages = lr.total_packages;
+									row.total_weight = lr.total_charged_weight;
+									row.rate_type = "Fix";
+									row.st_charge = lr.bilty_charges;
+									row.detention_narration = lr.detention_narration;
+									row.detention_charges = lr.detention_charges;
+									row.hamali_narration = lr.hamali_narration;
+									row.hamali_charges = lr.hamali_charges;
+									row.other_charge_narration = lr.other_charge_narration;
+									row.other_charges = lr.other_charges;
+								}
+							});
+							
+							calculate_totals(frm);
+							frm.refresh_field("items");
+							d.hide();
+						}
 					});
 					
-					calculate_totals(frm);
-					frm.refresh_field("items");
-					frappe.msgprint(__("Successfully fetched {0} Lorry Receipts.", [r.message.length]));
+					d.show();
 				} else {
 					frappe.msgprint(__("No unbilled Lorry Receipts found for this customer."));
 				}
