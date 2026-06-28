@@ -69,7 +69,6 @@
    "fieldname": "lr_number",
    "fieldtype": "Data",
    "label": "LR Number",
-   "reqd": 1,
    "unique": 1
   },
   {

@@ -11,6 +11,7 @@
   "branch",
   "document_type",
   "financial_year",
+  "starting_number",
   "current_number"
  ],
  "fields": [
@@ -38,6 +39,15 @@
    "label": "Financial Year",
    "options": "Fiscal Year",
    "reqd": 1
+  },
+  {
+   "fieldname": "starting_number",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Starting Number",
+   "reqd": 1,
+   "default": "0",
+   "description": "The initial value set at the beginning of the financial year. This serves as a tracker."
   },
   {
    "default": "999",

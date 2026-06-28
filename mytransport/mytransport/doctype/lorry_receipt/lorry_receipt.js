@@ -88,3 +88,30 @@ function calculate_total_amount(frm) {
 				flt(frm.doc.other_charges);
 	frm.set_value("total_amount", total);
 }
+
+function peek_branch_number(frm, doc_type, fieldname) {
+	if (frm.doc.__islocal && frm.doc.branch && frm.doc.date && !frm.doc[fieldname]) {
+		frappe.call({
+			method: "mytransport.branch_numbering.peek_next_branch_number",
+			args: {
+				branch: frm.doc.branch,
+				document_type: doc_type,
+				date: frm.doc.date
+			},
+			callback: function(r) {
+				if (r.message) {
+					frm.set_value(fieldname, String(r.message));
+				}
+			}
+		});
+	}
+}
+
+frappe.ui.form.on("Lorry Receipt", {
+	branch: function(frm) {
+		peek_branch_number(frm, "Lorry Receipt", "lr_number");
+	},
+	date: function(frm) {
+		peek_branch_number(frm, "Lorry Receipt", "lr_number");
+	}
+});

@@ -6,10 +6,13 @@ from frappe.model.document import Document
 from frappe.utils import flt
 
 class LorryReceipt(Document):
-    def before_insert(self):
-        from mytransport.mytransport.branch_numbering import get_next_branch_number
+    def autoname(self):
+        from mytransport.branch_numbering import get_next_branch_number, update_branch_number_counter
         if not self.lr_number:
-            self.lr_number = get_next_branch_number(self.branch, "Lorry Receipt", self.date)
+            self.lr_number = str(get_next_branch_number(self.branch, "Lorry Receipt", self.date))
+        else:
+            update_branch_number_counter(self.branch, "Lorry Receipt", self.date, self.lr_number)
+        self.name = self.lr_number
 
     def before_save(self):
         # Calculate totals from items

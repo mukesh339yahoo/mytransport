@@ -167,3 +167,30 @@ function calculate_totals(frm) {
         frm.set_value("amount_in_words", "");
     }
 }
+
+function peek_branch_number(frm, doc_type, fieldname) {
+	if (frm.doc.__islocal && frm.doc.branch && frm.doc.date && !frm.doc[fieldname]) {
+		frappe.call({
+			method: "mytransport.branch_numbering.peek_next_branch_number",
+			args: {
+				branch: frm.doc.branch,
+				document_type: doc_type,
+				date: frm.doc.date
+			},
+			callback: function(r) {
+				if (r.message) {
+					frm.set_value(fieldname, String(r.message));
+				}
+			}
+		});
+	}
+}
+
+frappe.ui.form.on("Expense Voucher", {
+	branch: function(frm) {
+		peek_branch_number(frm, "Expense Voucher", "voucher_no");
+	},
+	date: function(frm) {
+		peek_branch_number(frm, "Expense Voucher", "voucher_no");
+	}
+});

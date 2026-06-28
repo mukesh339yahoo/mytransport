@@ -267,3 +267,30 @@ function calculate_balance(frm) {
 	
 	frm.set_value('balance_amount', balance);
 }
+
+function peek_branch_number(frm, doc_type, fieldname) {
+	if (frm.doc.__islocal && frm.doc.branch && frm.doc.date && !frm.doc[fieldname]) {
+		frappe.call({
+			method: "mytransport.branch_numbering.peek_next_branch_number",
+			args: {
+				branch: frm.doc.branch,
+				document_type: doc_type,
+				date: frm.doc.date
+			},
+			callback: function(r) {
+				if (r.message) {
+					frm.set_value(fieldname, String(r.message));
+				}
+			}
+		});
+	}
+}
+
+frappe.ui.form.on("Challan", {
+	branch: function(frm) {
+		peek_branch_number(frm, "Challan", "challan_number");
+	},
+	date: function(frm) {
+		peek_branch_number(frm, "Challan", "challan_number");
+	}
+});

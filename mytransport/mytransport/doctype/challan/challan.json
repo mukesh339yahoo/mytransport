@@ -74,7 +74,6 @@
    "fieldname": "challan_number",
    "fieldtype": "Data",
    "label": "Challan Number",
-   "reqd": 1,
    "unique": 1
   },
   {
