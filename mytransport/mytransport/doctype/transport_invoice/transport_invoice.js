@@ -217,6 +217,9 @@ function peek_branch_number(frm, doc_type, fieldname) {
 }
 
 frappe.ui.form.on("Transport Invoice", {
+	refresh: function(frm) {
+		peek_branch_number(frm, "Transport Invoice", "invoice_number");
+	},
 	branch: function(frm) {
 		peek_branch_number(frm, "Transport Invoice", "bill_no");
 	},

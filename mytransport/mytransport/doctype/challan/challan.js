@@ -287,6 +287,9 @@ function peek_branch_number(frm, doc_type, fieldname) {
 }
 
 frappe.ui.form.on("Challan", {
+	refresh: function(frm) {
+		peek_branch_number(frm, "Challan", "challan_number");
+	},
 	branch: function(frm) {
 		peek_branch_number(frm, "Challan", "challan_number");
 	},

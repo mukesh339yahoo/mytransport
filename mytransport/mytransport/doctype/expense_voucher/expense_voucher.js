@@ -187,6 +187,9 @@ function peek_branch_number(frm, doc_type, fieldname) {
 }
 
 frappe.ui.form.on("Expense Voucher", {
+	refresh: function(frm) {
+		peek_branch_number(frm, "Expense Voucher", "expense_voucher_number");
+	},
 	branch: function(frm) {
 		peek_branch_number(frm, "Expense Voucher", "voucher_no");
 	},

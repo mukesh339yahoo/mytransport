@@ -108,6 +108,9 @@ function peek_branch_number(frm, doc_type, fieldname) {
 }
 
 frappe.ui.form.on("Lorry Receipt", {
+	refresh: function(frm) {
+		peek_branch_number(frm, "Lorry Receipt", "lr_number");
+	},
 	branch: function(frm) {
 		peek_branch_number(frm, "Lorry Receipt", "lr_number");
 	},
