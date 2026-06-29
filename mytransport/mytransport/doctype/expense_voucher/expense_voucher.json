@@ -32,7 +32,9 @@
   "expense_details",
   "total_paid_amt",
   "amount_in_words",
-  "on_account"
+  "on_account",
+  "previous_payments_section",
+  "previous_payments"
  ],
  "fields": [
   {
@@ -193,6 +195,18 @@
    "fieldname": "on_account",
    "fieldtype": "Data",
    "label": "On Account"
+  },
+  {
+   "fieldname": "previous_payments_section",
+   "fieldtype": "Section Break",
+   "label": "Previous Challan Payments"
+  },
+  {
+   "fieldname": "previous_payments",
+   "fieldtype": "Table",
+   "label": "Previous Challan Payments",
+   "options": "Previous Challan Payment",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,

@@ -153,6 +153,9 @@ frappe.ui.form.on("Expense Detail", {
     expense_amount: function(frm, cdt, cdn) {
         calculate_totals(frm);
     },
+    challan_ref: function(frm, cdt, cdn) {
+        calculate_totals(frm);
+    },
     expense_details_remove: function(frm) {
         calculate_totals(frm);
     }
@@ -177,6 +180,7 @@ function calculate_totals(frm) {
     total_paid += on_account;
 
     frm.set_value("total_paid_amt", total_paid);
+    fetch_previous_payments(frm);
 
     if (total_paid > 0) {
         frappe.call({
@@ -225,3 +229,46 @@ frappe.ui.form.on("Expense Voucher", {
 		peek_branch_number(frm, "Expense Voucher", "voucher_no");
 	}
 });
+
+function fetch_previous_payments(frm) {
+    let challans = new Set();
+    
+    if (frm.doc.allocated_challans) {
+        frm.doc.allocated_challans.forEach(row => {
+            if (row.challan) challans.add(row.challan);
+        });
+    }
+    
+    if (frm.doc.expense_details) {
+        frm.doc.expense_details.forEach(row => {
+            if (row.challan_ref) challans.add(row.challan_ref);
+        });
+    }
+    
+    if (challans.size > 0) {
+        frappe.call({
+            method: "mytransport.mytransport.doctype.expense_voucher.expense_voucher.get_previous_payments",
+            args: {
+                challans: Array.from(challans),
+                current_voucher: frm.doc.name
+            },
+            callback: function(r) {
+                frm.clear_table("previous_payments");
+                if (r.message && r.message.length > 0) {
+                    r.message.forEach(pmt => {
+                        let row = frm.add_child("previous_payments");
+                        row.challan_no = pmt.challan_no;
+                        row.voucher_no = pmt.voucher_no;
+                        row.voucher_date = pmt.voucher_date;
+                        row.amount = pmt.amount;
+                        row.vendor = pmt.vendor;
+                    });
+                }
+                frm.refresh_field("previous_payments");
+            }
+        });
+    } else {
+        frm.clear_table("previous_payments");
+        frm.refresh_field("previous_payments");
+    }
+}

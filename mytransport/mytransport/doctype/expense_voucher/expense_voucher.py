@@ -78,3 +78,52 @@ class ExpenseVoucher(Document):
                 "advance": new_advance,
                 "balance_amount": new_balance
             })
+
+@frappe.whitelist()
+def get_previous_payments(challans, current_voucher=None):
+    if isinstance(challans, str):
+        import json
+        challans = json.loads(challans)
+        
+    if not challans:
+        return []
+        
+    conditions = ""
+    if current_voucher:
+        conditions = " AND ev.name != %(current_voucher)s"
+        
+    # Query 1: Payments from Allocated Challans
+    sql1 = f"""
+        SELECT 
+            ac.challan_no as challan_no, 
+            ev.voucher_no as voucher_no, 
+            ev.date as voucher_date, 
+            ac.paid_amt as amount, 
+            ev.vendor as vendor 
+        FROM `tabAllocated Challan` ac
+        JOIN `tabExpense Voucher` ev ON ac.parent = ev.name
+        WHERE ac.challan IN %(challans)s 
+        AND ev.docstatus = 1 
+        {conditions}
+    """
+    
+    # Query 2: Payments from Expense Details
+    sql2 = f"""
+        SELECT 
+            ch.challan_number as challan_no, 
+            ev.voucher_no as voucher_no, 
+            ev.date as voucher_date, 
+            ed.expense_amount as amount, 
+            ev.vendor as vendor 
+        FROM `tabExpense Detail` ed
+        JOIN `tabExpense Voucher` ev ON ed.parent = ev.name
+        JOIN `tabChallan` ch ON ed.challan_ref = ch.name
+        WHERE ed.challan_ref IN %(challans)s 
+        AND ev.docstatus = 1 
+        {conditions}
+    """
+    
+    res1 = frappe.db.sql(sql1, {"challans": tuple(challans), "current_voucher": current_voucher}, as_dict=1)
+    res2 = frappe.db.sql(sql2, {"challans": tuple(challans), "current_voucher": current_voucher}, as_dict=1)
+    
+    return res1 + res2
