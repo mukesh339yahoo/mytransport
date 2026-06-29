@@ -28,6 +28,8 @@
   "cheque_date",
   "get_unpaid_challans",
   "allocated_challans",
+  "expense_details_section",
+  "expense_details",
   "total_paid_amt",
   "amount_in_words",
   "on_account"
@@ -163,6 +165,17 @@
    "fieldtype": "Table",
    "label": "Allocated Challans",
    "options": "Allocated Challan"
+  },
+  {
+   "fieldname": "expense_details_section",
+   "fieldtype": "Section Break",
+   "label": "Expense Details"
+  },
+  {
+   "fieldname": "expense_details",
+   "fieldtype": "Table",
+   "label": "Expense Details",
+   "options": "Expense Detail"
   },
   {
    "fieldname": "total_paid_amt",

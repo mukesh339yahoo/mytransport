@@ -28,6 +28,9 @@ frappe.ui.form.on("Expense Voucher", {
             };
         });
         
+        frm.set_df_property("total_paid_amt", "hidden", 0);
+        frm.set_df_property("amount_in_words", "hidden", 0);
+        
         frm.set_query("expense_account", function() {
             return {
                 filters: {
@@ -146,12 +149,27 @@ frappe.ui.form.on("Allocated Challan", {
     }
 });
 
+frappe.ui.form.on("Expense Detail", {
+    expense_amount: function(frm, cdt, cdn) {
+        calculate_totals(frm);
+    },
+    expense_details_remove: function(frm) {
+        calculate_totals(frm);
+    }
+});
+
 function calculate_totals(frm) {
     let total_paid = 0;
     
     if (frm.doc.allocated_challans && frm.doc.allocated_challans.length > 0) {
         frm.doc.allocated_challans.forEach(row => {
             total_paid += flt(row.paid_amt);
+        });
+    }
+
+    if (frm.doc.expense_details && frm.doc.expense_details.length > 0) {
+        frm.doc.expense_details.forEach(row => {
+            total_paid += flt(row.expense_amount);
         });
     }
 
@@ -174,7 +192,7 @@ function calculate_totals(frm) {
             }
         });
     } else {
-        frm.set_value("amount_in_words", "");
+        frm.set_value("amount_in_words", "Zero");
     }
 }
 
