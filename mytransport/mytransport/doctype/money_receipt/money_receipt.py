@@ -7,6 +7,8 @@ class MoneyReceipt(Document):
         from mytransport.branch_numbering import get_next_branch_number, update_branch_number_counter
         if not self.mr_no:
             self.mr_no = get_next_branch_number(self.branch, "Money Receipt", self.date)
+        else:
+            update_branch_number_counter(self.branch, "Money Receipt", self.date, self.mr_no)
 
     def validate(self):
         pass
