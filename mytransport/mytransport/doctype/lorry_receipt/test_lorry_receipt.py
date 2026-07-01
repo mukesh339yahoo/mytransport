@@ -14,27 +14,46 @@ class IntegrationTestLorryReceipt(FrappeTestCase):
         # Clear existing test records to ensure clean state
         frappe.db.sql("DELETE FROM `tabBranch Numbering Settings` WHERE branch='Test Branch'")
         
+        # Setup Test Company with Standard COA
+        if not frappe.db.exists("Company", "Test Company"):
+            company = frappe.new_doc("Company")
+            company.company_name = "Test Company"
+            company.abbr = "TC"
+            company.default_currency = "INR"
+            company.chart_of_accounts = "Standard"
+            try:
+                company.insert(ignore_permissions=True, ignore_mandatory=True)
+                # Call create_default_accounts manually if ignore_mandatory bypassed it
+                company.create_default_accounts()
+            except Exception:
+                pass
+                
+        if not frappe.db.exists("Account", "Freight Expense - TC"):
+            try:
+                expense_account = frappe.new_doc("Account")
+                expense_account.account_name = "Freight Expense"
+                expense_account.company = "Test Company"
+                expense_account.parent_account = "Direct Expenses - TC"
+                expense_account.is_group = 0
+                expense_account.account_type = "Expense Account"
+                expense_account.insert(ignore_permissions=True)
+            except Exception:
+                pass
+
         for dt, name in [
-            ("Company", "Test Company"),
-            ("Account", "Sales - TC"),
-            ("Account", "Cash - TC"),
-            ("Account", "Freight Expense - TC"),
-            ("Account", "Debtors - TC"),
             ("Customer", "Test Consignor"),
             ("Customer", "Test Consignee"),
             ("Supplier", "Test Transporter"),
         ]:
             if not frappe.db.exists(dt, name):
                 doc = frappe.new_doc(dt)
-                if dt == "Company":
-                    doc.company_name = name
-                    doc.default_currency = "INR"
-                elif dt == "Account":
-                    doc.account_name = name
-                    doc.company = "Test Company"
-                    doc.account_type = "Cash"
-                else:
-                    doc.update({"name": name, frappe.scrub(dt)+"_name": name})
+                if dt == "Customer":
+                    doc.customer_name = name
+                    doc.customer_group = "All Customer Groups"
+                    doc.territory = "All Territories"
+                elif dt == "Supplier":
+                    doc.supplier_name = name
+                    doc.supplier_group = "All Supplier Groups"
                 try:
                     doc.insert(ignore_permissions=True, ignore_mandatory=True)
                 except Exception:
