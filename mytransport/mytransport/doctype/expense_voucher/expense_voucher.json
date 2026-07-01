@@ -24,7 +24,6 @@
   "cb2",
   "paid_to",
   "sb2",
-  "remarks",
   "journal_entry",
   "amended_from",
   "get_unpaid_challans",
@@ -35,7 +34,8 @@
   "amount_in_words",
   "on_account",
   "previous_payments_section",
-  "previous_payments"
+  "previous_payments",
+  "remarks"
  ],
  "fields": [
   {
