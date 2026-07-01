@@ -62,11 +62,11 @@ frappe.ui.form.on("Expense Voucher", {
             args: {
                 doctype: "Challan",
                 filters: [
-                    ["balance_amount", ">", 0],
                     ["docstatus", "=", 1],
                     ["broker", "=", frm.doc.vendor]
                 ],
-                fields: ["name", "challan_number", "date", "vehicle_number", "broker", "total_hire_amount", "balance_amount"]
+                fields: ["name", "challan_number", "date", "vehicle_number", "broker", "total_hire_amount", "balance_amount"],
+                order_by: "challan_number asc"
             },
             callback: function(r) {
                 if (r.message && r.message.length > 0) {
