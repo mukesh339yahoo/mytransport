@@ -41,7 +41,8 @@
   {
    "fieldname": "voucher_no",
    "fieldtype": "Data",
-   "label": "Voucher No"
+   "label": "Voucher No",
+   "unique": 1
   },
   {
    "fieldname": "company",

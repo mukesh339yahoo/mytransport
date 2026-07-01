@@ -167,7 +167,8 @@
   {
    "fieldname": "mr_no",
    "fieldtype": "Data",
-   "label": "MR No"
+   "label": "MR No",
+   "unique": 1
   },
   {
    "fieldname": "previous_payments_section",
