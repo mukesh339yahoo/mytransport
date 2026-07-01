@@ -16,7 +16,7 @@ class ExpenseVoucher(Document):
         je.company = self.company
         je.posting_date = self.date
         je.cheque_no = getattr(self, "cheque_no", None)
-        if self.voucher_type == "Bank" and getattr(self, "cheque_date", None):
+        if self.voucher_type in ["Bank", "Cheque", "UPI"] and getattr(self, "cheque_date", None):
             je.cheque_date = self.cheque_date
         
         user_remark = self.remarks or ""

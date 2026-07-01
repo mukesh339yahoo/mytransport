@@ -117,13 +117,13 @@
    "depends_on": "eval:in_list(['Cheque'], doc.payment_mode)",
    "fieldname": "cheque_no",
    "fieldtype": "Data",
-   "label": "Cheque No"
+   "label": "Reference No"
   },
   {
    "depends_on": "eval:in_list(['Cheque'], doc.payment_mode)",
    "fieldname": "cheque_date",
    "fieldtype": "Date",
-   "label": "Cheque Date"
+   "label": "Reference Date"
   },
   {
    "default": "0",

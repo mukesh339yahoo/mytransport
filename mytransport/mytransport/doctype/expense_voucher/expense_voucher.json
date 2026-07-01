@@ -77,8 +77,8 @@
    "fieldname": "voucher_type",
    "fieldtype": "Select",
    "in_list_view": 1,
-   "label": "Voucher Type",
-   "options": "Cash\nBank",
+   "label": "Payment Mode",
+   "options": "Cash\nBank\nCheque\nUPI",
    "reqd": 1
   },
   {
@@ -148,16 +148,16 @@
    "options": "Supplier"
   },
   {
-   "depends_on": "eval:doc.voucher_type=='Bank'",
+   "depends_on": "eval:in_list(['Bank', 'Cheque', 'UPI'], doc.voucher_type)",
    "fieldname": "cheque_no",
    "fieldtype": "Data",
-   "label": "Cheque No"
+   "label": "Reference No"
   },
   {
-   "depends_on": "eval:doc.voucher_type=='Bank'",
+   "depends_on": "eval:in_list(['Bank', 'Cheque', 'UPI'], doc.voucher_type)",
    "fieldname": "cheque_date",
    "fieldtype": "Date",
-   "label": "Cheque Date"
+   "label": "Reference Date"
   },
   {
    "fieldname": "get_unpaid_challans",
