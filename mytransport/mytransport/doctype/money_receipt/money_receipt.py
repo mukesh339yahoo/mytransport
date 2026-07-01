@@ -87,3 +87,33 @@ class MoneyReceipt(Document):
 @frappe.whitelist()
 def get_money_in_words(amount, currency):
     return money_in_words(amount, currency)
+
+@frappe.whitelist()
+def get_previous_payments(invoices, current_receipt=None):
+    if isinstance(invoices, str):
+        import json
+        invoices = json.loads(invoices)
+        
+    if not invoices:
+        return []
+        
+    conditions = ""
+    if current_receipt:
+        conditions = " AND mr.name != %(current_receipt)s"
+        
+    sql = f"""
+        SELECT 
+            mr.mr_no as mr_no, 
+            ati.bill_no as bill_no, 
+            mr.cheque_no as cheque_no, 
+            ati.paid_amt as paid_amt, 
+            ati.deduct_amt as deduct_amt,
+            ati.tds_amt as tds_amt
+        FROM `tabAllocated Transport Invoice` ati
+        JOIN `tabMoney Receipt` mr ON ati.parent = mr.name
+        WHERE ati.transport_invoice IN %(invoices)s 
+        AND mr.docstatus = 1 
+        {conditions}
+    """
+    
+    return frappe.db.sql(sql, {"invoices": tuple(invoices), "current_receipt": current_receipt}, as_dict=1)

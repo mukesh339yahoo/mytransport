@@ -160,6 +160,7 @@ function calculate_totals(frm) {
     }
     
     frm.set_value("total_amount", total_paid);
+    fetch_previous_payments(frm);
     
     // Convert to words if frappe has the utility, sometimes frappe.utils.money_in_words is available
     if (total_paid > 0) {
@@ -176,7 +177,7 @@ function calculate_totals(frm) {
             }
         });
     } else {
-        frm.set_value("amount_in_words", "");
+        frm.set_value("amount_in_words", "Zero");
     }
 }
 
@@ -209,3 +210,41 @@ frappe.ui.form.on("Money Receipt", {
 		peek_branch_number(frm, "Money Receipt", "mr_no");
 	}
 });
+
+function fetch_previous_payments(frm) {
+    let invoices = new Set();
+    
+    if (frm.doc.allocated_invoices) {
+        frm.doc.allocated_invoices.forEach(row => {
+            if (row.transport_invoice) invoices.add(row.transport_invoice);
+        });
+    }
+    
+    if (invoices.size > 0) {
+        frappe.call({
+            method: "mytransport.mytransport.doctype.money_receipt.money_receipt.get_previous_payments",
+            args: {
+                invoices: Array.from(invoices),
+                current_receipt: frm.doc.name
+            },
+            callback: function(r) {
+                frm.clear_table("previous_payments");
+                if (r.message && r.message.length > 0) {
+                    r.message.forEach(pmt => {
+                        let row = frm.add_child("previous_payments");
+                        row.mr_no = pmt.mr_no;
+                        row.bill_no = pmt.bill_no;
+                        row.cheque_no = pmt.cheque_no;
+                        row.paid_amt = pmt.paid_amt;
+                        row.deduct_amt = pmt.deduct_amt;
+                        row.tds_amt = pmt.tds_amt;
+                    });
+                }
+                frm.refresh_field("previous_payments");
+            }
+        });
+    } else {
+        frm.clear_table("previous_payments");
+        frm.refresh_field("previous_payments");
+    }
+}

@@ -28,7 +28,9 @@
   "allocated_invoices",
   "sb3",
   "total_amount",
-  "remarks"
+  "remarks",
+  "previous_payments_section",
+  "previous_payments"
  ],
  "fields": [
   {
@@ -166,6 +168,18 @@
    "fieldname": "mr_no",
    "fieldtype": "Data",
    "label": "MR No"
+  },
+  {
+   "fieldname": "previous_payments_section",
+   "fieldtype": "Section Break",
+   "label": "Previous Payments for Transport Invoices"
+  },
+  {
+   "fieldname": "previous_payments",
+   "fieldtype": "Table",
+   "label": "Previous Payments for Transport Invoices",
+   "options": "Previous Invoice Payment",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
