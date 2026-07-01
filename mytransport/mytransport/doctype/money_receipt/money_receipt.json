@@ -2,7 +2,7 @@
  "actions": [],
  "allow_bulk_edit": 1,
  "allow_rename": 1,
- "autoname": "format:MR-.YYYY.-.#####",
+ "autoname": "format:MR-{YYYY}-{#####}",
  "creation": "2026-06-06 20:12:50.018261",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -190,7 +190,7 @@
  "modified_by": "Administrator",
  "module": "Mytransport",
  "name": "Money Receipt",
- "naming_rule": "Expression (old style)",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {
