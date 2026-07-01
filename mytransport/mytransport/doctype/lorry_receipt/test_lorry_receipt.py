@@ -10,6 +10,46 @@ class IntegrationTestLorryReceipt(FrappeTestCase):
             b.insert(ignore_permissions=True, ignore_mandatory=True)
             
         # Clear existing test records to ensure clean state
+
+        # Clear existing test records to ensure clean state
+        frappe.db.sql("DELETE FROM `tabBranch Numbering Settings` WHERE branch='Test Branch'")
+        
+        for dt, name in [
+            ("Company", "Test Company"),
+            ("Account", "Sales - TC"),
+            ("Account", "Cash - TC"),
+            ("Account", "Freight Expense - TC"),
+            ("Account", "Debtors - TC"),
+            ("Customer", "Test Consignor"),
+            ("Customer", "Test Consignee"),
+            ("Supplier", "Test Transporter"),
+        ]:
+            if not frappe.db.exists(dt, name):
+                doc = frappe.new_doc(dt)
+                if dt == "Company":
+                    doc.company_name = name
+                    doc.default_currency = "INR"
+                elif dt == "Account":
+                    doc.account_name = name
+                    doc.company = "Test Company"
+                    doc.account_type = "Cash"
+                else:
+                    doc.update({"name": name, frappe.scrub(dt)+"_name": name})
+                try:
+                    doc.insert(ignore_permissions=True, ignore_mandatory=True)
+                except Exception:
+                    pass
+        
+        doctypes = ["Lorry Receipt", "Challan", "Transport Invoice", "Expense Voucher", "Money Receipt"]
+        for dt in doctypes:
+            bns = frappe.new_doc("Branch Numbering Settings")
+            bns.branch = "Test Branch"
+            bns.financial_year = "2026-2027"
+            bns.document_type = dt
+            bns.starting_number = 90000
+            bns.current_number = 89999
+            bns.insert(ignore_permissions=True, ignore_mandatory=True)
+        
         frappe.db.sql("DELETE FROM `tabLorry Receipt` WHERE name='TEST-LR-001'")
         frappe.db.sql("DELETE FROM `tabChallan` WHERE name='TEST-CH-001'")
         frappe.db.sql("DELETE FROM `tabTransport Invoice` WHERE name='TEST-INV-001'")
@@ -47,9 +87,9 @@ class IntegrationTestLorryReceipt(FrappeTestCase):
         challan.to_location = "Delhi"
         challan.vendor = "Test Transporter"
         
-        challan.append("lorry_receipts", {
+        challan.append("lrs", {
             "lr_number": lr.name,
-            "amount": 5000
+            "basic_freight": 5000
         })
         challan.insert(ignore_permissions=True, ignore_mandatory=True, ignore_links=True)
         challan.submit()
@@ -69,7 +109,7 @@ class IntegrationTestLorryReceipt(FrappeTestCase):
         
         invoice.append("items", {
             "lr_number": lr.name,
-            "amount": 5000
+            "basic_freight": 5000
         })
         invoice.insert(ignore_permissions=True, ignore_mandatory=True, ignore_links=True)
         invoice.submit()
@@ -86,13 +126,13 @@ class IntegrationTestLorryReceipt(FrappeTestCase):
         ev.vendor = "Test Transporter"
         ev.voucher_type = "Cash"
         ev.payment_account = "Cash - TC"
-        ev.expense_category = "Freight"
+        ev.expense_category = "Trip Advance"
         ev.expense_account = "Freight Expense - TC"
         ev.total_paid_amt = 4000
         
         ev.append("allocated_challans", {
-            "challan_number": challan.name,
-            "allocated_amount": 4000
+            "challan": challan.name,
+            "paid_amt": 4000
         })
         ev.insert(ignore_permissions=True, ignore_mandatory=True, ignore_links=True)
         ev.submit()
@@ -112,8 +152,8 @@ class IntegrationTestLorryReceipt(FrappeTestCase):
         mr.total_amount = 5000
         
         mr.append("allocated_invoices", {
-            "invoice_number": invoice.name,
-            "allocated_amount": 5000
+            "transport_invoice": invoice.name,
+            "paid_amt": 5000
         })
         mr.insert(ignore_permissions=True, ignore_mandatory=True, ignore_links=True)
         mr.submit()
