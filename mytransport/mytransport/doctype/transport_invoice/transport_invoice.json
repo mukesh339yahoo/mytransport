@@ -186,7 +186,8 @@
   {
    "fieldname": "bill_no",
    "fieldtype": "Data",
-   "label": "Bill No"
+   "label": "Bill No",
+   "unique": 1
   },
   {
    "fieldname": "customer_address",
