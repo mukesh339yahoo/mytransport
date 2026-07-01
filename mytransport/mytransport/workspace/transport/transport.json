@@ -90,6 +90,7 @@
    "link_to": "LR Register",
    "link_type": "Report",
    "onboard": 0,
+   "report_ref_doctype": "Lorry Receipt",
    "type": "Link"
   },
   {
@@ -100,6 +101,7 @@
    "link_to": "LR Status Report",
    "link_type": "Report",
    "onboard": 0,
+   "report_ref_doctype": "Lorry Receipt",
    "type": "Link"
   },
   {
@@ -110,6 +112,7 @@
    "link_to": "Challan Costing Report",
    "link_type": "Report",
    "onboard": 0,
+   "report_ref_doctype": "Challan",
    "type": "Link"
   },
   {
@@ -120,10 +123,11 @@
    "link_to": "Challan Register",
    "link_type": "Report",
    "onboard": 0,
+   "report_ref_doctype": "Challan",
    "type": "Link"
   }
  ],
- "modified": "2026-06-21 06:44:10.503074",
+ "modified": "2026-07-01 18:58:28.947159",
  "modified_by": "Administrator",
  "module": "Mytransport",
  "name": "Transport",
