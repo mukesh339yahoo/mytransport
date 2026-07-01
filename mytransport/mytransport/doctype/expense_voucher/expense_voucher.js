@@ -40,6 +40,14 @@ frappe.ui.form.on("Expense Voucher", {
                 }
             };
         });
+
+        frm.set_query("challan_ref", "expense_details", function(doc, cdt, cdn) {
+            let filters = { "docstatus": 1 };
+            if (frm.doc.vendor) {
+                filters["broker"] = frm.doc.vendor;
+            }
+            return { filters: filters };
+        });
     },
 
     voucher_type: function(frm) {
