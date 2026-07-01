@@ -69,11 +69,11 @@ class IntegrationTestLorryReceipt(FrappeTestCase):
             bns.current_number = 89999
             bns.insert(ignore_permissions=True, ignore_mandatory=True)
         
-        frappe.db.sql("DELETE FROM `tabLorry Receipt` WHERE name='TEST-LR-001'")
-        frappe.db.sql("DELETE FROM `tabChallan` WHERE name='TEST-CH-001'")
-        frappe.db.sql("DELETE FROM `tabTransport Invoice` WHERE name='TEST-INV-001'")
-        frappe.db.sql("DELETE FROM `tabExpense Voucher` WHERE name='TEST-EV-001'")
-        frappe.db.sql("DELETE FROM `tabMoney Receipt` WHERE name='TEST-MR-001'")
+        frappe.db.sql("DELETE FROM `tabLorry Receipt` WHERE name='TEST-LR-001' OR name LIKE 'TEST-LR-MULT-%'")
+        frappe.db.sql("DELETE FROM `tabChallan` WHERE name='TEST-CH-001' OR name='TEST-CH-MULT-001'")
+        frappe.db.sql("DELETE FROM `tabTransport Invoice` WHERE name='TEST-INV-001' OR name='TEST-INV-MULT-001'")
+        frappe.db.sql("DELETE FROM `tabExpense Voucher` WHERE name='TEST-EV-001' OR name='TEST-EV-MULT-001'")
+        frappe.db.sql("DELETE FROM `tabMoney Receipt` WHERE name='TEST-MR-001' OR name='TEST-MR-MULT-001'")
         frappe.db.commit()
 
     def test_end_to_end_transport_lifecycle(self):
@@ -186,4 +186,112 @@ class IntegrationTestLorryReceipt(FrappeTestCase):
         # Assuming paid_amount gets updated to 5000
         # self.assertEqual(updated_invoice.paid_amount, 5000)
         
-        print("End-to-End Test Passed Successfully!")
+        print("End-to-End Test (Single LR) Passed Successfully!")
+
+    def test_end_to_end_multiple_lrs(self):
+        # ---------------------------------------------------------
+        # STEP 1: Create 5 Lorry Receipts (LRs)
+        # ---------------------------------------------------------
+        lr_names = []
+        for i in range(1, 6):
+            lr = frappe.new_doc("Lorry Receipt")
+            lr_name = f"TEST-LR-MULT-{i}"
+            lr.name = lr_name
+            lr.branch = "Test Branch"
+            lr.date = frappe.utils.today()
+            lr.consignor = "Test Consignor"
+            lr.consignee = "Test Consignee"
+            lr.from_city = "Mumbai"
+            lr.to_city = "Delhi"
+            lr.total_amount = 1000 * i # 1000, 2000, 3000, 4000, 5000 = 15000 total
+            lr.insert(ignore_permissions=True, ignore_mandatory=True, ignore_links=True)
+            lr.submit()
+            self.assertEqual(lr.docstatus, 1)
+            lr_names.append({"name": lr.name, "amount": lr.total_amount})
+        
+        # ---------------------------------------------------------
+        # STEP 2: Create a Challan & Link the 5 LRs
+        # ---------------------------------------------------------
+        challan = frappe.new_doc("Challan")
+        challan.name = "TEST-CH-MULT-001"
+        challan.branch = "Test Branch"
+        challan.date = frappe.utils.today()
+        challan.from_location = "Mumbai"
+        challan.to_location = "Delhi"
+        challan.vendor = "Test Transporter"
+        
+        for lr_data in lr_names:
+            challan.append("lrs", {
+                "lr_number": lr_data["name"],
+                "basic_freight": lr_data["amount"]
+            })
+        challan.insert(ignore_permissions=True, ignore_mandatory=True, ignore_links=True)
+        challan.submit()
+        self.assertEqual(challan.docstatus, 1)
+        
+        # ---------------------------------------------------------
+        # STEP 3: Create Transport Invoice for the 5 LRs
+        # ---------------------------------------------------------
+        invoice = frappe.new_doc("Transport Invoice")
+        invoice.name = "TEST-INV-MULT-001"
+        invoice.branch = "Test Branch"
+        invoice.date = frappe.utils.today()
+        invoice.customer = "Test Consignor"
+        invoice.company = "Test Company"
+        invoice.debit_to = "Debtors - TC"
+        invoice.income_account = "Sales - TC"
+        
+        for lr_data in lr_names:
+            invoice.append("items", {
+                "lr_number": lr_data["name"],
+                "basic_freight": lr_data["amount"]
+            })
+        invoice.insert(ignore_permissions=True, ignore_mandatory=True, ignore_links=True)
+        invoice.submit()
+        self.assertEqual(invoice.docstatus, 1)
+        
+        # ---------------------------------------------------------
+        # STEP 4: Create Expense Voucher for the Challan
+        # ---------------------------------------------------------
+        ev = frappe.new_doc("Expense Voucher")
+        ev.name = "TEST-EV-MULT-001"
+        ev.branch = "Test Branch"
+        ev.company = "Test Company"
+        ev.date = frappe.utils.today()
+        ev.vendor = "Test Transporter"
+        ev.voucher_type = "Cash"
+        ev.payment_account = "Cash - TC"
+        ev.expense_category = "Trip Advance"
+        ev.expense_account = "Freight Expense - TC"
+        ev.total_paid_amt = 15000
+        
+        ev.append("allocated_challans", {
+            "challan": challan.name,
+            "paid_amt": 15000
+        })
+        ev.insert(ignore_permissions=True, ignore_mandatory=True, ignore_links=True)
+        ev.submit()
+        self.assertEqual(ev.docstatus, 1)
+        
+        # ---------------------------------------------------------
+        # STEP 5: Create Money Receipt for the Invoice
+        # ---------------------------------------------------------
+        mr = frappe.new_doc("Money Receipt")
+        mr.name = "TEST-MR-MULT-001"
+        mr.branch = "Test Branch"
+        mr.company = "Test Company"
+        mr.date = frappe.utils.today()
+        mr.customer = "Test Consignor"
+        mr.payment_mode = "Cash"
+        mr.deposit_account = "Cash - TC"
+        mr.total_amount = 15000
+        
+        mr.append("allocated_invoices", {
+            "transport_invoice": invoice.name,
+            "paid_amt": 15000
+        })
+        mr.insert(ignore_permissions=True, ignore_mandatory=True, ignore_links=True)
+        mr.submit()
+        self.assertEqual(mr.docstatus, 1)
+        
+        print("End-to-End Test (Multiple LRs) Passed Successfully!")
