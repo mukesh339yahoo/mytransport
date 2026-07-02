@@ -69,11 +69,11 @@ class IntegrationTestLorryReceipt(FrappeTestCase):
             bns.current_number = 89999
             bns.insert(ignore_permissions=True, ignore_mandatory=True)
         
-        frappe.db.sql("DELETE FROM `tabLorry Receipt` WHERE name='TEST-LR-001' OR name LIKE 'TEST-LR-MULT-%'")
-        frappe.db.sql("DELETE FROM `tabChallan` WHERE name='TEST-CH-001' OR name='TEST-CH-MULT-001'")
-        frappe.db.sql("DELETE FROM `tabTransport Invoice` WHERE name='TEST-INV-001' OR name='TEST-INV-MULT-001'")
-        frappe.db.sql("DELETE FROM `tabExpense Voucher` WHERE name='TEST-EV-001' OR name='TEST-EV-MULT-001'")
-        frappe.db.sql("DELETE FROM `tabMoney Receipt` WHERE name='TEST-MR-001' OR name='TEST-MR-MULT-001'")
+        frappe.db.sql("DELETE FROM `tabLorry Receipt` WHERE name='TEST-LR-001' OR name LIKE 'TEST-LR-MULT-%' OR name LIKE 'TEST-LR-COMP-%'")
+        frappe.db.sql("DELETE FROM `tabChallan` WHERE name='TEST-CH-001' OR name='TEST-CH-MULT-001' OR name='TEST-CH-COMP-001'")
+        frappe.db.sql("DELETE FROM `tabTransport Invoice` WHERE name='TEST-INV-001' OR name='TEST-INV-MULT-001' OR name LIKE 'TEST-INV-COMP-%'")
+        frappe.db.sql("DELETE FROM `tabExpense Voucher` WHERE name='TEST-EV-001' OR name='TEST-EV-MULT-001' OR name LIKE 'TEST-EV-COMP-%'")
+        frappe.db.sql("DELETE FROM `tabMoney Receipt` WHERE name='TEST-MR-001' OR name='TEST-MR-MULT-001' OR name LIKE 'TEST-MR-COMP-%'")
         frappe.db.commit()
 
     def test_end_to_end_transport_lifecycle(self):
@@ -88,7 +88,11 @@ class IntegrationTestLorryReceipt(FrappeTestCase):
         lr.consignee = "Test Consignee"
         lr.from_city = "Mumbai"
         lr.to_city = "Delhi"
-        lr.total_amount = 5000
+        lr.append("items", {
+            "lorry_freight": 5000,
+            "actual_weight": 100,
+            "qty": 10
+        })
         lr.insert(ignore_permissions=True, ignore_mandatory=True, ignore_links=True)
         lr.submit()
         
@@ -203,7 +207,12 @@ class IntegrationTestLorryReceipt(FrappeTestCase):
             lr.consignee = "Test Consignee"
             lr.from_city = "Mumbai"
             lr.to_city = "Delhi"
-            lr.total_amount = 1000 * i # 1000, 2000, 3000, 4000, 5000 = 15000 total
+            amount = 1000 * i
+            lr.append("items", {
+                "lorry_freight": amount,
+                "actual_weight": 100,
+                "qty": 10
+            })
             lr.insert(ignore_permissions=True, ignore_mandatory=True, ignore_links=True)
             lr.submit()
             self.assertEqual(lr.docstatus, 1)
@@ -295,3 +304,132 @@ class IntegrationTestLorryReceipt(FrappeTestCase):
         self.assertEqual(mr.docstatus, 1)
         
         print("End-to-End Test (Multiple LRs) Passed Successfully!")
+
+    def test_end_to_end_complex_batching(self):
+        # ---------------------------------------------------------
+        # STEP 1: Create 10 LRs
+        # ---------------------------------------------------------
+        lr_names = []
+        for i in range(1, 11):
+            lr = frappe.new_doc("Lorry Receipt")
+            lr.name = f"TEST-LR-COMP-{i}"
+            lr.branch = "Test Branch"
+            lr.date = frappe.utils.today()
+            lr.consignor = "Test Consignor"
+            lr.consignee = "Test Consignee"
+            lr.from_city = "Mumbai"
+            lr.to_city = "Delhi"
+            amount = 1000
+            lr.append("items", {
+                "lorry_freight": amount,
+                "actual_weight": 100,
+                "qty": 10
+            })
+            lr.insert(ignore_permissions=True, ignore_mandatory=True, ignore_links=True)
+            lr.submit()
+            self.assertEqual(lr.docstatus, 1)
+            lr_names.append({"name": lr.name, "amount": lr.total_amount})
+            
+        # ---------------------------------------------------------
+        # STEP 2: Create a Challan & Link the 10 LRs
+        # ---------------------------------------------------------
+        challan = frappe.new_doc("Challan")
+        challan.name = "TEST-CH-COMP-001"
+        challan.branch = "Test Branch"
+        challan.date = frappe.utils.today()
+        challan.from_location = "Mumbai"
+        challan.to_location = "Delhi"
+        challan.vendor = "Test Transporter"
+        
+        for lr_data in lr_names:
+            challan.append("lrs", {
+                "lr_number": lr_data["name"],
+                "basic_freight": lr_data["amount"]
+            })
+        challan.insert(ignore_permissions=True, ignore_mandatory=True, ignore_links=True)
+        challan.submit()
+        self.assertEqual(challan.docstatus, 1)
+        
+        # ---------------------------------------------------------
+        # STEP 3: Create 3 Transport Invoices for the 10 LRs
+        # Inv 1: 3 LRs, Inv 2: 4 LRs, Inv 3: 3 LRs
+        # ---------------------------------------------------------
+        invoice_allocations = [
+            (1, lr_names[0:3]), # 3 LRs
+            (2, lr_names[3:7]), # 4 LRs
+            (3, lr_names[7:10]) # 3 LRs
+        ]
+        
+        invoices = []
+        for inv_idx, lrs in invoice_allocations:
+            invoice = frappe.new_doc("Transport Invoice")
+            invoice.name = f"TEST-INV-COMP-{inv_idx}"
+            invoice.branch = "Test Branch"
+            invoice.date = frappe.utils.today()
+            invoice.customer = "Test Consignor"
+            invoice.company = "Test Company"
+            invoice.debit_to = "Debtors - TC"
+            invoice.income_account = "Sales - TC"
+            
+            total_amt = 0
+            for lr_data in lrs:
+                invoice.append("items", {
+                    "lr_number": lr_data["name"],
+                    "basic_freight": lr_data["amount"]
+                })
+                total_amt += lr_data["amount"]
+                
+            invoice.insert(ignore_permissions=True, ignore_mandatory=True, ignore_links=True)
+            invoice.submit()
+            self.assertEqual(invoice.docstatus, 1)
+            invoices.append({"name": invoice.name, "amount": total_amt})
+            
+        # ---------------------------------------------------------
+        # STEP 4: Create 2 Expense Vouchers for the Challan
+        # EV 1: 6000, EV 2: 4000
+        # ---------------------------------------------------------
+        ev_allocations = [(1, 6000), (2, 4000)]
+        for ev_idx, amt in ev_allocations:
+            ev = frappe.new_doc("Expense Voucher")
+            ev.name = f"TEST-EV-COMP-{ev_idx}"
+            ev.branch = "Test Branch"
+            ev.company = "Test Company"
+            ev.date = frappe.utils.today()
+            ev.vendor = "Test Transporter"
+            ev.voucher_type = "Cash"
+            ev.payment_account = "Cash - TC"
+            ev.expense_category = "Trip Advance"
+            ev.expense_account = "Freight Expense - TC"
+            ev.total_paid_amt = amt
+            
+            ev.append("allocated_challans", {
+                "challan": challan.name,
+                "paid_amt": amt
+            })
+            ev.insert(ignore_permissions=True, ignore_mandatory=True, ignore_links=True)
+            ev.submit()
+            self.assertEqual(ev.docstatus, 1)
+            
+        # ---------------------------------------------------------
+        # STEP 5: Create 3 Money Receipts for the 3 Transport Invoices
+        # ---------------------------------------------------------
+        for i, inv_data in enumerate(invoices, start=1):
+            mr = frappe.new_doc("Money Receipt")
+            mr.name = f"TEST-MR-COMP-{i}"
+            mr.branch = "Test Branch"
+            mr.company = "Test Company"
+            mr.date = frappe.utils.today()
+            mr.customer = "Test Consignor"
+            mr.payment_mode = "Cash"
+            mr.deposit_account = "Cash - TC"
+            mr.total_amount = inv_data["amount"]
+            
+            mr.append("allocated_invoices", {
+                "transport_invoice": inv_data["name"],
+                "paid_amt": inv_data["amount"]
+            })
+            mr.insert(ignore_permissions=True, ignore_mandatory=True, ignore_links=True)
+            mr.submit()
+            self.assertEqual(mr.docstatus, 1)
+            
+        print("End-to-End Test (Complex Batching) Passed Successfully!")
