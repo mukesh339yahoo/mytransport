@@ -14,6 +14,16 @@ class Challan(Document):
 			update_branch_number_counter(self.branch, "Challan", self.date, self.challan_number)
 		self.name = self.challan_number
 
+	def validate(self):
+		if getattr(self, "challan_number", None):
+			existing = frappe.db.exists("Challan", {
+				"challan_number": self.challan_number,
+				"name": ("!=", self.name),
+				"docstatus": ("!=", 2)
+			})
+			if existing:
+				frappe.throw(f"Challan with Challan Number {self.challan_number} already exists")
+
 	def before_save(self):
 		self.calculate_lr_totals()
 		self.calculate_tds()

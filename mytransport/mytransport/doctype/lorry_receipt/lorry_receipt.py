@@ -14,6 +14,16 @@ class LorryReceipt(Document):
             update_branch_number_counter(self.branch, "Lorry Receipt", self.date, self.lr_number)
         self.name = self.lr_number
 
+    def validate(self):
+        if getattr(self, "lr_number", None):
+            existing = frappe.db.exists("Lorry Receipt", {
+                "lr_number": self.lr_number,
+                "name": ("!=", self.name),
+                "docstatus": ("!=", 2)
+            })
+            if existing:
+                frappe.throw(f"Lorry Receipt with LR Number {self.lr_number} already exists")
+
     def before_save(self):
         # Calculate totals from items
         self.basic_freight = sum([flt(item.lorry_freight) for item in self.get("items")])

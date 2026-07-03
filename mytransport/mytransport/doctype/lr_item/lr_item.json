@@ -21,39 +21,45 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Item Description",
-   "options": "Oil\nPlastic Dana\nGenerator"
+   "options": "Oil\nPlastic Dana\nGenerator",
+   "allow_on_submit": 1
   },
   {
    "fieldname": "qty",
    "fieldtype": "Int",
    "in_list_view": 1,
-   "label": "Quantity"
+   "label": "Quantity",
+   "allow_on_submit": 1
   },
   {
    "fieldname": "actual_weight",
    "fieldtype": "Float",
    "in_list_view": 1,
-   "label": "Act Wgt (MT)"
+   "label": "Act Wgt (MT)",
+   "allow_on_submit": 1
   },
   {
    "fieldname": "charged_weight",
    "fieldtype": "Float",
    "label": "Chrg Wgt (MT)",
-   "in_list_view": 1
+   "in_list_view": 1,
+   "allow_on_submit": 1
   },
   {
    "fieldname": "packaging_type",
    "fieldtype": "Select",
    "label": "Packaging Type",
    "options": "Loose\nCarton\nPallet\nDrum",
-   "in_list_view": 1
+   "in_list_view": 1,
+   "allow_on_submit": 1
   },
   {
    "fieldname": "load_type",
    "fieldtype": "Select",
    "label": "Load Type",
    "options": "9MT\n16 MT\n21 MT\n32 MT",
-   "in_list_view": 1
+   "in_list_view": 1,
+   "allow_on_submit": 1
   },
   {
    "fieldname": "lorry_freight",

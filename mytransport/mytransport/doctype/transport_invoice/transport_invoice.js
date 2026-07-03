@@ -3,6 +3,8 @@
 
 frappe.ui.form.on("Transport Invoice", {
 	setup: function(frm) {
+		frm.ignore_doctypes_on_cancel_all = ["Lorry Receipt"];
+		
 		frm.set_query("debit_to", function() {
 			return {
 				filters: {

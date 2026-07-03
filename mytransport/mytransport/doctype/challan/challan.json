@@ -2,7 +2,7 @@
  "actions": [],
  "allow_bulk_edit": 1,
  "allow_rename": 1,
- "autoname": "field:challan_number",
+ "autoname": "",
  "creation": "2026-06-05 12:36:16.733502",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -73,8 +73,7 @@
   {
    "fieldname": "challan_number",
    "fieldtype": "Data",
-   "label": "Challan Number",
-   "unique": 1
+   "label": "Challan Number"
   },
   {
    "fieldname": "branch",
@@ -82,7 +81,8 @@
    "in_list_view": 1,
    "label": "Branch",
    "options": "Branch",
-   "reqd": 1
+   "reqd": 1,
+   "allow_on_submit": 1
   },
   {
    "default": "Today",
@@ -90,7 +90,8 @@
    "fieldtype": "Date",
    "in_list_view": 1,
    "label": "Date",
-   "reqd": 1
+   "reqd": 1,
+   "allow_on_submit": 1
   },
   {
    "fieldname": "location_sec",
@@ -103,7 +104,8 @@
    "options": "Territory",
    "in_list_view": 1,
    "label": "From Location",
-   "reqd": 1
+   "reqd": 1,
+   "allow_on_submit": 1
   },
   {
    "fieldname": "column_break_1",
@@ -115,7 +117,8 @@
    "options": "Territory",
    "in_list_view": 1,
    "label": "To Location",
-   "reqd": 1
+   "reqd": 1,
+   "allow_on_submit": 1
   },
   {
    "fieldname": "vehicle_details_sec",
@@ -126,19 +129,22 @@
    "fieldname": "broker",
    "fieldtype": "Link",
    "label": "Broker",
-   "options": "Supplier"
+   "options": "Supplier",
+   "allow_on_submit": 1
   },
   {
    "fieldname": "vehicle_number",
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Vehicle Number",
-   "options": "Hired Vehicle"
+   "options": "Hired Vehicle",
+   "allow_on_submit": 1
   },
   {
    "fieldname": "driver_name",
    "fieldtype": "Data",
-   "label": "Driver Name"
+   "label": "Driver Name",
+   "allow_on_submit": 1
   },
   {
    "fieldname": "column_break_2",
@@ -153,7 +159,8 @@
    "fieldname": "lrs",
    "fieldtype": "Table",
    "label": "Lorry Receipts",
-   "options": "Challan LR Item"
+   "options": "Challan LR Item",
+   "allow_on_submit": 1
   },
   {
    "fieldname": "finance_sec",
@@ -324,7 +331,8 @@
   {
    "fieldname": "remarks",
    "fieldtype": "Small Text",
-   "label": "Remarks"
+   "label": "Remarks",
+   "allow_on_submit": 1
   },
   {
    "fieldname": "tds_details_sec",
@@ -385,12 +393,14 @@
   {
    "fieldname": "eway_bill_no",
    "fieldtype": "Data",
-   "label": "Eway Bill No"
+   "label": "Eway Bill No",
+   "allow_on_submit": 1
   },
   {
    "fieldname": "eway_bill_expiry_date",
    "fieldtype": "Date",
-   "label": "Eway Bill Expiry Date"
+   "label": "Eway Bill Expiry Date",
+   "allow_on_submit": 1
   },
   {
    "fieldname": "get_unmapped_lrs",
@@ -430,5 +440,6 @@
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
+ "title_field": "challan_number",
  "allow_attachments": 1
 }

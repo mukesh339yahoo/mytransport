@@ -9,6 +9,16 @@ class ExpenseVoucher(Document):
         else:
             update_branch_number_counter(self.branch, "Expense Voucher", self.date, self.voucher_no)
 
+    def validate(self):
+        if getattr(self, "voucher_no", None):
+            existing = frappe.db.exists("Expense Voucher", {
+                "voucher_no": self.voucher_no,
+                "name": ("!=", self.name),
+                "docstatus": ("!=", 2)
+            })
+            if existing:
+                frappe.throw(f"Expense Voucher with Voucher No {self.voucher_no} already exists")
+
     def on_submit(self):
         # Create Journal Entry
         je = frappe.new_doc("Journal Entry")

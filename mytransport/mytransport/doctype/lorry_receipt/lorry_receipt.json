@@ -2,7 +2,7 @@
  "actions": [],
  "allow_bulk_edit": 1,
  "allow_rename": 1,
- "autoname": "field:lr_number",
+ "autoname": "",
  "creation": "2026-06-05 12:07:21.658969",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -68,8 +68,7 @@
   {
    "fieldname": "lr_number",
    "fieldtype": "Data",
-   "label": "LR Number",
-   "unique": 1
+   "label": "LR Number"
   },
   {
    "default": "Unbilled",
@@ -78,7 +77,8 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Status",
-   "options": "Unbilled\nBilled\nCancelled"
+   "options": "Unbilled\nBilled\nCancelled",
+   "allow_on_submit": 1
   },
   {
    "fieldname": "branch",
@@ -86,7 +86,8 @@
    "in_list_view": 1,
    "label": "Branch",
    "options": "Branch",
-   "reqd": 1
+   "reqd": 1,
+   "allow_on_submit": 1
   },
   {
    "default": "Today",
@@ -94,7 +95,8 @@
    "fieldtype": "Date",
    "in_list_view": 1,
    "label": "Date",
-   "reqd": 1
+   "reqd": 1,
+   "allow_on_submit": 1
   },
   {
    "fieldname": "payment_terms",
@@ -113,26 +115,30 @@
    "fieldtype": "Link",
    "label": "Consignor",
    "options": "Customer",
-   "reqd": 1
+   "reqd": 1,
+   "allow_on_submit": 1
   },
   {
    "fieldname": "consignor_address",
    "fieldtype": "Small Text",
    "label": "Consignor Address",
-   "fetch_from": "consignor.primary_address"
+   "fetch_from": "consignor.primary_address",
+   "allow_on_submit": 1
   },
   {
    "fieldname": "consignor_gst_no",
    "fieldtype": "Data",
    "label": "Consignor GST No",
-   "fetch_from": "consignor.tax_id"
+   "fetch_from": "consignor.tax_id",
+   "allow_on_submit": 1
   },
   {
    "fieldname": "from_city",
    "fieldtype": "Link",
    "label": "From City",
    "options": "Territory",
-   "reqd": 1
+   "reqd": 1,
+   "allow_on_submit": 1
   },
   {
    "fieldname": "column_break_1",
@@ -143,26 +149,30 @@
    "fieldtype": "Link",
    "label": "Consignee",
    "options": "Customer",
-   "reqd": 1
+   "reqd": 1,
+   "allow_on_submit": 1
   },
   {
    "fieldname": "consignee_address",
    "fieldtype": "Small Text",
    "label": "Consignee Address",
-   "fetch_from": "consignee.primary_address"
+   "fetch_from": "consignee.primary_address",
+   "allow_on_submit": 1
   },
   {
    "fieldname": "consignee_gst_no",
    "fieldtype": "Data",
    "label": "Consignee GST No",
-   "fetch_from": "consignee.tax_id"
+   "fetch_from": "consignee.tax_id",
+   "allow_on_submit": 1
   },
   {
    "fieldname": "to_city",
    "fieldtype": "Link",
    "label": "To City",
    "options": "Territory",
-   "reqd": 1
+   "reqd": 1,
+   "allow_on_submit": 1
   },
   {
    "fieldname": "vehicle_details_sec",
@@ -174,13 +184,15 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Challan Number",
-   "read_only": 1
+   "read_only": 1,
+   "allow_on_submit": 1
   },
   {
    "fieldname": "vehicle_number",
    "fieldtype": "Link",
    "label": "Vehicle Number",
-   "options": "Hired Vehicle"
+   "options": "Hired Vehicle",
+   "allow_on_submit": 1
   },
   {
    "fieldname": "column_break_2",
@@ -190,7 +202,8 @@
    "fieldname": "driver_name",
    "fieldtype": "Data",
    "label": "Driver Name",
-   "fetch_from": "vehicle_number.driver_name"
+   "fetch_from": "vehicle_number.driver_name",
+   "allow_on_submit": 1
   },
   {
    "fieldname": "items_sec",
@@ -201,7 +214,8 @@
    "fieldname": "items",
    "fieldtype": "Table",
    "label": "Items",
-   "options": "LR Item"
+   "options": "LR Item",
+   "allow_on_submit": 1
   },
   {
    "fieldname": "freight_details_sec",
@@ -296,18 +310,21 @@
    "fieldname": "delivery_at",
    "fieldtype": "Select",
    "label": "Delivery At",
-   "options": "Door Delivery\nGodown Delivery"
+   "options": "Door Delivery\nGodown Delivery",
+   "allow_on_submit": 1
   },
   {
    "fieldname": "remarks",
    "fieldtype": "Small Text",
-   "label": "Remarks"
+   "label": "Remarks",
+   "allow_on_submit": 1
   },
   {
    "fieldname": "challan_remarks",
    "fieldtype": "Small Text",
    "label": "Challan Remarks",
-   "read_only": 1
+   "read_only": 1,
+   "allow_on_submit": 1
   },
   {
    "fieldname": "transport_invoice",
@@ -393,7 +410,8 @@
    "default": "Pending",
    "read_only": 1,
    "in_list_view": 1,
-   "in_standard_filter": 1
+   "in_standard_filter": 1,
+   "allow_on_submit": 1
   }
  ],
  "grid_page_length": 50,
@@ -423,5 +441,6 @@
  "rows_threshold_for_grid_search": 20,
  "sort_field": "creation",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "title_field": "lr_number"
 }

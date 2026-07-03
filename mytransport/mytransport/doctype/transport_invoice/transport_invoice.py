@@ -15,6 +15,15 @@ class TransportInvoice(Document):
         from frappe.utils import getdate, nowdate
         if self.date and getdate(self.date) > getdate(nowdate()):
             frappe.throw("Transport Invoice Date cannot be a future date")
+            
+        if self.bill_no:
+            existing = frappe.db.exists("Transport Invoice", {
+                "bill_no": self.bill_no,
+                "name": ("!=", self.name),
+                "docstatus": ("!=", 2)
+            })
+            if existing:
+                frappe.throw(f"Transport Invoice with Bill No {self.bill_no} already exists")
         
         self.calculate_totals()
         if not self.company:
@@ -60,6 +69,10 @@ class TransportInvoice(Document):
         self.db_update()
         self.make_gl_entries()
 
+    def before_cancel(self):
+        # Tell Frappe framework to ignore ALL linked doctypes when checking for cancel block
+        self.flags.ignore_links = True
+
     def on_cancel(self):
         self.update_lorry_receipts(is_submit=False)
         self.status = "Cancelled"
@@ -100,6 +113,8 @@ class TransportInvoice(Document):
                 "party": self.customer,
                 "debit": self.total_amount,
                 "debit_in_account_currency": self.total_amount,
+                "credit": 0.0,
+                "credit_in_account_currency": 0.0,
                 "against": self.income_account
             })
         )
@@ -108,6 +123,8 @@ class TransportInvoice(Document):
         gl_entries.append(
             self.get_gl_dict({
                 "account": self.income_account,
+                "debit": 0.0,
+                "debit_in_account_currency": 0.0,
                 "credit": self.total_amount,
                 "credit_in_account_currency": self.total_amount,
                 "against": self.debit_to

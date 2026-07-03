@@ -58,12 +58,14 @@
    "fieldtype": "Date",
    "in_list_view": 1,
    "label": "Date",
-   "reqd": 1
+   "reqd": 1,
+   "allow_on_submit": 1
   },
   {
    "fieldname": "due_date",
    "fieldtype": "Date",
-   "label": "Due Date"
+   "label": "Due Date",
+   "allow_on_submit": 1
   },
   {
    "fieldname": "column_break_1",
@@ -145,7 +147,8 @@
   {
    "fieldname": "remarks",
    "fieldtype": "Small Text",
-   "label": "Remarks"
+   "label": "Remarks",
+   "allow_on_submit": 1
   },
   {
    "fieldname": "accounting_section",
@@ -186,23 +189,25 @@
   {
    "fieldname": "bill_no",
    "fieldtype": "Data",
-   "label": "Bill No",
-   "unique": 1
+   "label": "Bill No"
   },
   {
    "fieldname": "customer_address",
    "fieldtype": "Small Text",
-   "label": "Customer Address"
+   "label": "Customer Address",
+   "allow_on_submit": 1
   },
   {
    "fieldname": "customer_gst_no",
    "fieldtype": "Data",
-   "label": "Customer GST Number"
+   "label": "Customer GST Number",
+   "allow_on_submit": 1
   },
   {
    "fieldname": "customer_reference",
    "fieldtype": "Data",
-   "label": "Customer Reference"
+   "label": "Customer Reference",
+   "allow_on_submit": 1
   },
   {
    "fieldname": "total_freight",

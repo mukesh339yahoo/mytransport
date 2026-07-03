@@ -11,7 +11,14 @@ class MoneyReceipt(Document):
             update_branch_number_counter(self.branch, "Money Receipt", self.date, self.mr_no)
 
     def validate(self):
-        pass
+        if getattr(self, "mr_no", None):
+            existing = frappe.db.exists("Money Receipt", {
+                "mr_no": self.mr_no,
+                "name": ("!=", self.name),
+                "docstatus": ("!=", 2)
+            })
+            if existing:
+                frappe.throw(f"Money Receipt with MR No {self.mr_no} already exists")
 
     def on_submit(self):
         # Create Payment Entry
