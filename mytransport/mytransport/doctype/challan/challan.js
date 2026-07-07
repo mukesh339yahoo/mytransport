@@ -140,12 +140,12 @@ frappe.ui.form.on("Challan", {
 						} else {
 							frm.set_value("tds_declaration", 0);
 							frm.set_value("tds_percent", 1);
-							frm.set_value("tds_challan", "");
+							frm.set_value("tds_challan", "-");
 						}
 					} else {
 						frm.set_value("tds_declaration", 0);
 						frm.set_value("tds_percent", 1);
-						frm.set_value("tds_challan", "");
+						frm.set_value("tds_challan", "-");
 					}
 				});
 		}
@@ -157,7 +157,7 @@ frappe.ui.form.on("Challan", {
 		if (frm.doc.tds_declaration && !frm.doc.tds_challan) {
 			frm.set_value("tds_percent", 0);
 		} else if (!frm.doc.tds_declaration) {
-			frm.set_value("tds_challan", "");
+			frm.set_value("tds_challan", "-");
 			frm.set_value("tds_percent", 1);
 		}
 	},
@@ -319,5 +319,55 @@ frappe.ui.form.on("Challan", {
 	},
 	date: function(frm) {
 		peek_branch_number(frm, "Challan", "challan_number");
+	}
+});
+
+function calculate_delivery_days(frm) {
+	if (frm.doc.date && frm.doc.dispatch_date) {
+		frm.set_value("days_to_load", frappe.datetime.get_day_diff(frm.doc.dispatch_date, frm.doc.date));
+	} else {
+		frm.set_value("days_to_load", 0);
+	}
+
+	if (frm.doc.dispatch_date && frm.doc.delivery_date) {
+		frm.set_value("days_to_deliver", frappe.datetime.get_day_diff(frm.doc.delivery_date, frm.doc.dispatch_date));
+	} else {
+		frm.set_value("days_to_deliver", 0);
+	}
+
+	if (frm.doc.delivery_date && frm.doc.unloading_date) {
+		frm.set_value("days_to_unload", frappe.datetime.get_day_diff(frm.doc.unloading_date, frm.doc.delivery_date));
+	} else {
+		frm.set_value("days_to_unload", 0);
+	}
+}
+
+frappe.ui.form.on("Challan", {
+	dispatch_date: function(frm) {
+		calculate_delivery_days(frm);
+	},
+	delivery_date: function(frm) {
+		calculate_delivery_days(frm);
+	},
+	unloading_date: function(frm) {
+		calculate_delivery_days(frm);
+	},
+	date: function(frm) {
+		calculate_delivery_days(frm);
+	}
+});
+
+frappe.ui.form.on("Challan", "refresh", function(frm) {
+	if (frm.is_new() && frm.doc.date && !frm.doc.dispatch_date) {
+		frm.set_value("dispatch_date", frm.doc.date);
+	}
+	calculate_delivery_days(frm);
+});
+
+frappe.ui.form.on("Challan", {
+	on_submit: function(frm) {
+		setTimeout(() => {
+			frappe.new_doc(frm.doctype);
+		}, 500);
 	}
 });

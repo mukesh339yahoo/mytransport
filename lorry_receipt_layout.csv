@@ -1,0 +1,34 @@
+column1,column2,column3,column4
+--- SECTION: Default ---,,,
+lr_number,,,
+status,,,
+branch,,,
+date,,,
+payment_terms,,,
+--- SECTION: Party Details ---,consignee,,
+consignor,consignee_address,,
+consignor_address,consignee_gst_no,,
+consignor_gst_no,to_city,,
+from_city,,,
+--- SECTION: Vehicle Details ---,driver_name,,
+challan_number,,,
+vehicle_number,,,
+--- SECTION: Items ---,,,
+items,,,
+--- SECTION: Freight Details ---,bilty_charges,,
+basic_freight,rto_charges,,
+hamali_charges,other_charges,,
+detention_charges,total_amount,,
+--- SECTION: Billing Details ---,delivery_at,,
+credit_account,remarks,,
+party_invoice_number,challan_remarks,,
+party_invoice_value,transport_invoice,,
+invoice_number,receipt_status,,
+invoice_value,paid_amount,,
+gst_paid_by,outstanding_amount,,
+--- SECTION: Delivery Details ---,delivery_date,unloading_date,total_weight
+delivery_status,days_to_deliver,days_to_unload,total_packages
+dispatch_date,,amended_from,detention_narration
+days_to_load,,,hamali_narration
+,,,other_charge_narration
+,,,challan_status

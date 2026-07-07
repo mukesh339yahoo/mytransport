@@ -10,6 +10,8 @@ class TransportInvoice(Document):
         from mytransport.branch_numbering import get_next_branch_number, update_branch_number_counter
         if not self.bill_no:
             self.bill_no = get_next_branch_number(self.branch, "Transport Invoice", self.date)
+        else:
+            update_branch_number_counter(self.branch, "Transport Invoice", self.date, self.bill_no)
 
     def validate(self):
         from frappe.utils import getdate, nowdate

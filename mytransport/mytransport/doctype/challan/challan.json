@@ -9,94 +9,82 @@
  "engine": "InnoDB",
  "field_order": [
   "challan_number",
-  "column_break_top_1",
+  "from_location",
+  "column_break_1",
   "branch",
-  "column_break_top_2",
+  "to_location",
+  "column_break_2",
   "date",
+  "remarks",
+  "vehicle_details_sec",
+  "broker",
+  "column_break_3",
+  "vehicle_number",
+  "column_break_12",
+  "driver_name",
   "lrs_sec",
   "get_unmapped_lrs",
   "lrs",
-  "location_sec",
-  "from_location",
-  "eway_bill_no",
-  "column_break_1",
-  "to_location",
-  "eway_bill_expiry_date",
-  "vehicle_details_sec",
-  "broker",
-  "vehicle_number",
-  "column_break_2",
-  "driver_name",
-  "truck_freight_sec",
-  "total_lrs",
-  "total_weight",
-  "total_packages",
-  "column_break_tf_1",
-  "basic_freight",
-  "hamali_charges",
-  "detention_charges",
-  "column_break_tf_2",
-  "rto_charges",
-  "other_charges",
-  "total_amount",
-  "advance_details_sec",
-  "bank",
-  "column_break_ad_1",
-  "cheque_no",
-  "cheque_date",
-  "cheque_amount",
-  "voucher_no",
-  "column_break_ad_2",
-  "cash_amount",
-  "utr_rtgs_no",
-  "e_pay_amount",
-  "remarks",
-  "tds_details_sec",
-  "pan_no",
-  "name_field",
-  "tds_declaration",
-  "tds_challan",
-  "column_break_tds_1",
-  "tds_percent",
-  "total_tds",
-  "column_break_tds_2",
-  "tds_payable_by",
   "finance_sec",
   "total_hire_amount",
-  "column_break_3",
+  "column_break_13",
   "advance",
+  "column_break_15",
   "balance_amount",
-  "amended_from",
-  "update_vehicle_tds"
+  "truck_freight_sec",
+  "basic_freight",
+  "total_lrs",
+  "hamali_charges",
+  "column_break_16",
+  "total_amount",
+  "total_packages",
+  "detention_charges",
+  "column_break_17",
+  "total_weight",
+  "other_charges",
+  "rto_charges",
+  "section_break_18",
+  "tds_declaration",
+  "section_break_19",
+  "tds_percent",
+  "tds_challan",
+  "eway_bill_expiry_date",
+  "column_break_20",
+  "tds_payable_by",
+  "pan_no",
+  "eway_bill_no",
+  "column_break_21",
+  "total_tds",
+  "name_field",
+  "update_vehicle_tds",
+  "advance_details_sec",
+  "voucher_no",
+  "bank",
+  "utr_rtgs_no",
+  "column_break_22",
+  "cheque_no",
+  "cheque_date",
+  "e_pay_amount",
+  "column_break_23",
+  "cheque_amount",
+  "cash_amount",
+  "delivery_details_sec",
+  "delivery_status",
+  "unloading_date",
+  "days_to_load",
+  "column_break_29",
+  "dispatch_date",
+  "days_to_deliver",
+  "column_break_30",
+  "delivery_date",
+  "days_to_unload",
+  "amended_from"
  ],
  "fields": [
   {
    "fieldname": "challan_number",
    "fieldtype": "Data",
    "label": "Challan Number"
-  },
-  {
-   "fieldname": "branch",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Branch",
-   "options": "Branch",
-   "reqd": 1,
-   "allow_on_submit": 1
-  },
-  {
-   "default": "Today",
-   "fieldname": "date",
-   "fieldtype": "Date",
-   "in_list_view": 1,
-   "label": "Date",
-   "reqd": 1,
-   "allow_on_submit": 1
-  },
-  {
-   "fieldname": "location_sec",
-   "fieldtype": "Section Break",
-   "label": "Location Details"
   },
   {
    "fieldname": "from_location",
@@ -112,12 +100,40 @@
    "fieldtype": "Column Break"
   },
   {
+   "fieldname": "branch",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Branch",
+   "options": "Branch",
+   "reqd": 1,
+   "allow_on_submit": 1
+  },
+  {
    "fieldname": "to_location",
    "fieldtype": "Link",
    "options": "Territory",
    "in_list_view": 1,
    "label": "To Location",
    "reqd": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "column_break_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Today",
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Date",
+   "reqd": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Data",
+   "label": "Remarks",
    "allow_on_submit": 1
   },
   {
@@ -133,6 +149,10 @@
    "allow_on_submit": 1
   },
   {
+   "fieldname": "column_break_3",
+   "fieldtype": "Column Break"
+  },
+  {
    "fieldname": "vehicle_number",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -141,19 +161,25 @@
    "allow_on_submit": 1
   },
   {
+   "fieldname": "column_break_12",
+   "fieldtype": "Column Break"
+  },
+  {
    "fieldname": "driver_name",
    "fieldtype": "Data",
    "label": "Driver Name",
    "allow_on_submit": 1
   },
   {
-   "fieldname": "column_break_2",
-   "fieldtype": "Column Break"
-  },
-  {
    "fieldname": "lrs_sec",
    "fieldtype": "Section Break",
    "label": "Lorry Receipts"
+  },
+  {
+   "fieldname": "get_unmapped_lrs",
+   "fieldtype": "Button",
+   "label": "Get Unmapped LRs",
+   "depends_on": "eval:doc.docstatus==0"
   },
   {
    "fieldname": "lrs",
@@ -173,7 +199,7 @@
    "label": "Total Hire Amount"
   },
   {
-   "fieldname": "column_break_3",
+   "fieldname": "column_break_13",
    "fieldtype": "Column Break"
   },
   {
@@ -182,11 +208,282 @@
    "label": "Advance"
   },
   {
+   "fieldname": "column_break_15",
+   "fieldtype": "Column Break"
+  },
+  {
    "fieldname": "balance_amount",
    "fieldtype": "Currency",
    "in_list_view": 1,
    "label": "Balance",
-   "read_only": 1
+   "read_only": 1,
+   "default": "0"
+  },
+  {
+   "fieldname": "truck_freight_sec",
+   "fieldtype": "Section Break",
+   "label": "Truck Freight"
+  },
+  {
+   "fieldname": "basic_freight",
+   "fieldtype": "Currency",
+   "label": "Basic Freight",
+   "read_only": 1,
+   "default": "0"
+  },
+  {
+   "fieldname": "total_lrs",
+   "fieldtype": "Int",
+   "label": "Total LRs",
+   "read_only": 1,
+   "default": "0"
+  },
+  {
+   "fieldname": "hamali_charges",
+   "fieldtype": "Currency",
+   "label": "Hamali Charges",
+   "read_only": 1,
+   "default": "0"
+  },
+  {
+   "fieldname": "column_break_16",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total_amount",
+   "fieldtype": "Currency",
+   "label": "Total Amount",
+   "read_only": 1,
+   "default": "0"
+  },
+  {
+   "fieldname": "total_packages",
+   "fieldtype": "Int",
+   "label": "Total Packages",
+   "read_only": 1,
+   "default": "0"
+  },
+  {
+   "fieldname": "detention_charges",
+   "fieldtype": "Currency",
+   "label": "Detention Charges",
+   "read_only": 1,
+   "default": "0"
+  },
+  {
+   "fieldname": "column_break_17",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total_weight",
+   "fieldtype": "Float",
+   "label": "Total Weight",
+   "read_only": 1,
+   "default": "0"
+  },
+  {
+   "fieldname": "other_charges",
+   "fieldtype": "Currency",
+   "label": "Other Charges",
+   "read_only": 1,
+   "default": "0"
+  },
+  {
+   "fieldname": "rto_charges",
+   "fieldtype": "Currency",
+   "label": "RTO Charges",
+   "read_only": 1,
+   "default": "0"
+  },
+  {
+   "fieldname": "section_break_18",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "tds_declaration",
+   "fieldtype": "Check",
+   "label": "TDS Declaration"
+  },
+  {
+   "fieldname": "section_break_19",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "tds_percent",
+   "fieldtype": "Float",
+   "label": "TDS %",
+   "default": "1"
+  },
+  {
+   "fieldname": "tds_challan",
+   "fieldtype": "Data",
+   "label": "TDS Challan",
+   "read_only": 1,
+   "default": "-"
+  },
+  {
+   "fieldname": "eway_bill_expiry_date",
+   "fieldtype": "Date",
+   "label": "Eway Bill Expiry Date",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "column_break_20",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "tds_payable_by",
+   "fieldtype": "Select",
+   "label": "TDS Payable By",
+   "options": "Owner\nBroker\nCompany"
+  },
+  {
+   "fieldname": "pan_no",
+   "fieldtype": "Data",
+   "label": "PAN No"
+  },
+  {
+   "fieldname": "eway_bill_no",
+   "fieldtype": "Data",
+   "label": "Eway Bill No",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "column_break_21",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total_tds",
+   "fieldtype": "Currency",
+   "label": "Total TDS",
+   "read_only": 1,
+   "default": "0"
+  },
+  {
+   "fieldname": "name_field",
+   "fieldtype": "Data",
+   "label": "Name"
+  },
+  {
+   "fieldname": "update_vehicle_tds",
+   "fieldtype": "Check",
+   "label": "Update Vehicle TDS",
+   "hidden": 1
+  },
+  {
+   "fieldname": "advance_details_sec",
+   "fieldtype": "Section Break",
+   "label": "Advance Details"
+  },
+  {
+   "fieldname": "voucher_no",
+   "fieldtype": "Data",
+   "label": "Voucher No"
+  },
+  {
+   "fieldname": "bank",
+   "fieldtype": "Data",
+   "label": "Bank"
+  },
+  {
+   "fieldname": "utr_rtgs_no",
+   "fieldtype": "Data",
+   "label": "UTR/RTGS No"
+  },
+  {
+   "fieldname": "column_break_22",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "cheque_no",
+   "fieldtype": "Data",
+   "label": "Cheque No"
+  },
+  {
+   "fieldname": "cheque_date",
+   "fieldtype": "Date",
+   "label": "Cheque Date"
+  },
+  {
+   "fieldname": "e_pay_amount",
+   "fieldtype": "Currency",
+   "label": "E-Pay Amount"
+  },
+  {
+   "fieldname": "column_break_23",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "cheque_amount",
+   "fieldtype": "Currency",
+   "label": "Cheque Amount"
+  },
+  {
+   "fieldname": "cash_amount",
+   "fieldtype": "Currency",
+   "label": "Cash Amount"
+  },
+  {
+   "fieldname": "delivery_details_sec",
+   "fieldtype": "Section Break",
+   "label": "Delivery Details"
+  },
+  {
+   "fieldname": "delivery_status",
+   "fieldtype": "Select",
+   "label": "Delivery Status",
+   "options": "\nIn Transit\nDelivered",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "unloading_date",
+   "fieldtype": "Date",
+   "label": "Unloading Date",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "days_to_load",
+   "fieldtype": "Int",
+   "label": "No. of Days to Load",
+   "read_only": 1,
+   "allow_on_submit": 1,
+   "default": "0"
+  },
+  {
+   "fieldname": "column_break_29",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "dispatch_date",
+   "fieldtype": "Date",
+   "label": "Dispatch Date",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "days_to_deliver",
+   "fieldtype": "Int",
+   "label": "No. of Days to Deliver",
+   "read_only": 1,
+   "allow_on_submit": 1,
+   "default": "0"
+  },
+  {
+   "fieldname": "column_break_30",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "delivery_date",
+   "fieldtype": "Date",
+   "label": "Delivery Date",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "days_to_unload",
+   "fieldtype": "Int",
+   "label": "No. of Days to Unload",
+   "read_only": 1,
+   "allow_on_submit": 1,
+   "default": "0"
   },
   {
    "fieldname": "amended_from",
@@ -197,216 +494,6 @@
    "print_hide": 1,
    "read_only": 1,
    "search_index": 1
-  },
-  {
-   "fieldname": "truck_freight_sec",
-   "fieldtype": "Section Break",
-   "label": "Truck Freight"
-  },
-  {
-   "fieldname": "total_lrs",
-   "fieldtype": "Int",
-   "label": "Total LRs",
-   "read_only": 1
-  },
-  {
-   "fieldname": "basic_freight",
-   "fieldtype": "Currency",
-   "label": "Basic Freight",
-   "read_only": 1
-  },
-  {
-   "fieldname": "hamali_charges",
-   "fieldtype": "Currency",
-   "label": "Hamali Charges",
-   "read_only": 1
-  },
-  {
-   "fieldname": "detention_charges",
-   "fieldtype": "Currency",
-   "label": "Detention Charges",
-   "read_only": 1
-  },
-  {
-   "fieldname": "column_break_tf_1",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "rto_charges",
-   "fieldtype": "Currency",
-   "label": "RTO Charges",
-   "read_only": 1
-  },
-  {
-   "fieldname": "other_charges",
-   "fieldtype": "Currency",
-   "label": "Other Charges",
-   "read_only": 1
-  },
-  {
-   "fieldname": "total_amount",
-   "fieldtype": "Currency",
-   "label": "Total Amount",
-   "read_only": 1
-  },
-  {
-   "fieldname": "column_break_tf_2",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "total_weight",
-   "fieldtype": "Float",
-   "label": "Total Weight",
-   "read_only": 1
-  },
-  {
-   "fieldname": "total_packages",
-   "fieldtype": "Int",
-   "label": "Total Packages",
-   "read_only": 1
-  },
-  {
-   "fieldname": "advance_details_sec",
-   "fieldtype": "Section Break",
-   "label": "Advance Details"
-  },
-  {
-   "fieldname": "pan_no",
-   "fieldtype": "Data",
-   "label": "PAN No"
-  },
-  {
-   "fieldname": "name_field",
-   "fieldtype": "Data",
-   "label": "Name"
-  },
-  {
-   "fieldname": "cheque_no",
-   "fieldtype": "Data",
-   "label": "Cheque No"
-  },
-  {
-   "fieldname": "bank",
-   "fieldtype": "Data",
-   "label": "Bank"
-  },
-  {
-   "fieldname": "cheque_date",
-   "fieldtype": "Date",
-   "label": "Cheque Date"
-  },
-  {
-   "fieldname": "column_break_ad_1",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "cheque_amount",
-   "fieldtype": "Currency",
-   "label": "Cheque Amount"
-  },
-  {
-   "fieldname": "voucher_no",
-   "fieldtype": "Data",
-   "label": "Voucher No"
-  },
-  {
-   "fieldname": "cash_amount",
-   "fieldtype": "Currency",
-   "label": "Cash Amount"
-  },
-  {
-   "fieldname": "utr_rtgs_no",
-   "fieldtype": "Data",
-   "label": "UTR/RTGS No"
-  },
-  {
-   "fieldname": "e_pay_amount",
-   "fieldtype": "Currency",
-   "label": "E-Pay Amount"
-  },
-  {
-   "fieldname": "column_break_ad_2",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "remarks",
-   "fieldtype": "Small Text",
-   "label": "Remarks",
-   "allow_on_submit": 1
-  },
-  {
-   "fieldname": "tds_details_sec",
-   "fieldtype": "Section Break",
-   "label": "TDS Details"
-  },
-  {
-   "fieldname": "tds_declaration",
-   "fieldtype": "Check",
-   "label": "TDS Declaration"
-  },
-  {
-   "fieldname": "tds_challan",
-   "fieldtype": "Data",
-   "label": "TDS Challan",
-   "read_only": 1
-  },
-  {
-   "fieldname": "column_break_tds_1",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "tds_percent",
-   "fieldtype": "Float",
-   "label": "TDS %",
-   "default": "1"
-  },
-  {
-   "fieldname": "total_tds",
-   "fieldtype": "Currency",
-   "label": "Total TDS",
-   "read_only": 1
-  },
-  {
-   "fieldname": "column_break_tds_2",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "tds_payable_by",
-   "fieldtype": "Select",
-   "label": "TDS Payable By",
-   "options": "Owner\nBroker\nCompany"
-  },
-  {
-   "fieldname": "update_vehicle_tds",
-   "fieldtype": "Check",
-   "label": "Update Vehicle TDS",
-   "hidden": 1
-  },
-  {
-   "fieldname": "column_break_top_1",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "column_break_top_2",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "eway_bill_no",
-   "fieldtype": "Data",
-   "label": "Eway Bill No",
-   "allow_on_submit": 1
-  },
-  {
-   "fieldname": "eway_bill_expiry_date",
-   "fieldtype": "Date",
-   "label": "Eway Bill Expiry Date",
-   "allow_on_submit": 1
-  },
-  {
-   "fieldname": "get_unmapped_lrs",
-   "fieldtype": "Button",
-   "label": "Get Unmapped LRs",
-   "depends_on": "eval:doc.docstatus==0"
   }
  ],
  "grid_page_length": 50,

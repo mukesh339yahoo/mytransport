@@ -10,11 +10,8 @@
  "field_order": [
   "lr_number",
   "status",
-  "challan_status",
-  "column_break_top_1",
   "branch",
   "date",
-  "column_break_top_2",
   "payment_terms",
   "party_details_sec",
   "consignor",
@@ -34,18 +31,13 @@
   "items_sec",
   "items",
   "freight_details_sec",
-  "total_weight",
-  "total_packages",
   "basic_freight",
   "hamali_charges",
-  "hamali_narration",
   "detention_charges",
-  "detention_narration",
   "column_break_3",
   "bilty_charges",
   "rto_charges",
   "other_charges",
-  "other_charge_narration",
   "total_amount",
   "billing_sec",
   "credit_account",
@@ -62,7 +54,25 @@
   "receipt_status",
   "paid_amount",
   "outstanding_amount",
-  "amended_from"
+  "delivery_details_sec",
+  "delivery_status",
+  "dispatch_date",
+  "days_to_load",
+  "cb_delivery_1",
+  "delivery_date",
+  "days_to_deliver",
+  "cb_delivery_2",
+  "unloading_date",
+  "days_to_unload",
+  "amended_from",
+  "column_break_top_1",
+  "column_break_top_2",
+  "total_weight",
+  "total_packages",
+  "detention_narration",
+  "hamali_narration",
+  "other_charge_narration",
+  "challan_status"
  ],
  "fields": [
   {
@@ -315,7 +325,7 @@
   },
   {
    "fieldname": "remarks",
-   "fieldtype": "Small Text",
+   "fieldtype": "Data",
    "label": "Remarks",
    "allow_on_submit": 1
   },
@@ -355,6 +365,65 @@
    "read_only": 1
   },
   {
+   "fieldname": "delivery_details_sec",
+   "fieldtype": "Section Break",
+   "label": "Delivery Details"
+  },
+  {
+   "fieldname": "delivery_status",
+   "fieldtype": "Select",
+   "label": "Delivery Status",
+   "options": "\nIn Transit\nDelivered",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "dispatch_date",
+   "fieldtype": "Date",
+   "label": "Dispatch Date",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "days_to_load",
+   "fieldtype": "Int",
+   "label": "No. of Days to Load",
+   "read_only": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "cb_delivery_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "delivery_date",
+   "fieldtype": "Date",
+   "label": "Delivery Date",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "days_to_deliver",
+   "fieldtype": "Int",
+   "label": "No. of Days to Deliver",
+   "read_only": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "cb_delivery_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "unloading_date",
+   "fieldtype": "Date",
+   "label": "Unloading Date",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "days_to_unload",
+   "fieldtype": "Int",
+   "label": "No. of Days to Unload",
+   "read_only": 1,
+   "allow_on_submit": 1
+  },
+  {
    "fieldname": "amended_from",
    "fieldtype": "Link",
    "label": "Amended From",
@@ -386,19 +455,19 @@
   },
   {
    "fieldname": "detention_narration",
-   "fieldtype": "Small Text",
+   "fieldtype": "Data",
    "label": "Detention Narration",
    "allow_on_submit": 1
   },
   {
    "fieldname": "hamali_narration",
-   "fieldtype": "Small Text",
+   "fieldtype": "Data",
    "label": "Hamali Narration",
    "allow_on_submit": 1
   },
   {
    "fieldname": "other_charge_narration",
-   "fieldtype": "Small Text",
+   "fieldtype": "Data",
    "label": "Other Charge Narration",
    "allow_on_submit": 1
   },

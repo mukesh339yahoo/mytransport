@@ -176,13 +176,14 @@ frappe.ui.form.on("Transport Invoice", {
 									row.total_packages = lr.total_packages;
 									row.total_weight = lr.total_charged_weight;
 									row.rate_type = "Fix";
-									row.st_charge = lr.bilty_charges;
-									row.detention_narration = lr.detention_narration;
-									row.detention_charges = lr.detention_charges;
-									row.hamali_narration = lr.hamali_narration;
-									row.hamali_charges = lr.hamali_charges;
-									row.other_charge_narration = lr.other_charge_narration;
-									row.other_charges = lr.other_charges;
+									row.rate_per_mt = 0;
+									row.st_charge = 0;
+									row.detention_narration = "";
+									row.detention_charges = 0;
+									row.hamali_narration = "";
+									row.hamali_charges = 0;
+									row.other_charge_narration = "";
+									row.other_charges = 0;
 								}
 							});
 							
@@ -210,7 +211,9 @@ frappe.ui.form.on("Transport Invoice Item", {
 	},
 	rate_type: function(frm, cdt, cdn) {
 		let row = locals[cdt][cdn];
-		if (row.rate_type === "Per MT") {
+		if (row.rate_type === "Fix") {
+			frappe.model.set_value(cdt, cdn, "rate_per_mt", 0);
+		} else if (row.rate_type === "Per MT") {
 			let rate = flt(row.rate_per_mt);
 			if (rate > 0) {
 				frappe.model.set_value(cdt, cdn, "basic_freight", rate * flt(row.total_weight));
@@ -227,6 +230,18 @@ frappe.ui.form.on("Transport Invoice Item", {
 		}
 	},
 	basic_freight: function(frm, cdt, cdn) {
+		calculate_totals(frm);
+	},
+	st_charge: function(frm, cdt, cdn) {
+		calculate_totals(frm);
+	},
+	detention_charges: function(frm, cdt, cdn) {
+		calculate_totals(frm);
+	},
+	hamali_charges: function(frm, cdt, cdn) {
+		calculate_totals(frm);
+	},
+	other_charges: function(frm, cdt, cdn) {
 		calculate_totals(frm);
 	}
 });
@@ -280,5 +295,13 @@ frappe.ui.form.on("Transport Invoice", {
 	},
 	date: function(frm) {
 		peek_branch_number(frm, "Transport Invoice", "bill_no");
+	}
+});
+
+frappe.ui.form.on("Transport Invoice", {
+	on_submit: function(frm) {
+		setTimeout(() => {
+			frappe.new_doc(frm.doctype);
+		}, 500);
 	}
 });

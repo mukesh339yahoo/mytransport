@@ -1,0 +1,19 @@
+column1,column2
+--- SECTION: Default ---,customer
+mr_no,payment_mode
+company,deposit_account
+branch,
+date,
+--- SECTION: Allocation ---,
+--- SECTION: Totals & Remarks ---,cheque_date
+payment_entry,on_account
+amended_from,amount_in_words
+cheque_no,
+--- SECTION: Allocations ---,
+get_unpaid_bills,
+allocated_invoices,
+total_amount,
+remarks,
+--- SECTION: Additional Information ---,
+--- SECTION: Previous Payments for Transport Invoices ---,
+previous_payments,

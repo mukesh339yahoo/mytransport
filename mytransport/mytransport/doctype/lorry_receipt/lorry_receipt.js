@@ -142,3 +142,54 @@ frappe.ui.form.on("Lorry Receipt", {
 		peek_branch_number(frm, "Lorry Receipt", "lr_number");
 	}
 });
+
+function calculate_delivery_days(frm) {
+	if (frm.doc.date && frm.doc.dispatch_date) {
+		frm.set_value("days_to_load", frappe.datetime.get_day_diff(frm.doc.dispatch_date, frm.doc.date));
+	} else {
+		frm.set_value("days_to_load", 0);
+	}
+
+	if (frm.doc.dispatch_date && frm.doc.delivery_date) {
+		frm.set_value("days_to_deliver", frappe.datetime.get_day_diff(frm.doc.delivery_date, frm.doc.dispatch_date));
+	} else {
+		frm.set_value("days_to_deliver", 0);
+	}
+
+	if (frm.doc.delivery_date && frm.doc.unloading_date) {
+		frm.set_value("days_to_unload", frappe.datetime.get_day_diff(frm.doc.unloading_date, frm.doc.delivery_date));
+	} else {
+		frm.set_value("days_to_unload", 0);
+	}
+}
+
+frappe.ui.form.on("Lorry Receipt", {
+	dispatch_date: function(frm) {
+		calculate_delivery_days(frm);
+	},
+	delivery_date: function(frm) {
+		calculate_delivery_days(frm);
+	},
+	unloading_date: function(frm) {
+		calculate_delivery_days(frm);
+	},
+	date: function(frm) {
+		// Existing date hook is above, but frappe merges these on execution.
+		calculate_delivery_days(frm);
+	}
+});
+
+frappe.ui.form.on("Lorry Receipt", "refresh", function(frm) {
+	if (frm.is_new() && frm.doc.date && !frm.doc.dispatch_date) {
+		frm.set_value("dispatch_date", frm.doc.date);
+	}
+	calculate_delivery_days(frm);
+});
+
+frappe.ui.form.on("Lorry Receipt", {
+	on_submit: function(frm) {
+		setTimeout(() => {
+			frappe.new_doc(frm.doctype);
+		}, 500);
+	}
+});

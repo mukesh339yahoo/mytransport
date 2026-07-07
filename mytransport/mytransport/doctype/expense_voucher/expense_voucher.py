@@ -44,22 +44,7 @@ class ExpenseVoucher(Document):
             "debit_in_account_currency": self.total_paid_amt
         })
         
-        # Update Challan Advance Details
-        for item in self.get("allocated_challans", []):
-            challan_doc = frappe.get_doc("Challan", item.challan)
-            
-            # Increase the advance amount by the paid amount
-            current_advance = frappe.utils.flt(challan_doc.advance)
-            new_advance = current_advance + frappe.utils.flt(item.paid_amt)
-            
-            # Recalculate balance
-            total_hire = frappe.utils.flt(challan_doc.total_hire_amount)
-            new_balance = total_hire - new_advance
-            
-            frappe.db.set_value("Challan", item.challan, {
-                "advance": new_advance,
-                "balance_amount": new_balance
-            })
+
 
         je.insert(ignore_permissions=True)
         je.submit()
@@ -74,22 +59,7 @@ class ExpenseVoucher(Document):
                 je.cancel()
             frappe.msgprint(f"Journal Entry {je.name} cancelled.")
             
-        # Revert Challan Advance Details
-        for item in self.get("allocated_challans", []):
-            challan_doc = frappe.get_doc("Challan", item.challan)
-            
-            # Decrease the advance amount by the paid amount
-            current_advance = frappe.utils.flt(challan_doc.advance)
-            new_advance = current_advance - frappe.utils.flt(item.paid_amt)
-            
-            # Recalculate balance
-            total_hire = frappe.utils.flt(challan_doc.total_hire_amount)
-            new_balance = total_hire - new_advance
-            
-            frappe.db.set_value("Challan", item.challan, {
-                "advance": new_advance,
-                "balance_amount": new_balance
-            })
+
 
 @frappe.whitelist()
 def get_previous_payments(challans, current_voucher=None):

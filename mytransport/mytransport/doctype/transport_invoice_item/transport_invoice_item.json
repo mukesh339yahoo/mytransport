@@ -88,8 +88,8 @@
    "fieldtype": "Float",
    "label": "Rate per MT",
    "in_list_view": 1,
-   "depends_on": "eval:doc.rate_type==\"Per MT\"",
-   "columns": 2
+   "columns": 2,
+   "read_only_depends_on": "eval:doc.rate_type==\"Fix\""
   },
   {
    "fieldname": "basic_freight",
@@ -102,50 +102,43 @@
    "fieldname": "st_charge",
    "fieldtype": "Currency",
    "label": "St Charge",
-   "fetch_from": "lr_number.bilty_charges",
-   "read_only": 1
+   "default": "0"
   },
   {
    "fieldname": "detention_narration",
    "fieldtype": "Small Text",
    "label": "Detention Narration",
-   "fetch_from": "lr_number.detention_narration",
-   "read_only": 1
+   "default": ""
   },
   {
    "fieldname": "detention_charges",
    "fieldtype": "Currency",
    "label": "Detention Amount",
-   "fetch_from": "lr_number.detention_charges",
-   "read_only": 1
+   "default": "0"
   },
   {
    "fieldname": "hamali_narration",
    "fieldtype": "Small Text",
    "label": "Hamali Narration",
-   "fetch_from": "lr_number.hamali_narration",
-   "read_only": 1
+   "default": ""
   },
   {
    "fieldname": "hamali_charges",
    "fieldtype": "Currency",
    "label": "Hamali Amount",
-   "fetch_from": "lr_number.hamali_charges",
-   "read_only": 1
+   "default": "0"
   },
   {
    "fieldname": "other_charge_narration",
    "fieldtype": "Small Text",
    "label": "Other Charge Narration",
-   "fetch_from": "lr_number.other_charge_narration",
-   "read_only": 1
+   "default": ""
   },
   {
    "fieldname": "other_charges",
    "fieldtype": "Currency",
    "label": "Other Charge Amount",
-   "fetch_from": "lr_number.other_charges",
-   "read_only": 1
+   "default": "0"
   }
  ],
  "grid_page_length": 50,

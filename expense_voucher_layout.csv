@@ -1,0 +1,22 @@
+column1,column2
+--- SECTION: Default ---,date
+voucher_no,voucher_type
+vendor,payment_account
+branch,cheque_no
+company,cheque_date
+--- SECTION: Allocation ---,paid_to
+expense_category,
+expense_account,
+--- SECTION: Totals & Remarks ---,
+journal_entry,
+amended_from,
+get_unpaid_challans,
+allocated_challans,
+--- SECTION: Expense Details ---,
+expense_details,
+total_paid_amt,
+amount_in_words,
+on_account,
+--- SECTION: Previous Challan Payments ---,
+previous_payments,
+remarks,

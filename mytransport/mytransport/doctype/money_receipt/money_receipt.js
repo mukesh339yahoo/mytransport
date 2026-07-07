@@ -248,3 +248,11 @@ function fetch_previous_payments(frm) {
         frm.refresh_field("previous_payments");
     }
 }
+
+frappe.ui.form.on("Money Receipt", {
+	on_submit: function(frm) {
+		setTimeout(() => {
+			frappe.new_doc(frm.doctype);
+		}, 500);
+	}
+});
