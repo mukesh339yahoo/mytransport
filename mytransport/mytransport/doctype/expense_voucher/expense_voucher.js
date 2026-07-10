@@ -262,9 +262,26 @@ function fetch_previous_payments(frm) {
                 current_voucher: frm.doc.name
             },
             callback: function(r) {
-                frm.clear_table("previous_payments");
-                if (r.message && r.message.length > 0) {
-                    r.message.forEach(pmt => {
+                let existing = frm.doc.previous_payments || [];
+                let incoming = r.message || [];
+                
+                let is_same = true;
+                if (existing.length !== incoming.length) {
+                    is_same = false;
+                } else {
+                    for (let i = 0; i < incoming.length; i++) {
+                        let e = existing[i];
+                        let p = incoming[i];
+                        if (e.challan_no !== p.challan_no || e.voucher_no !== p.voucher_no || flt(e.amount) !== flt(p.amount)) {
+                            is_same = false;
+                            break;
+                        }
+                    }
+                }
+                
+                if (!is_same) {
+                    frm.clear_table("previous_payments");
+                    incoming.forEach(pmt => {
                         let row = frm.add_child("previous_payments");
                         row.challan_no = pmt.challan_no;
                         row.voucher_no = pmt.voucher_no;
@@ -272,13 +289,15 @@ function fetch_previous_payments(frm) {
                         row.amount = pmt.amount;
                         row.vendor = pmt.vendor;
                     });
+                    frm.refresh_field("previous_payments");
                 }
-                frm.refresh_field("previous_payments");
             }
         });
     } else {
-        frm.clear_table("previous_payments");
-        frm.refresh_field("previous_payments");
+        if (frm.doc.previous_payments && frm.doc.previous_payments.length > 0) {
+            frm.clear_table("previous_payments");
+            frm.refresh_field("previous_payments");
+        }
     }
 }
 
