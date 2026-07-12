@@ -1,9 +1,9 @@
 app_name = "mytransport"
 app_title = "Mytransport"
 app_publisher = "Shaily Sharma"
-app_description = "A transport management module"
+app_description = "A comprehensive Transport Management System (TMS) built natively on the Frappe framework."
 app_email = "shaily@example.com"
-app_license = "mit"
+app_license = "MIT"
 app_publisher_url = "https://github.com/mukesh339yahoo"
 app_source_url = "https://github.com/mukesh339yahoo/mytransport"
 
@@ -13,15 +13,15 @@ app_source_url = "https://github.com/mukesh339yahoo/mytransport"
 # required_apps = []
 
 # Each item in the list will be shown as an app in the apps page
-# add_to_apps_screen = [
-# 	{
-# 		"name": "mytransport",
-# 		"logo": "/assets/mytransport/logo.png",
-# 		"title": "Mytransport",
-# 		"route": "/mytransport",
-# 		"has_permission": "mytransport.api.permission.has_app_permission"
-# 	}
-# ]
+add_to_apps_screen = [
+	{
+		"name": "mytransport",
+		"logo": "/assets/mytransport/logo.png",
+		"title": "Mytransport",
+		"route": "/mytransport",
+		"has_permission": "mytransport.api.permission.has_app_permission"
+	}
+]
 
 # Includes in <head>
 # ------------------
