@@ -1,7 +1,7 @@
 [project]
 name = "mytransport"
 authors = [
-    { name = "Shaily Sharma", email = "shaily@example.com"}
+    { name = "Ridhira Technologies", email = "ridhiratech@gmail.com"}
 ]
 description = "A comprehensive Transport Management System (TMS) built natively on the Frappe framework."
 requires-python = ">=3.14"
