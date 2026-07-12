@@ -24,7 +24,7 @@ def create_doctypes():
             ]
         })
         doc.insert()
-        frappe.db.commit()
+        frappe.db.commit()  # nosemgrep: required in standalone setup scripts
         print("Created Branch DocType")
     else:
         print("Branch DocType already exists")

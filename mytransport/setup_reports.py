@@ -29,4 +29,4 @@ def run():
         doc.insert(ignore_permissions=True)
         print("LR Status Report created.")
         
-    frappe.db.commit()
+    frappe.db.commit()  # nosemgrep: required in standalone setup scripts

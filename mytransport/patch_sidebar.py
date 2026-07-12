@@ -53,7 +53,7 @@ def patch():
         })
         
     doc.save(ignore_permissions=True)
-    frappe.db.commit()
+    frappe.db.commit()  # nosemgrep: required in standalone setup scripts
     print("Workspace Sidebar updated successfully!")
 
 if __name__ == "__main__":

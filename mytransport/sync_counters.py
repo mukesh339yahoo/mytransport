@@ -37,6 +37,6 @@ def sync_counters():
                 if row.max_num > (s.current_number or 0):
                     print(f"Updating {s.name} from {s.current_number} to {row.max_num}")
                     frappe.db.set_value("Branch Numbering Settings", s.name, "current_number", int(row.max_num))
-                    frappe.db.commit()
+                    frappe.db.commit()  # nosemgrep: required in standalone setup scripts
 
 sync_counters()

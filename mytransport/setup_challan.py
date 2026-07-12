@@ -19,7 +19,7 @@ def create_doctypes():
             ]
         })
         doc.insert()
-        frappe.db.commit()
+        frappe.db.commit()  # nosemgrep: required in standalone setup scripts
         print("Created Challan LR Item DocType")
     else:
         print("Challan LR Item already exists")
@@ -62,7 +62,7 @@ def create_doctypes():
             ]
         })
         doc.insert()
-        frappe.db.commit()
+        frappe.db.commit()  # nosemgrep: required in standalone setup scripts
         print("Created Challan DocType")
     else:
         print("Challan already exists")

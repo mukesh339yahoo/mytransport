@@ -15,5 +15,5 @@ def run():
     }
     
     create_custom_fields(custom_fields, ignore_validate=True)
-    frappe.db.commit()
+    frappe.db.commit()  # nosemgrep: required in standalone setup scripts
     print("Created custom fields for Sales Invoice Item.")

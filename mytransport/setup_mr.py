@@ -57,4 +57,4 @@ def run():
         doc.insert(ignore_permissions=True)
         print("Money Receipt created.")
         
-    frappe.db.commit()
+    frappe.db.commit()  # nosemgrep: required in standalone setup scripts

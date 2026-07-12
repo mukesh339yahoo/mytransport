@@ -4,6 +4,8 @@ app_publisher = "Shaily Sharma"
 app_description = "A transport management module"
 app_email = "shaily@example.com"
 app_license = "mit"
+app_publisher_url = "https://github.com/mukesh339yahoo"
+app_source_url = "https://github.com/mukesh339yahoo/mytransport"
 
 # Apps
 # ------------------

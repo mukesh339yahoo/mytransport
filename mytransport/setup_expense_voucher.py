@@ -42,5 +42,5 @@ def run():
     })
     
     doc.insert(ignore_permissions=True)
-    frappe.db.commit()
+    frappe.db.commit()  # nosemgrep: required in standalone setup scripts
     print("Expense Voucher created successfully.")

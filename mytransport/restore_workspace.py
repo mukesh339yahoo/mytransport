@@ -24,7 +24,7 @@ def restore():
             doc.append("links", l)
             
     doc.save(ignore_permissions=True)
-    frappe.db.commit()
+    frappe.db.commit()  # nosemgrep: required in standalone setup scripts
     print("Transport Workspace restored in DB!")
 
 if __name__ == "__main__":

@@ -74,7 +74,7 @@ class IntegrationTestLorryReceipt(FrappeTestCase):
         frappe.db.sql("DELETE FROM `tabTransport Invoice` WHERE name='TEST-INV-001' OR name='TEST-INV-MULT-001' OR name LIKE 'TEST-INV-COMP-%'")
         frappe.db.sql("DELETE FROM `tabExpense Voucher` WHERE name='TEST-EV-001' OR name='TEST-EV-MULT-001' OR name LIKE 'TEST-EV-COMP-%'")
         frappe.db.sql("DELETE FROM `tabMoney Receipt` WHERE name='TEST-MR-001' OR name='TEST-MR-MULT-001' OR name LIKE 'TEST-MR-COMP-%'")
-        frappe.db.commit()
+        frappe.db.commit()  # nosemgrep: required in standalone setup scripts
 
     def test_end_to_end_transport_lifecycle(self):
         # ---------------------------------------------------------

@@ -24,7 +24,7 @@ def fix():
             item.idx = i + 1
             
         doc.save(ignore_permissions=True)
-        frappe.db.commit()
+        frappe.db.commit()  # nosemgrep: required in standalone setup scripts
         print("Transport Workspace routing fixed!")
 
 if __name__ == "__main__":

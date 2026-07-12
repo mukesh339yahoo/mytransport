@@ -50,4 +50,4 @@ def run():
             ws.save(ignore_permissions=True)
             print("Added to Transport Workspace.")
             
-    frappe.db.commit()
+    frappe.db.commit()  # nosemgrep: required in standalone setup scripts

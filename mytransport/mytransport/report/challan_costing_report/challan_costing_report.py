@@ -37,7 +37,7 @@ def get_data(filters):
 
     where_clause = " AND ".join(conditions) if conditions else "1=1"
     
-    data = frappe.db.sql(f"""
+    query = """
         SELECT 
             c.name as challan_number, 
             c.date, 
@@ -50,9 +50,11 @@ def get_data(filters):
             (IFNULL(SUM(lr.paid_amount), 0) - IFNULL(c.total_hire_amount, 0)) as real_net_profit
         FROM `tabChallan` c
         LEFT JOIN `tabLorry Receipt` lr ON lr.challan_number = c.name AND lr.docstatus < 2
-        WHERE {{where_clause}} AND c.docstatus < 2
+        WHERE {where_clause} AND c.docstatus < 2
         GROUP BY c.name
         ORDER BY c.date DESC, c.name DESC
-    """.format(where_clause=where_clause), values, as_dict=1)
+    """.format(where_clause=where_clause)
+    
+    data = frappe.db.sql(query, values, as_dict=1)
     
     return data

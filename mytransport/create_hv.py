@@ -90,7 +90,7 @@ def run():
             ]
         })
         doc.insert()
-        frappe.db.commit()
+        frappe.db.commit()  # nosemgrep: required in standalone setup scripts
         print("Hired Vehicle Doctype created successfully.")
     else:
         print("Hired Vehicle Doctype already exists.")

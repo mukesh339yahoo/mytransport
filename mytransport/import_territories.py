@@ -23,7 +23,7 @@ def run():
             "parent_territory": "All Territories",
             "is_group": 1
         }).insert(ignore_permissions=True)
-        frappe.db.commit()
+        frappe.db.commit()  # nosemgrep: required in standalone setup scripts
         print("Created India territory")
 
     # Iterate states
@@ -64,6 +64,6 @@ def run():
                             "is_group": 0
                         }).insert(ignore_permissions=True)
         
-        frappe.db.commit()
+        frappe.db.commit()  # nosemgrep: required in standalone setup scripts
     
     print("Done importing territories.")

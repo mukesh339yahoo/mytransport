@@ -43,13 +43,15 @@ def get_data(filters):
 
     where_clause = " AND ".join(conditions) if conditions else "1=1"
     
-    data = frappe.db.sql(f"""
+    query = """
         SELECT 
             name as lr_number, date, branch, consignor, consignee, 
             from_city, to_city, challan_number, total_amount, status, receipt_status
         FROM `tabLorry Receipt`
-        WHERE {{where_clause}} AND docstatus < 2
+        WHERE {where_clause} AND docstatus < 2
         ORDER BY date DESC, name DESC
-    """.format(where_clause=where_clause), values, as_dict=1)
+    """.format(where_clause=where_clause)
+    
+    data = frappe.db.sql(query, values, as_dict=1)
     
     return data

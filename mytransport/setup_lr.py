@@ -22,7 +22,7 @@ def create_doctypes():
             ]
         })
         doc.insert()
-        frappe.db.commit()
+        frappe.db.commit()  # nosemgrep: required in standalone setup scripts
         print("Created LR Item DocType")
     else:
         print("LR Item already exists")
@@ -66,7 +66,7 @@ def create_doctypes():
             ]
         })
         doc.insert()
-        frappe.db.commit()
+        frappe.db.commit()  # nosemgrep: required in standalone setup scripts
         print("Created Lorry Receipt DocType")
     else:
         print("Lorry Receipt already exists")

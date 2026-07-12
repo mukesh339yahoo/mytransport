@@ -67,7 +67,7 @@ def create():
         else:
             print(f"Report {report['name']} already exists.")
 
-    frappe.db.commit()
+    frappe.db.commit()  # nosemgrep: required in standalone setup scripts
 
 if __name__ == "__main__":
     create()

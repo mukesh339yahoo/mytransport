@@ -5,7 +5,7 @@ def run():
     frappe.connect()
 
     frappe.db.sql("DELETE FROM `tabCompany` WHERE name='Test Company 2'")
-    frappe.db.commit()
+    frappe.db.commit()  # nosemgrep: required in standalone setup scripts
 
     try:
         company = frappe.new_doc("Company")
