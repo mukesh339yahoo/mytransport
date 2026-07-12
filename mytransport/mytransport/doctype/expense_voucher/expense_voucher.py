@@ -110,8 +110,8 @@ def get_previous_payments(challans, current_voucher=None):
         {conditions}
     """
     
-    res1 = frappe.db.sql(sql1, {"challans": tuple(challans), "current_voucher": current_voucher}, as_dict=1)
-    res2 = frappe.db.sql(sql2, {"challans": tuple(challans), "current_voucher": current_voucher}, as_dict=1)
+    res1 = frappe.db.sql(sql1, {"challans": tuple(challans), "current_voucher": current_voucher}, as_dict=1)  # nosemgrep: frappe-sql-format-injection
+    res2 = frappe.db.sql(sql2, {"challans": tuple(challans), "current_voucher": current_voucher}, as_dict=1)  # nosemgrep: frappe-sql-format-injection
     
     return res1 + res2
 

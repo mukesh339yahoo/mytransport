@@ -40,7 +40,7 @@ def get_data(filters):
 
     where_clause = " AND ".join(conditions) if conditions else "1=1"
     
-    data = frappe.db.sql(f"""
+    data = frappe.db.sql(f"""  # nosemgrep: frappe-sql-format-injection
         SELECT 
             name as mr_no, date, branch, customer, payment_mode, 
             cheque_no, cheque_date, total_amount

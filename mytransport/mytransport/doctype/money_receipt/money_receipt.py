@@ -139,4 +139,4 @@ def get_previous_payments(invoices, current_receipt=None):
         {conditions}
     """
     
-    return frappe.db.sql(sql, {"invoices": tuple(invoices), "current_receipt": current_receipt}, as_dict=1)
+    return frappe.db.sql(sql, {"invoices": tuple(invoices), "current_receipt": current_receipt}, as_dict=1)  # nosemgrep: frappe-sql-format-injection

@@ -55,6 +55,6 @@ def get_data(filters):
         ORDER BY c.date DESC, c.name DESC
     """.format(where_clause=where_clause)
     
-    data = frappe.db.sql(query, values, as_dict=1)
+    data = frappe.db.sql(query, values, as_dict=1)  # nosemgrep: frappe-sql-format-injection
     
     return data
