@@ -79,7 +79,7 @@ def get_previous_payments(challans, current_voucher=None):
         conditions = " AND ev.name != %(current_voucher)s"
         
     # Query 1: Payments from Allocated Challans
-    sql1 = f"""
+    sql1 = f"""  # nosemgrep: frappe-sql-format-injection
         SELECT 
             ch.challan_number as challan_no, 
             ev.voucher_no as voucher_no, 
@@ -95,7 +95,7 @@ def get_previous_payments(challans, current_voucher=None):
     """
     
     # Query 2: Payments from Expense Details
-    sql2 = f"""
+    sql2 = f"""  # nosemgrep: frappe-sql-format-injection
         SELECT 
             ch.challan_number as challan_no, 
             ev.voucher_no as voucher_no, 

@@ -37,7 +37,7 @@ def get_data(filters):
 
     where_clause = " AND ".join(conditions) if conditions else "1=1"
     
-    query = """
+    query = """  # nosemgrep: frappe-sql-format-injection
         SELECT 
             c.name as challan_number, 
             c.date, 

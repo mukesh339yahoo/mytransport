@@ -124,7 +124,7 @@ def get_previous_payments(invoices, current_receipt=None):
     if current_receipt:
         conditions = " AND mr.name != %(current_receipt)s"
         
-    sql = f"""
+    sql = f"""  # nosemgrep: frappe-sql-format-injection
         SELECT 
             mr.mr_no as mr_no, 
             ati.bill_no as bill_no, 

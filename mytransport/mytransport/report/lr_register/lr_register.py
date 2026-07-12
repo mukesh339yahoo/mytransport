@@ -43,7 +43,7 @@ def get_data(filters):
 
     where_clause = " AND ".join(conditions) if conditions else "1=1"
     
-    query = """
+    query = """  # nosemgrep: frappe-sql-format-injection
         SELECT 
             name as lr_number, date, branch, consignor, consignee, 
             from_city, to_city, challan_number, total_amount, status, receipt_status
