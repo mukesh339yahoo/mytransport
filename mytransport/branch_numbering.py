@@ -23,15 +23,16 @@ def get_next_branch_number(branch, document_type, date):
     if not frappe.db.exists("Branch Numbering Settings", settings_name):
         frappe.throw(f"Numbering sequence not configured for Branch '{branch}' and Year '{financial_year}' for {document_type}. Please configure it in Branch Numbering Settings.")
     
-    # Lock the row for update to prevent race conditions
-    frappe.db.sql("SELECT name FROM `tabBranch Numbering Settings` WHERE name=%s FOR UPDATE", settings_name)
+    # Use direct SQL update to bypass cache and avoid race conditions
+    frappe.db.sql("""
+        UPDATE `tabBranch Numbering Settings`
+        SET current_number = COALESCE(current_number, 0) + 1
+        WHERE name = %s
+    """, settings_name)
     
-    current_number = frappe.db.get_value("Branch Numbering Settings", settings_name, "current_number")
-    next_number = (current_number or 0) + 1
+    next_number = frappe.db.sql("SELECT current_number FROM `tabBranch Numbering Settings` WHERE name = %s", settings_name)[0][0]
     
-    frappe.db.set_value("Branch Numbering Settings", settings_name, "current_number", next_number)
-    
-    return next_number
+    return str(next_number)
 
 @frappe.whitelist()
 def peek_next_branch_number(branch, document_type, date):

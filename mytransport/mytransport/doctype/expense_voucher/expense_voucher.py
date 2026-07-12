@@ -5,7 +5,7 @@ class ExpenseVoucher(Document):
     def autoname(self):
         from mytransport.branch_numbering import get_next_branch_number, update_branch_number_counter
         if not self.voucher_no:
-            self.voucher_no = get_next_branch_number(self.branch, "Expense Voucher", self.date)
+            self.voucher_no = str(get_next_branch_number(self.branch, "Expense Voucher", self.date))
         else:
             update_branch_number_counter(self.branch, "Expense Voucher", self.date, self.voucher_no)
         self.name = self.voucher_no

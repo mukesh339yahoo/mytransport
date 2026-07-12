@@ -69,11 +69,11 @@ class IntegrationTestLorryReceipt(FrappeTestCase):
             bns.current_number = 89999
             bns.insert(ignore_permissions=True, ignore_mandatory=True)
         
-        frappe.db.sql("DELETE FROM `tabLorry Receipt` WHERE name='TEST-LR-001' OR name LIKE 'TEST-LR-MULT-%' OR name LIKE 'TEST-LR-COMP-%'")
-        frappe.db.sql("DELETE FROM `tabChallan` WHERE name='TEST-CH-001' OR name='TEST-CH-MULT-001' OR name='TEST-CH-COMP-001'")
-        frappe.db.sql("DELETE FROM `tabTransport Invoice` WHERE name='TEST-INV-001' OR name='TEST-INV-MULT-001' OR name LIKE 'TEST-INV-COMP-%'")
-        frappe.db.sql("DELETE FROM `tabExpense Voucher` WHERE name='TEST-EV-001' OR name='TEST-EV-MULT-001' OR name LIKE 'TEST-EV-COMP-%'")
-        frappe.db.sql("DELETE FROM `tabMoney Receipt` WHERE name='TEST-MR-001' OR name='TEST-MR-MULT-001' OR name LIKE 'TEST-MR-COMP-%'")
+        frappe.db.sql("DELETE FROM `tabLorry Receipt`")
+        frappe.db.sql("DELETE FROM `tabChallan`")
+        frappe.db.sql("DELETE FROM `tabTransport Invoice`")
+        frappe.db.sql("DELETE FROM `tabExpense Voucher`")
+        frappe.db.sql("DELETE FROM `tabMoney Receipt`")
         frappe.db.commit()  # nosemgrep: required in standalone setup scripts
 
     def test_end_to_end_transport_lifecycle(self):
@@ -146,11 +146,12 @@ class IntegrationTestLorryReceipt(FrappeTestCase):
         ev.branch = "Test Branch"
         ev.company = "Test Company"
         ev.date = frappe.utils.today()
-        ev.vendor = "Test Transporter"
+        ev.party_type = "Supplier"
+        ev.party = "Test Transporter"
         ev.voucher_type = "Cash"
         ev.payment_account = "Cash - TC"
         ev.expense_category = "Trip Advance"
-        ev.expense_account = "Freight Expense - TC"
+        ev.debit_account = "Creditors - TC"
         ev.total_paid_amt = 4000
         
         ev.append("allocated_challans", {
@@ -169,9 +170,11 @@ class IntegrationTestLorryReceipt(FrappeTestCase):
         mr.branch = "Test Branch"
         mr.company = "Test Company"
         mr.date = frappe.utils.today()
-        mr.customer = "Test Consignor"
+        mr.party_type = "Customer"
+        mr.party = "Test Consignor"
         mr.payment_mode = "Cash"
         mr.deposit_account = "Cash - TC"
+        mr.credit_account = "Debtors - TC"
         mr.total_amount = 5000
         
         mr.append("allocated_invoices", {
@@ -267,11 +270,12 @@ class IntegrationTestLorryReceipt(FrappeTestCase):
         ev.branch = "Test Branch"
         ev.company = "Test Company"
         ev.date = frappe.utils.today()
-        ev.vendor = "Test Transporter"
+        ev.party_type = "Supplier"
+        ev.party = "Test Transporter"
         ev.voucher_type = "Cash"
         ev.payment_account = "Cash - TC"
         ev.expense_category = "Trip Advance"
-        ev.expense_account = "Freight Expense - TC"
+        ev.debit_account = "Creditors - TC"
         ev.total_paid_amt = 15000
         
         ev.append("allocated_challans", {
@@ -290,9 +294,11 @@ class IntegrationTestLorryReceipt(FrappeTestCase):
         mr.branch = "Test Branch"
         mr.company = "Test Company"
         mr.date = frappe.utils.today()
-        mr.customer = "Test Consignor"
+        mr.party_type = "Customer"
+        mr.party = "Test Consignor"
         mr.payment_mode = "Cash"
         mr.deposit_account = "Cash - TC"
+        mr.credit_account = "Debtors - TC"
         mr.total_amount = 15000
         
         mr.append("allocated_invoices", {
@@ -395,11 +401,12 @@ class IntegrationTestLorryReceipt(FrappeTestCase):
             ev.branch = "Test Branch"
             ev.company = "Test Company"
             ev.date = frappe.utils.today()
-            ev.vendor = "Test Transporter"
+            ev.party_type = "Supplier"
+            ev.party = "Test Transporter"
             ev.voucher_type = "Cash"
             ev.payment_account = "Cash - TC"
             ev.expense_category = "Trip Advance"
-            ev.expense_account = "Freight Expense - TC"
+            ev.debit_account = "Creditors - TC"
             ev.total_paid_amt = amt
             
             ev.append("allocated_challans", {
@@ -419,9 +426,11 @@ class IntegrationTestLorryReceipt(FrappeTestCase):
             mr.branch = "Test Branch"
             mr.company = "Test Company"
             mr.date = frappe.utils.today()
-            mr.customer = "Test Consignor"
+            mr.party_type = "Customer"
+            mr.party = "Test Consignor"
             mr.payment_mode = "Cash"
             mr.deposit_account = "Cash - TC"
+            mr.credit_account = "Debtors - TC"
             mr.total_amount = inv_data["amount"]
             
             mr.append("allocated_invoices", {
