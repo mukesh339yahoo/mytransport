@@ -2,8 +2,8 @@ import json
 import csv
 
 def rebuild_layout():
-    json_path = '/Users/shailysharma/CursorAI/mytransport/development/frappe-bench/apps/mytransport/mytransport/mytransport/doctype/transport_invoice/transport_invoice.json'
-    csv_path = '/Users/shailysharma/CursorAI/mytransport/development/frappe-bench/apps/mytransport/transport_invoice_layout.csv'
+    json_path = '/Users/shailysharma/CursorAI/mytransport/development/frappe-bench/apps/mytransport/mytransport/mytransport/doctype/expense_voucher/expense_voucher.json'
+    csv_path = '/Users/shailysharma/CursorAI/mytransport/development/frappe-bench/apps/mytransport/expense_voucher_layout.csv'
 
     with open(json_path, 'r') as f:
         doc = json.load(f)

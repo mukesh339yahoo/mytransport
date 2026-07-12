@@ -2,7 +2,7 @@
  "actions": [],
  "allow_bulk_edit": 1,
  "allow_rename": 1,
- "autoname": "INV-.YYYY.-.#####",
+ "autoname": "",
  "creation": "2026-06-10 15:31:02.684743",
  "doctype": "DocType",
  "editable_grid": 1,

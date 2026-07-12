@@ -8,11 +8,11 @@
  "engine": "InnoDB",
  "field_order": [
   "challan",
-  "challan_no",
   "challan_date",
   "vehicle_no",
   "vendor",
   "total_amt",
+  "adjusted_amt",
   "balance",
   "paid_amt"
  ],
@@ -24,14 +24,6 @@
    "label": "Challan Ref",
    "options": "Challan",
    "reqd": 1
-  },
-  {
-   "fetch_from": "challan.challan_number",
-   "fieldname": "challan_no",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Challan No",
-   "read_only": 1
   },
   {
    "fetch_from": "challan.date",
@@ -66,7 +58,13 @@
    "read_only": 1
   },
   {
-   "fetch_from": "challan.balance_amount",
+   "fieldname": "adjusted_amt",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Adjusted Amt",
+   "read_only": 1
+  },
+  {
    "fieldname": "balance",
    "fieldtype": "Currency",
    "in_list_view": 1,
@@ -77,7 +75,7 @@
    "fieldname": "paid_amt",
    "fieldtype": "Currency",
    "in_list_view": 1,
-   "label": "Paid Amt",
+   "label": "Expense Amt",
    "reqd": 1
   }
  ],

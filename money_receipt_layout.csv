@@ -1,19 +1,22 @@
 column1,column2
---- SECTION: Default ---,customer
-mr_no,payment_mode
-company,deposit_account
-branch,
+--- SECTION: Default ---,search_party
+mr_no,deposit_account
 date,
+branch,
+company,
 --- SECTION: Allocation ---,
 --- SECTION: Totals & Remarks ---,cheque_date
-payment_entry,on_account
-amended_from,amount_in_words
-cheque_no,
+cheque_no,remarks
+on_account,amended_from
+payment_entry,
 --- SECTION: Allocations ---,
 get_unpaid_bills,
 allocated_invoices,
+--- SECTION: section_break_3 ---,amount_in_words
 total_amount,
-remarks,
 --- SECTION: Additional Information ---,
 --- SECTION: Previous Payments for Transport Invoices ---,
 previous_payments,
+party_type,
+party,
+credit_account,

@@ -1,16 +1,16 @@
 column1,column2,column3
---- SECTION: Default ---,,
-bill_no,customer,category
-date,customer_address,branch
-due_date,customer_gst_no,customer_reference
-remarks,amended_from,status
+--- SECTION: Default ---,customer,category
+bill_no,customer_address,branch
+date,customer_gst_no,customer_reference
+due_date,amended_from,status
+remarks,,
 --- SECTION: Lorry Receipts ---,,
 get_unbilled_lrs,,
 items,,
---- SECTION: Totals ---,,
-total_freight,total_hamali_charge,paid_amount
-total_st_charge,total_other_charges,outstanding_amount
-total_amount,total_detention_charge,
---- SECTION: Accounting ---,,
+--- SECTION: Totals ---,total_hamali_charge,paid_amount
+total_freight,total_other_charges,outstanding_amount
+total_st_charge,total_detention_charge,
+total_amount,,
+--- SECTION: Accounting ---,income_account,
 company,,
-debit_to,income_account,
+debit_to,,

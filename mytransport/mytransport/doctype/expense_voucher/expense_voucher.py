@@ -2,12 +2,13 @@ import frappe
 from frappe.model.document import Document
 
 class ExpenseVoucher(Document):
-    def before_insert(self):
+    def autoname(self):
         from mytransport.branch_numbering import get_next_branch_number, update_branch_number_counter
         if not self.voucher_no:
             self.voucher_no = get_next_branch_number(self.branch, "Expense Voucher", self.date)
         else:
             update_branch_number_counter(self.branch, "Expense Voucher", self.date, self.voucher_no)
+        self.name = self.voucher_no
 
     def validate(self):
         if getattr(self, "voucher_no", None):
@@ -38,10 +39,13 @@ class ExpenseVoucher(Document):
             "credit_in_account_currency": self.total_paid_amt
         })
         
-        # Debit the expense account
+        # Debit the party account
         je.append("accounts", {
-            "account": self.expense_account,
-            "debit_in_account_currency": self.total_paid_amt
+            "account": self.debit_account,
+            "debit_in_account_currency": self.total_paid_amt,
+            "party_type": self.party_type,
+            "party": self.party,
+            "is_advance": "Yes"
         })
         
 
@@ -77,13 +81,14 @@ def get_previous_payments(challans, current_voucher=None):
     # Query 1: Payments from Allocated Challans
     sql1 = f"""
         SELECT 
-            ac.challan_no as challan_no, 
+            ch.challan_number as challan_no, 
             ev.voucher_no as voucher_no, 
             ev.date as voucher_date, 
             ac.paid_amt as amount, 
-            ev.vendor as vendor 
+            ev.party as vendor 
         FROM `tabAllocated Challan` ac
         JOIN `tabExpense Voucher` ev ON ac.parent = ev.name
+        JOIN `tabChallan` ch ON ac.challan = ch.name
         WHERE ac.challan IN %(challans)s 
         AND ev.docstatus = 1 
         {conditions}
@@ -96,7 +101,7 @@ def get_previous_payments(challans, current_voucher=None):
             ev.voucher_no as voucher_no, 
             ev.date as voucher_date, 
             ed.expense_amount as amount, 
-            ev.vendor as vendor 
+            ev.party as vendor 
         FROM `tabExpense Detail` ed
         JOIN `tabExpense Voucher` ev ON ed.parent = ev.name
         JOIN `tabChallan` ch ON ed.challan_ref = ch.name
@@ -109,3 +114,32 @@ def get_previous_payments(challans, current_voucher=None):
     res2 = frappe.db.sql(sql2, {"challans": tuple(challans), "current_voucher": current_voucher}, as_dict=1)
     
     return res1 + res2
+
+@frappe.whitelist()
+def get_unpaid_challans_for_vendor(party, current_voucher=None):
+    challans = frappe.get_all("Challan", filters={"docstatus": 1, "broker": party}, 
+                              fields=["name", "challan_number", "date", "vehicle_number", "broker", "total_hire_amount"],
+                              order_by="challan_number asc")
+    
+    if not challans:
+        return []
+        
+    challan_names = [c.name for c in challans]
+    payments = get_previous_payments(challan_names, current_voucher)
+    
+    payment_map = {}
+    for p in payments:
+        c_no = p.get("challan_no")
+        payment_map[c_no] = payment_map.get(c_no, 0) + float(p.get("amount") or 0)
+        
+    result = []
+    for c in challans:
+        adjusted_amt = payment_map.get(c.challan_number, 0)
+        balance_amount = float(c.total_hire_amount) - adjusted_amt
+        
+        if balance_amount > 0:
+            c.adjusted_amt = adjusted_amt
+            c.balance_amount = balance_amount
+            result.append(c)
+            
+    return result

@@ -31,20 +31,10 @@ frappe.ui.form.on("Expense Voucher", {
         frm.set_df_property("total_paid_amt", "hidden", 0);
         frm.set_df_property("amount_in_words", "hidden", 0);
         
-        frm.set_query("expense_account", function() {
-            return {
-                filters: {
-                    "report_type": "Profit and Loss",
-                    "is_group": 0,
-                    "company": frm.doc.company
-                }
-            };
-        });
-
         frm.set_query("challan_ref", "expense_details", function(doc, cdt, cdn) {
             let filters = { "docstatus": 1 };
-            if (frm.doc.vendor) {
-                filters["broker"] = frm.doc.vendor;
+            if (frm.doc.party) {
+                filters["broker"] = frm.doc.party;
             }
             return { filters: filters };
         });
@@ -60,21 +50,16 @@ frappe.ui.form.on("Expense Voucher", {
     },
 
     get_unpaid_challans: function(frm) {
-        if (!frm.doc.vendor || frm.doc.docstatus !== 0) {
-            frappe.msgprint("Please select a Vendor first.");
+        if (!frm.doc.party || frm.doc.docstatus !== 0) {
+            frappe.msgprint("Please select a Party first.");
             return;
         }
 
         frappe.call({
-            method: "frappe.client.get_list",
+            method: "mytransport.mytransport.doctype.expense_voucher.expense_voucher.get_unpaid_challans_for_vendor",
             args: {
-                doctype: "Challan",
-                filters: [
-                    ["docstatus", "=", 1],
-                    ["broker", "=", frm.doc.vendor]
-                ],
-                fields: ["name", "challan_number", "date", "vehicle_number", "broker", "total_hire_amount", "balance_amount"],
-                order_by: "challan_number asc"
+                party: frm.doc.party,
+                current_voucher: frm.doc.name
             },
             callback: function(r) {
                 if (r.message && r.message.length > 0) {
@@ -93,6 +78,7 @@ frappe.ui.form.on("Expense Voucher", {
                                     {fieldtype: 'Date', fieldname: 'date', label: 'Date', read_only: 1, in_list_view: 1},
                                     {fieldtype: 'Data', fieldname: 'vehicle_number', label: 'Vehicle No', read_only: 1, in_list_view: 1},
                                     {fieldtype: 'Currency', fieldname: 'total_hire_amount', label: 'Total Amount', read_only: 1, in_list_view: 1},
+                                    {fieldtype: 'Currency', fieldname: 'adjusted_amt', label: 'Adjusted Amt', read_only: 1, in_list_view: 1},
                                     {fieldtype: 'Currency', fieldname: 'balance_amount', label: 'Balance', read_only: 1, in_list_view: 1},
                                     {fieldtype: 'Currency', fieldname: 'allocate', label: 'Pay Now', in_list_view: 1}
                                 ],
@@ -102,6 +88,7 @@ frappe.ui.form.on("Expense Voucher", {
                                     date: c.date,
                                     vehicle_number: c.vehicle_number,
                                     total_hire_amount: c.total_hire_amount,
+                                    adjusted_amt: c.adjusted_amt,
                                     balance_amount: c.balance_amount,
                                     allocate: c.balance_amount,
                                     select: 0
@@ -124,11 +111,11 @@ frappe.ui.form.on("Expense Voucher", {
                                 }
                                 let row = frm.add_child("allocated_challans");
                                 row.challan = sel.name;
-                                row.challan_no = sel.challan_number;
                                 row.challan_date = sel.date;
                                 row.vehicle_no = sel.vehicle_number;
-                                row.vendor = frm.doc.vendor;
+                                row.vendor = frm.doc.party;
                                 row.total_amt = sel.total_hire_amount;
+                                row.adjusted_amt = sel.adjusted_amt;
                                 row.balance = sel.balance_amount;
                                 row.paid_amt = sel.allocate;
                             });
@@ -230,6 +217,67 @@ frappe.ui.form.on("Expense Voucher", {
 	refresh: function(frm) {
 		peek_branch_number(frm, "Expense Voucher", "voucher_no");
 		calculate_totals(frm);
+
+		if (frm.fields_dict.search_party && frm.fields_dict.search_party.$input) {
+            let $input = frm.fields_dict.search_party.$input;
+            if (!$input.data("awesomplete-init")) {
+                let party_map = {}; // store party_types
+                
+                let awesomplete = new Awesomplete($input[0], {
+                    minChars: 0,
+                    maxItems: 15,
+                    autoFirst: true
+                });
+
+                function fetch_parties() {
+                    let term = $input.val();
+                    frappe.call({
+                        method: "mytransport.mytransport.doctype.money_receipt.money_receipt.search_unified_party",
+                        args: { query: term },
+                        callback: function(r) {
+                            if (r.message) {
+                                awesomplete.list = r.message.map(d => {
+                                    party_map[d.name] = d.party_type;
+                                    return {
+                                        label: d.name + " (" + d.party_type + ")",
+                                        value: d.name
+                                    };
+                                });
+                                awesomplete.evaluate();
+                            }
+                        }
+                    });
+                }
+
+                $input.on("input focus click", function() {
+                    fetch_parties();
+                });
+                
+                $input[0].addEventListener("awesomplete-selectcomplete", function(e) {
+                    let selected_party = e.text.value;
+                    let p_type = party_map[selected_party];
+                    
+                    frm.set_value("search_party", e.text.label);
+                    frm.set_value("party_type", p_type);
+                    frm.set_value("party", selected_party);
+                    
+                    frappe.call({
+                        method: "erpnext.accounts.party.get_party_account",
+                        args: {
+                            party_type: p_type,
+                            party: selected_party,
+                            company: frm.doc.company
+                        },
+                        callback: function(r) {
+                            if (r.message) {
+                                frm.set_value("debit_account", r.message);
+                            }
+                        }
+                    });
+                });
+                $input.data("awesomplete-init", true);
+            }
+        }
 	},
 	branch: function(frm) {
 		peek_branch_number(frm, "Expense Voucher", "voucher_no");

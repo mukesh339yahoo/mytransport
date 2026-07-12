@@ -2,6 +2,9 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on('Money Receipt', {
+    on_account: function(frm) {
+        calculate_totals(frm);
+    },
     onload: function(frm) {
         if (frm.is_new() && !frm.doc.company) {
             frm.set_value("company", frappe.defaults.get_default("Company"));
@@ -19,24 +22,19 @@ frappe.ui.form.on('Money Receipt', {
     },
     setup: function(frm) {
         frm.set_query("deposit_account", function() {
-            let ac_type = frm.doc.payment_mode === "Cash" ? "Cash" : "Bank";
             return {
                 filters: {
-                    "account_type": ac_type,
+                    "account_type": ["in", ["Bank", "Cash"]],
                     "is_group": 0,
                     "company": frm.doc.company
                 }
             };
         });
     },
-    
-    payment_mode: function(frm) {
-        frm.set_value("deposit_account", null);
-    },
 
     get_unpaid_bills: function(frm) {
-        if (!frm.doc.customer || frm.doc.docstatus !== 0) {
-            frappe.msgprint("Please select a customer first.");
+        if (!frm.doc.party || frm.doc.docstatus !== 0) {
+            frappe.msgprint("Please search and select a party first.");
             return;
         }
 
@@ -47,7 +45,7 @@ frappe.ui.form.on('Money Receipt', {
                 filters: [
                     ["status", "in", ["Unpaid", "Partially Paid"]],
                     ["docstatus", "=", 1],
-                    ["customer", "=", frm.doc.customer]
+                    ["customer", "=", frm.doc.party]
                 ],
                 fields: ["name", "bill_no", "date", "total_amount", "outstanding_amount"]
             },
@@ -159,6 +157,8 @@ function calculate_totals(frm) {
         });
     }
     
+    total_paid += flt(frm.doc.on_account);
+    
     frm.set_value("total_amount", total_paid);
     fetch_previous_payments(frm);
     
@@ -202,6 +202,67 @@ function peek_branch_number(frm, doc_type, fieldname) {
 frappe.ui.form.on("Money Receipt", {
 	refresh: function(frm) {
 		peek_branch_number(frm, "Money Receipt", "mr_no");
+		
+		if (frm.fields_dict.search_party && frm.fields_dict.search_party.$input) {
+            let $input = frm.fields_dict.search_party.$input;
+            if (!$input.data("awesomplete-init")) {
+                let party_map = {}; // store party_types
+                
+                let awesomplete = new Awesomplete($input[0], {
+                    minChars: 0,
+                    maxItems: 15,
+                    autoFirst: true
+                });
+
+                function fetch_parties() {
+                    let term = $input.val();
+                    frappe.call({
+                        method: "mytransport.mytransport.doctype.money_receipt.money_receipt.search_unified_party",
+                        args: { query: term },
+                        callback: function(r) {
+                            if (r.message) {
+                                awesomplete.list = r.message.map(d => {
+                                    party_map[d.name] = d.party_type;
+                                    return {
+                                        label: d.name + " (" + d.party_type + ")",
+                                        value: d.name
+                                    };
+                                });
+                                awesomplete.evaluate();
+                            }
+                        }
+                    });
+                }
+
+                $input.on("input focus click", function() {
+                    fetch_parties();
+                });
+                
+                $input[0].addEventListener("awesomplete-selectcomplete", function(e) {
+                    let selected_party = e.text.value;
+                    let p_type = party_map[selected_party];
+                    
+                    frm.set_value("search_party", e.text.label);
+                    frm.set_value("party_type", p_type);
+                    frm.set_value("party", selected_party);
+                    
+                    frappe.call({
+                        method: "erpnext.accounts.party.get_party_account",
+                        args: {
+                            party_type: p_type,
+                            party: selected_party,
+                            company: frm.doc.company
+                        },
+                        callback: function(r) {
+                            if (r.message) {
+                                frm.set_value("credit_account", r.message);
+                            }
+                        }
+                    });
+                });
+                $input.data("awesomplete-init", true);
+            }
+        }
 	},
 	branch: function(frm) {
 		peek_branch_number(frm, "Money Receipt", "mr_no");

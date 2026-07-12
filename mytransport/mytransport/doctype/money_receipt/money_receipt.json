@@ -2,60 +2,47 @@
  "actions": [],
  "allow_bulk_edit": 1,
  "allow_rename": 1,
- "autoname": "format:MR-{YYYY}-{#####}",
+ "autoname": "",
  "creation": "2026-06-06 20:12:50.018261",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
   "mr_no",
-  "company",
-  "branch",
   "date",
-  "cb1",
-  "customer",
-  "payment_mode",
+  "branch",
+  "company",
+  "column_break_1",
+  "search_party",
   "deposit_account",
   "sb1",
   "sb2",
-  "payment_entry",
-  "amended_from",
   "cheque_no",
-  "cb2",
-  "cheque_date",
   "on_account",
-  "amount_in_words",
+  "payment_entry",
+  "column_break_2",
+  "cheque_date",
+  "remarks",
+  "amended_from",
   "sb_tables",
   "get_unpaid_bills",
   "allocated_invoices",
+  "section_break_3",
   "total_amount",
-  "remarks",
+  "column_break_7",
+  "amount_in_words",
   "sb3",
   "previous_payments_section",
-  "previous_payments"
+  "previous_payments",
+  "party_type",
+  "party",
+  "credit_account"
  ],
  "fields": [
   {
    "fieldname": "mr_no",
    "fieldtype": "Data",
    "label": "MR No"
-  },
-  {
-   "fieldname": "company",
-   "fieldtype": "Link",
-   "hidden": 1,
-   "in_list_view": 1,
-   "label": "Company",
-   "options": "Company",
-   "reqd": 1
-  },
-  {
-   "fieldname": "branch",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Branch",
-   "options": "Branch",
-   "reqd": 1
   },
   {
    "default": "Today",
@@ -67,31 +54,37 @@
    "allow_on_submit": 1
   },
   {
-   "fieldname": "cb1",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "customer",
+   "fieldname": "branch",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Customer",
-   "options": "Customer",
+   "label": "Branch",
+   "options": "Branch",
    "reqd": 1
   },
   {
-   "default": "Bank",
-   "fieldname": "payment_mode",
-   "fieldtype": "Select",
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "hidden": 1,
    "in_list_view": 1,
-   "label": "Payment Mode",
-   "options": "Cash\nBank\nCheque\nUPI",
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "search_party",
+   "fieldtype": "Data",
+   "label": "Search Party",
    "reqd": 1,
-   "allow_on_submit": 1
+   "in_list_view": 1
   },
   {
    "fieldname": "deposit_account",
    "fieldtype": "Link",
-   "label": "Deposit Account",
+   "label": "Debit Account",
    "options": "Account",
    "reqd": 1
   },
@@ -106,12 +99,42 @@
    "label": "Totals & Remarks"
   },
   {
+   "fieldname": "cheque_no",
+   "fieldtype": "Data",
+   "label": "Reference No",
+   "allow_on_submit": 1,
+   "in_list_view": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "on_account",
+   "fieldtype": "Currency",
+   "label": "On Account"
+  },
+  {
    "fieldname": "payment_entry",
    "fieldtype": "Link",
    "label": "Payment Entry",
-   "options": "Payment Entry",
+   "options": "Journal Entry",
    "print_hide": 1,
    "read_only": 1
+  },
+  {
+   "fieldname": "column_break_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "cheque_date",
+   "fieldtype": "Date",
+   "label": "Reference Date",
+   "allow_on_submit": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Data",
+   "label": "Remarks",
+   "allow_on_submit": 1
   },
   {
    "fieldname": "amended_from",
@@ -122,37 +145,6 @@
    "print_hide": 1,
    "read_only": 1,
    "search_index": 1
-  },
-  {
-   "depends_on": "eval:in_list(['Bank', 'Cheque', 'UPI'], doc.payment_mode)",
-   "fieldname": "cheque_no",
-   "fieldtype": "Data",
-   "label": "Reference No",
-   "allow_on_submit": 1
-  },
-  {
-   "fieldname": "cb2",
-   "fieldtype": "Column Break"
-  },
-  {
-   "depends_on": "eval:in_list(['Bank', 'Cheque', 'UPI'], doc.payment_mode)",
-   "fieldname": "cheque_date",
-   "fieldtype": "Date",
-   "label": "Reference Date",
-   "allow_on_submit": 1
-  },
-  {
-   "default": "0",
-   "fieldname": "on_account",
-   "fieldtype": "Data",
-   "label": "On Account"
-  },
-  {
-   "fieldname": "amount_in_words",
-   "fieldtype": "Small Text",
-   "label": "Amount in Words",
-   "read_only": 1,
-   "allow_on_submit": 1
   },
   {
    "fieldname": "sb_tables",
@@ -171,16 +163,27 @@
    "options": "Allocated Transport Invoice"
   },
   {
+   "fieldname": "section_break_3",
+   "fieldtype": "Section Break"
+  },
+  {
    "fieldname": "total_amount",
    "fieldtype": "Currency",
    "label": "Total Amount",
-   "read_only": 1
+   "read_only": 1,
+   "default": "0"
   },
   {
-   "fieldname": "remarks",
+   "fieldname": "column_break_7",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "amount_in_words",
    "fieldtype": "Small Text",
-   "label": "Remarks",
-   "allow_on_submit": 1
+   "label": "Amount in Words",
+   "read_only": 1,
+   "allow_on_submit": 1,
+   "default": "Zero"
   },
   {
    "fieldname": "sb3",
@@ -198,6 +201,28 @@
    "label": "Previous Payments for Transport Invoices",
    "options": "Previous Invoice Payment",
    "read_only": 1
+  },
+  {
+   "default": "Customer",
+   "fieldname": "party_type",
+   "fieldtype": "Select",
+   "label": "Party Type",
+   "options": "Customer\nSupplier",
+   "hidden": 1
+  },
+  {
+   "fieldname": "party",
+   "fieldtype": "Dynamic Link",
+   "label": "Party",
+   "options": "party_type",
+   "hidden": 1
+  },
+  {
+   "fieldname": "credit_account",
+   "fieldtype": "Link",
+   "label": "Credit Account",
+   "options": "Account",
+   "hidden": 1
   }
  ],
  "grid_page_length": 50,

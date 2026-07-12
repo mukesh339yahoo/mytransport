@@ -3,14 +3,18 @@ from frappe.model.document import Document
 from frappe.utils import flt, money_in_words
 
 class MoneyReceipt(Document):
-    def before_insert(self):
+    def autoname(self):
         from mytransport.branch_numbering import get_next_branch_number, update_branch_number_counter
         if not self.mr_no:
-            self.mr_no = get_next_branch_number(self.branch, "Money Receipt", self.date)
+            self.mr_no = str(get_next_branch_number(self.branch, "Money Receipt", self.date))
         else:
             update_branch_number_counter(self.branch, "Money Receipt", self.date, self.mr_no)
+        self.name = self.mr_no
 
     def validate(self):
+        if flt(self.total_amount) <= 0:
+            frappe.throw("Total Amount must be greater than 0")
+            
         if getattr(self, "mr_no", None):
             existing = frappe.db.exists("Money Receipt", {
                 "mr_no": self.mr_no,
@@ -21,22 +25,37 @@ class MoneyReceipt(Document):
                 frappe.throw(f"Money Receipt with MR No {self.mr_no} already exists")
 
     def on_submit(self):
-        # Create Payment Entry
-        pe = frappe.new_doc("Payment Entry")
-        pe.payment_type = "Receive"
-        pe.party_type = "Customer"
-        pe.party = self.customer
-        pe.company = self.company
-        pe.posting_date = self.date
-        pe.mode_of_payment = self.payment_mode
-        pe.paid_to = self.deposit_account
-        pe.paid_amount = self.total_amount
-        pe.received_amount = self.total_amount
+        # Create Journal Entry
+        je = frappe.new_doc("Journal Entry")
+        je.voucher_type = "Journal Entry"
+        je.company = self.company
+        je.posting_date = self.date
+        je.cheque_no = getattr(self, "cheque_no", None)
+        je.cheque_date = getattr(self, "cheque_date", None)
         
-        if getattr(self, "cheque_no", None):
-            pe.reference_no = self.cheque_no
-        if getattr(self, "cheque_date", None):
-            pe.reference_date = self.cheque_date
+        user_remark = self.remarks or ""
+        je.user_remark = f"Money Receipt: {self.name}. {user_remark}"
+
+        # Row 1: Debit the Bank/Cash Account
+        je.append("accounts", {
+            "account": self.deposit_account,
+            "debit_in_account_currency": self.total_amount
+        })
+
+        # Row 2: Credit the Party Account
+        je.append("accounts", {
+            "account": self.credit_account,
+            "credit_in_account_currency": self.total_amount,
+            "party_type": self.party_type,
+            "party": self.party,
+            "is_advance": "Yes"
+        })
+
+        je.insert(ignore_permissions=True)
+        je.submit()
+        
+        self.db_set("payment_entry", je.name)
+        frappe.msgprint(f"Journal Entry {je.name} created successfully.")
 
         # Update Transport Invoices
         invoice_allocations = {}
@@ -54,31 +73,12 @@ class MoneyReceipt(Document):
             
             invoice_allocations[item.transport_invoice] = item.paid_amt
 
-        # Set Party Account
-        from erpnext.accounts.party import get_party_account
-        try:
-            pe.paid_from = get_party_account("Customer", self.customer, self.company)
-        except Exception:
-            pe.paid_from = None
-            
-        if not pe.paid_from:
-            # Fallback to fetching default receivable account for company
-            pe.paid_from = frappe.db.get_value("Company", self.company, "default_receivable_account")
-
-        pe.remarks = f"Payment received via Money Receipt: {self.name}"
-
-        pe.insert(ignore_permissions=True)
-        pe.submit()
-        
-        self.db_set("payment_entry", pe.name)
-        frappe.msgprint(f"Payment Entry {pe.name} created successfully.")
-
     def on_cancel(self):
         if getattr(self, "payment_entry", None):
-            pe = frappe.get_doc("Payment Entry", self.payment_entry)
-            if pe.docstatus == 1:
-                pe.cancel()
-            frappe.msgprint(f"Payment Entry {self.payment_entry} cancelled.")
+            je = frappe.get_doc("Journal Entry", self.payment_entry)
+            if je.docstatus == 1:
+                je.cancel()
+            frappe.msgprint(f"Journal Entry {self.payment_entry} cancelled.")
             
         # Revert Transport Invoice balances
         for item in self.get("allocated_invoices", []):
@@ -92,6 +92,20 @@ class MoneyReceipt(Document):
                 "outstanding_amount": new_out,
                 "status": new_status
             })
+
+@frappe.whitelist()
+def search_unified_party(query):
+    customers = frappe.get_all("Customer", filters={"name": ["like", f"%{query}%"]}, limit=10, order_by="name asc")
+    suppliers = frappe.get_all("Supplier", filters={"name": ["like", f"%{query}%"]}, limit=10, order_by="name asc")
+    
+    results = []
+    for c in customers:
+        results.append({"name": c.name, "party_type": "Customer"})
+    for s in suppliers:
+        results.append({"name": s.name, "party_type": "Supplier"})
+        
+    results.sort(key=lambda x: x["name"].lower())
+    return results[:15]
 
 @frappe.whitelist()
 def get_money_in_words(amount, currency):
