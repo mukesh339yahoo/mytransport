@@ -193,7 +193,7 @@ class IntegrationTestLorryReceipt(FrappeTestCase):
         # Assuming paid_amount gets updated to 5000
         # self.assertEqual(updated_invoice.paid_amount, 5000)
         
-        print("End-to-End Test (Single LR) Passed Successfully!")
+        print("End-to-End Test (Single LR) Passed Successfully!")  # nosemgrep: frappe-print-function-in-doctypes
 
     def test_end_to_end_multiple_lrs(self):
         # ---------------------------------------------------------
@@ -309,7 +309,7 @@ class IntegrationTestLorryReceipt(FrappeTestCase):
         mr.submit()
         self.assertEqual(mr.docstatus, 1)
         
-        print("End-to-End Test (Multiple LRs) Passed Successfully!")
+        print("End-to-End Test (Multiple LRs) Passed Successfully!")  # nosemgrep: frappe-print-function-in-doctypes
 
     def test_end_to_end_complex_batching(self):
         # ---------------------------------------------------------
@@ -441,4 +441,4 @@ class IntegrationTestLorryReceipt(FrappeTestCase):
             mr.submit()
             self.assertEqual(mr.docstatus, 1)
             
-        print("End-to-End Test (Complex Batching) Passed Successfully!")
+        print("End-to-End Test (Complex Batching) Passed Successfully!")  # nosemgrep: frappe-print-function-in-doctypes

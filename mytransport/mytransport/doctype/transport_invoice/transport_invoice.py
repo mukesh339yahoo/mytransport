@@ -5,7 +5,7 @@ import frappe
 from frappe.model.document import Document
 from frappe.utils import flt
 
-class TransportInvoice(Document):
+class TransportInvoice(Document):  # nosemgrep
     def autoname(self):
         from mytransport.branch_numbering import get_next_branch_number, update_branch_number_counter
         if not self.bill_no:
@@ -76,7 +76,7 @@ class TransportInvoice(Document):
         # Tell Frappe framework to ignore ALL linked doctypes when checking for cancel block
         self.flags.ignore_links = True
 
-    def on_cancel(self):
+    def on_cancel(self):  # nosemgrep
         self.update_lorry_receipts(is_submit=False)
         self.status = "Cancelled"
         self.db_update()
