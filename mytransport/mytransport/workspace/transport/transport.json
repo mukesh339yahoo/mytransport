@@ -1,7 +1,7 @@
 {
  "app": "mytransport",
  "charts": [],
- "content": "[{\"id\":\"o36a8LX6Lb\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Welcome to the Transport workspace</span>\",\"col\":12}},{\"id\":\"jZAxKkBnah\",\"type\":\"paragraph\",\"data\":{\"text\":\"Shortcuts\",\"col\":12}},{\"id\":\"XsHzxAZLS0\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Lorry Receipt\",\"col\":3}},{\"id\":\"pOXZxEm6o0\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Challan\",\"col\":3}},{\"id\":\"RAdwLI1KzD\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Transport Invoice\",\"col\":3}},{\"id\":\"lvI3CnoEDZ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Money Receipt\",\"col\":3}},{\"id\":\"xPO9t5cKOh\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Expense Voucher\",\"col\":3}},{\"id\":\"faB-d93fxB\",\"type\":\"paragraph\",\"data\":{\"text\":\"Reports\",\"col\":12}},{\"id\":\"GHKRl4Qw3r\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Lr Register\",\"col\":3}},{\"id\":\"zZFm11KiPJ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Lr Status Report\",\"col\":3}},{\"id\":\"ksGD5E6Wll\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Challan Costing Report\",\"col\":3}},{\"id\":\"01b098acf9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Challan Register\",\"col\":3}}]",
+  "content": "[{\"id\":\"o36a8LX6Lb\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Welcome to the Transport workspace</span>\",\"col\":12}},{\"id\":\"jZAxKkBnah\",\"type\":\"paragraph\",\"data\":{\"text\":\"Shortcuts\",\"col\":12}},{\"id\":\"XsHzxAZLS0\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Lorry Receipt\",\"col\":3}},{\"id\":\"pOXZxEm6o0\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Challan\",\"col\":3}},{\"id\":\"RAdwLI1KzD\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Transport Invoice\",\"col\":3}},{\"id\":\"lvI3CnoEDZ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Money Receipt\",\"col\":3}},{\"id\":\"xPO9t5cKOh\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Expense Voucher\",\"col\":3}},{\"id\":\"faB-d93fxB\",\"type\":\"paragraph\",\"data\":{\"text\":\"Reports\",\"col\":12}},{\"id\":\"GHKRl4Qw3r\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Lr Register\",\"col\":3}},{\"id\":\"zZFm11KiPJ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Lr Status Report\",\"col\":3}},{\"id\":\"ksGD5E6Wll\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Challan Costing Report\",\"col\":3}},{\"id\":\"01b098acf9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Challan Register\",\"col\":3}},{\"id\":\"pnlStatement\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Profit and Loss Statement\",\"col\":3}}]",
  "creation": "2026-06-07 16:34:37.015105",
  "custom_blocks": [],
  "docstatus": 0,
@@ -94,6 +94,13 @@
    "label": "Challan Register",
    "link_to": "Challan Register",
    "report_ref_doctype": "Challan",
+   "type": "Report"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "",
+   "label": "Profit and Loss Statement",
+   "link_to": "Profit and Loss Statement",
    "type": "Report"
   }
  ],

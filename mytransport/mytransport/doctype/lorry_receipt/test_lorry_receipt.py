@@ -442,3 +442,53 @@ class IntegrationTestLorryReceipt(FrappeTestCase):
             self.assertEqual(mr.docstatus, 1)
             
         print("End-to-End Test (Complex Batching) Passed Successfully!")  # nosemgrep: frappe-print-function-in-doctypes
+
+    def test_profit_and_loss_accuracy(self):
+        # 1. Clear any existing GL entries to ensure an accurate P&L report for this test
+        frappe.db.sql("DELETE FROM `tabGL Entry` WHERE company='Test Company'")
+        frappe.db.commit()
+        
+        # 2. Create a Transport Invoice that posts Income
+        invoice = frappe.new_doc("Transport Invoice")
+        invoice.name = "TEST-PNL-INV-001"
+        invoice.branch = "Test Branch"
+        invoice.date = frappe.utils.today()
+        invoice.customer = "Test Consignor"
+        invoice.company = "Test Company"
+        invoice.debit_to = "Debtors - TC"
+        invoice.income_account = "Sales - TC"
+        
+        invoice.append("items", {
+            "lr_number": "DUMMY-LR-001",
+            "basic_freight": 8500
+        })
+        invoice.insert(ignore_permissions=True, ignore_mandatory=True, ignore_links=True)
+        invoice.submit()
+        
+        # 3. Fetch P&L Report
+        try:
+            from erpnext.accounts.report.profit_and_loss_statement.profit_and_loss_statement import execute
+        except ImportError:
+            self.fail("Could not import P&L statement report")
+            
+        filters = frappe._dict(
+            company="Test Company",
+            filter_based_on="Date Range",
+            period_start_date=frappe.utils.add_months(frappe.utils.today(), -1),
+            period_end_date=frappe.utils.add_months(frappe.utils.today(), 1),
+            periodicity="Yearly",
+            accumulated_values=False,
+        )
+        
+        result = execute(filters)
+        data = result[1]
+        
+        # 4. Assert accuracy
+        sales_total = 0
+        for row in data:
+            if isinstance(row, dict) and row.get("account") == "Sales - TC":
+                sales_total = row.get("total", 0)
+                
+        # Income is typically positive in P&L report total
+        self.assertEqual(abs(sales_total), 8500)
+        print("P&L Report Accuracy Test Passed Successfully!")
