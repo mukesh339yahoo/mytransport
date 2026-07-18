@@ -1,0 +1,20 @@
+rules:
+  - id: ban-commit-in-tests
+    patterns:
+      - pattern: frappe.db.commit()
+      - pattern-inside: |
+          class $TESTCLASS(FrappeTestCase):
+            ...
+    message: "Data Loss Risk: Do not use frappe.db.commit() inside unit tests. This bypasses the test runner's automatic transaction rollback."
+    languages: [python]
+    severity: ERROR
+
+  - id: ban-delete-in-tests
+    patterns:
+      - pattern: frappe.db.sql("DELETE FROM ...")
+      - pattern-inside: |
+          class $TESTCLASS(FrappeTestCase):
+            ...
+    message: "Data Loss Risk: Do not use raw DELETE FROM queries in unit tests. Rely on Frappe's test transaction rollback instead."
+    languages: [python]
+    severity: ERROR

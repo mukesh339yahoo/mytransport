@@ -18,8 +18,7 @@ add_to_apps_screen = [
 		"name": "mytransport",
 		"logo": "/assets/mytransport/logo.png",
 		"title": "Mytransport",
-		"route": "/mytransport",
-		"has_permission": "mytransport.api.permission.has_app_permission"
+		"route": "/mytransport"
 	}
 ]
 

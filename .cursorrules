@@ -1,0 +1,7 @@
+# AI Agent Rules
+
+## Data Loss Prevention (CRITICAL)
+1. NEVER execute `DELETE`, `DROP`, `TRUNCATE`, or `frappe.db.commit()` commands via SQL, shell scripts, or Python test files.
+2. If a task requires removing records to clean up a test state, you MUST ask for the user's explicit permission first.
+3. Always adhere to the `accidental-data-loss-prevention` skill guidelines.
+4. Before running destructive operations or migrations, proactively prompt the user to confirm if they have run `bench backup`.

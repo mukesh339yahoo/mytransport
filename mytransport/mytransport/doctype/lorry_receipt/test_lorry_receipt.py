@@ -2,6 +2,14 @@ import frappe
 from frappe.tests.utils import FrappeTestCase
 
 class IntegrationTestLorryReceipt(FrappeTestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        # Take a database backup before running tests to prevent accidental data loss
+        from frappe.utils.backups import new_backup
+        print("Taking a pre-test database backup...")
+        new_backup(ignore_files=True)
+
     def setUp(self):
         # Create minimal dependencies
         if not frappe.db.exists("Branch", "Test Branch"):
@@ -69,12 +77,7 @@ class IntegrationTestLorryReceipt(FrappeTestCase):
             bns.current_number = 89999
             bns.insert(ignore_permissions=True, ignore_mandatory=True)
         
-        frappe.db.sql("DELETE FROM `tabLorry Receipt`")
-        frappe.db.sql("DELETE FROM `tabChallan`")
-        frappe.db.sql("DELETE FROM `tabTransport Invoice`")
-        frappe.db.sql("DELETE FROM `tabExpense Voucher`")
-        frappe.db.sql("DELETE FROM `tabMoney Receipt`")
-        frappe.db.commit()  # nosemgrep: required in standalone setup scripts
+        # Do not use frappe.db.commit() or DELETE FROM in tests to avoid data loss
 
     def test_end_to_end_transport_lifecycle(self):
         # ---------------------------------------------------------
@@ -444,9 +447,7 @@ class IntegrationTestLorryReceipt(FrappeTestCase):
         print("End-to-End Test (Complex Batching) Passed Successfully!")  # nosemgrep: frappe-print-function-in-doctypes
 
     def test_profit_and_loss_accuracy(self):
-        # 1. Clear any existing GL entries to ensure an accurate P&L report for this test
-        frappe.db.sql("DELETE FROM `tabGL Entry` WHERE company='Test Company'")
-        frappe.db.commit()
+        # Note: Do not clear GL entries here. The test should rely on the test framework's transaction isolation.
         
         # 2. Create a Transport Invoice that posts Income
         invoice = frappe.new_doc("Transport Invoice")
