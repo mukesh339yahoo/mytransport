@@ -1,9 +1,7 @@
 column1,column2,column3,column4
 --- SECTION: Default ---,,,
-lr_number,,,
-status,,,
-branch,,,
-date,,,
+lr_number,status,,
+branch,date,,
 payment_terms,,,
 --- SECTION: Party Details ---,consignee,,
 consignor,consignee_address,,

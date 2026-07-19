@@ -22,6 +22,8 @@
   "branch",
   "customer_reference",
   "status",
+  "submitted_to_client",
+  "submission_date",
   "items_section",
   "get_unbilled_lrs",
   "items",
@@ -250,6 +252,18 @@
    "options": "Account",
    "read_only": 1,
    "reqd": 1
+  },
+  {
+   "default": "No",
+   "fieldname": "submitted_to_client",
+   "fieldtype": "Select",
+   "label": "Submitted to Client",
+   "options": "No\nYes"
+  },
+  {
+   "fieldname": "submission_date",
+   "fieldtype": "Date",
+   "label": "Submission Date"
   }
  ],
  "grid_page_length": 50,
