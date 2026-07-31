@@ -72,7 +72,6 @@ frappe.ui.form.on("Expense Voucher", {
                                 fieldtype: 'Table',
                                 fieldname: 'challans',
                                 fields: [
-                                    {fieldtype: 'Check', fieldname: 'select', label: 'Select', in_list_view: 1},
                                     {fieldtype: 'Data', fieldname: 'name', label: 'Challan Ref', read_only: 1, in_list_view: 1, hidden: 1},
                                     {fieldtype: 'Data', fieldname: 'challan_number', label: 'Challan No', read_only: 1, in_list_view: 1},
                                     {fieldtype: 'Date', fieldname: 'date', label: 'Date', read_only: 1, in_list_view: 1},
@@ -90,15 +89,14 @@ frappe.ui.form.on("Expense Voucher", {
                                     total_hire_amount: c.total_hire_amount,
                                     adjusted_amt: c.adjusted_amt,
                                     balance_amount: c.balance_amount,
-                                    allocate: c.balance_amount,
-                                    select: 0
+                                    allocate: c.balance_amount
                                 })),
                                 get_data: () => d.fields_dict.challans.grid.get_data()
                             }
                         ],
                         primary_action_label: 'Add to Voucher',
                         primary_action(values) {
-                            let selected = values.challans.filter(b => b.select);
+                            let selected = d.fields_dict.challans.grid.get_selected_children();
                             if (!selected.length) {
                                 frappe.msgprint("Please select at least one Challan.");
                                 return;

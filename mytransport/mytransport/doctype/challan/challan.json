@@ -70,6 +70,8 @@
   "cash_amount",
   "delivery_details_sec",
   "delivery_status",
+  "acknowledgement_received",
+  "acknowledgement_date",
   "unloading_date",
   "days_to_load",
   "column_break_29",
@@ -242,7 +244,6 @@
    "fieldname": "hamali_charges",
    "fieldtype": "Currency",
    "label": "Hamali Charges",
-   "read_only": 1,
    "default": "0"
   },
   {
@@ -267,7 +268,6 @@
    "fieldname": "detention_charges",
    "fieldtype": "Currency",
    "label": "Detention Charges",
-   "read_only": 1,
    "default": "0"
   },
   {
@@ -285,14 +285,12 @@
    "fieldname": "other_charges",
    "fieldtype": "Currency",
    "label": "Other Charges",
-   "read_only": 1,
    "default": "0"
   },
   {
    "fieldname": "rto_charges",
    "fieldtype": "Currency",
    "label": "RTO Charges",
-   "read_only": 1,
    "default": "0"
   },
   {
@@ -434,6 +432,21 @@
    "label": "Delivery Status",
    "options": "\nIn Transit\nDelivered",
    "allow_on_submit": 1
+  },
+  {
+   "fieldname": "acknowledgement_received",
+   "fieldtype": "Select",
+   "label": "Acknowledgement Received",
+   "options": "\nYes\nNo",
+   "allow_on_submit": 1,
+   "default": "No"
+  },
+  {
+   "fieldname": "acknowledgement_date",
+   "fieldtype": "Date",
+   "label": "Acknowledgement Date",
+   "allow_on_submit": 1,
+   "mandatory_depends_on": "eval:doc.acknowledgement_received===\"Yes\""
   },
   {
    "fieldname": "unloading_date",

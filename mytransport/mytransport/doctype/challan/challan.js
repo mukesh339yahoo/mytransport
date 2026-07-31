@@ -212,23 +212,14 @@ frappe.ui.form.on("Challan LR Item", {
 function calculate_lr_totals(frm) {
 	let total_lrs = 0;
 	let basic_freight = 0;
-	let hamali_charges = 0;
-	let detention_charges = 0;
-	let rto_charges = 0;
-	let other_charges = 0;
-	let total_amount = 0;
 	let total_weight = 0;
 	let total_packages = 0;
+
 
 	if (frm.doc.lrs) {
 		total_lrs = frm.doc.lrs.length;
 		frm.doc.lrs.forEach(function(item) {
 			basic_freight += flt(item.basic_freight);
-			hamali_charges += flt(item.hamali_charges);
-			detention_charges += flt(item.detention_charges);
-			rto_charges += flt(item.rto_charges);
-			other_charges += flt(item.other_charges);
-			total_amount += flt(item.total_amount);
 			total_weight += flt(item.total_weight);
 			total_packages += cint(item.total_packages);
 		});
@@ -236,14 +227,15 @@ function calculate_lr_totals(frm) {
 
 	frm.set_value("total_lrs", total_lrs);
 	frm.set_value("basic_freight", basic_freight);
-	frm.set_value("hamali_charges", hamali_charges);
-	frm.set_value("detention_charges", detention_charges);
-	frm.set_value("rto_charges", rto_charges);
-	frm.set_value("other_charges", other_charges);
-	frm.set_value("total_amount", total_amount);
 	frm.set_value("total_weight", total_weight);
 	frm.set_value("total_packages", total_packages);
 	
+	calculate_total_amount(frm);
+}
+
+function calculate_total_amount(frm) {
+	let total_amount = flt(frm.doc.basic_freight) + flt(frm.doc.hamali_charges) + flt(frm.doc.detention_charges) + flt(frm.doc.rto_charges) + flt(frm.doc.other_charges);
+	frm.set_value("total_amount", total_amount);
 	calculate_tds(frm);
 }
 
@@ -319,6 +311,21 @@ frappe.ui.form.on("Challan", {
 	},
 	date: function(frm) {
 		peek_branch_number(frm, "Challan", "challan_number");
+	},
+	basic_freight: function(frm) {
+		calculate_total_amount(frm);
+	},
+	hamali_charges: function(frm) {
+		calculate_total_amount(frm);
+	},
+	detention_charges: function(frm) {
+		calculate_total_amount(frm);
+	},
+	rto_charges: function(frm) {
+		calculate_total_amount(frm);
+	},
+	other_charges: function(frm) {
+		calculate_total_amount(frm);
 	}
 });
 

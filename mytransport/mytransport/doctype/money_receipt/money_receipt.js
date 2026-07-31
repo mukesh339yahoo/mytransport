@@ -60,7 +60,6 @@ frappe.ui.form.on('Money Receipt', {
                                 fieldtype: 'Table',
                                 fieldname: 'bills',
                                 fields: [
-                                    {fieldtype: 'Check', fieldname: 'select', label: 'Select', in_list_view: 1},
                                     {fieldtype: 'Data', fieldname: 'name', label: 'Invoice Ref', read_only: 1, in_list_view: 1, hidden: 1},
                                     {fieldtype: 'Data', fieldname: 'manual_bill_no', label: 'Bill No', read_only: 1, in_list_view: 1},
                                     {fieldtype: 'Date', fieldname: 'bill_date', label: 'Bill Date', read_only: 1, in_list_view: 1},
@@ -74,15 +73,14 @@ frappe.ui.form.on('Money Receipt', {
                                     bill_date: b.date,
                                     total_amount: b.total_amount,
                                     outstanding_amount: b.outstanding_amount,
-                                    allocate: b.outstanding_amount,
-                                    select: 0
+                                    allocate: b.outstanding_amount
                                 })),
                                 get_data: () => d.fields_dict.bills.grid.get_data()
                             }
                         ],
                         primary_action_label: 'Add to Receipt',
                         primary_action(values) {
-                            let selected = values.bills.filter(b => b.select);
+                            let selected = d.fields_dict.bills.grid.get_selected_children();
                             if (!selected.length) {
                                 frappe.msgprint("Please select at least one Bill.");
                                 return;

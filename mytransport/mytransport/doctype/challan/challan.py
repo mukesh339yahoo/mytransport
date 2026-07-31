@@ -31,11 +31,7 @@ class Challan(Document):
 	def calculate_lr_totals(self):
 		self.total_lrs = len(self.get("lrs"))
 		self.basic_freight = sum([flt(item.basic_freight) for item in self.get("lrs")])
-		self.hamali_charges = sum([flt(item.hamali_charges) for item in self.get("lrs")])
-		self.detention_charges = sum([flt(item.detention_charges) for item in self.get("lrs")])
-		self.rto_charges = sum([flt(item.rto_charges) for item in self.get("lrs")])
-		self.other_charges = sum([flt(item.other_charges) for item in self.get("lrs")])
-		self.total_amount = sum([flt(item.total_amount) for item in self.get("lrs")])
+		self.total_amount = flt(self.basic_freight) + flt(self.hamali_charges) + flt(self.detention_charges) + flt(self.rto_charges) + flt(self.other_charges)
 		self.total_weight = sum([flt(item.total_weight) for item in self.get("lrs")])
 		self.total_packages = sum([cint(item.total_packages) for item in self.get("lrs")])
 		

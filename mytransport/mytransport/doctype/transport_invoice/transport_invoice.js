@@ -140,7 +140,6 @@ frappe.ui.form.on("Transport Invoice", {
 								fieldtype: 'Table',
 								fieldname: 'lrs',
 								fields: [
-									{fieldtype: 'Check', fieldname: 'select', label: 'Select', in_list_view: 1},
 									{fieldtype: 'Data', fieldname: 'name', label: 'LR No', read_only: 1, in_list_view: 1},
 									{fieldtype: 'Date', fieldname: 'date', label: 'LR Date', read_only: 1, in_list_view: 1},
 									{fieldtype: 'Data', fieldname: 'from_city', label: 'From', read_only: 1, in_list_view: 1},
@@ -154,15 +153,14 @@ frappe.ui.form.on("Transport Invoice", {
 									from_city: lr.from_city,
 									to_city: lr.to_city,
 									total_charged_weight: lr.total_charged_weight,
-									basic_freight: lr.basic_freight,
-									select: 0
+									basic_freight: lr.basic_freight
 								})),
 								get_data: () => d.fields_dict.lrs.grid.get_data()
 							}
 						],
 						primary_action_label: 'Add to Invoice',
 						primary_action(values) {
-							let selected = values.lrs.filter(b => b.select);
+							let selected = d.fields_dict.lrs.grid.get_selected_children();
 							if (!selected.length) {
 								frappe.msgprint("Please select at least one LR.");
 								return;
