@@ -1,0 +1,136 @@
+<!-- Initialize copies selection -->
+{% set default_copies = ['Driver', 'Consignor', 'Consignee', 'Office'] %}
+{% set selected_copies = frappe.form_dict.print_copies.split(',') if frappe.form_dict.print_copies else default_copies %}
+
+<!-- Fetch Company details dynamically for branding -->
+{% set company_doc = frappe.get_doc("Company", doc.company) if doc.company else None %}
+
+<style>
+    .lr-header { border-bottom: 2px solid #333; margin-bottom: 20px; padding-bottom: 10px; }
+    .lr-logo { max-height: 80px; }
+    .lr-company-name { font-size: 24px; font-weight: bold; margin: 0; }
+    .lr-company-address { font-size: 12px; color: #555; }
+    .lr-copy-heading { 
+        text-align: center; 
+        font-size: 18px; 
+        font-weight: bold; 
+        margin-bottom: 20px; 
+        text-transform: uppercase; 
+        border: 1px solid #333; 
+        padding: 5px; 
+        background-color: #f9f9f9; 
+    }
+    .lr-details th, .lr-details td { padding: 5px; border: 1px solid #ddd; }
+    .lr-details th { width: 40%; background-color: #fafafa; }
+    .lr-items th { background-color: #f0f0f0; }
+    .lr-footer { margin-top: 40px; }
+    .lr-signature-box { border-top: 1px solid #333; padding-top: 5px; text-align: center; margin-top: 50px; font-weight: bold; }
+</style>
+
+<!-- Loop through selected copies -->
+{% for copy in selected_copies %}
+<div class="lr-page">
+    
+    <!-- 1. Company Header (Brand & Details) -->
+    <div class="row lr-header text-center">
+        <div class="col-xs-12">
+            {% if company_doc and company_doc.company_logo %}
+                <img src="{{ company_doc.company_logo }}" class="lr-logo" alt="{{ doc.company }}">
+            {% endif %}
+            <h2 class="lr-company-name">{{ doc.company or "Company Name" }}</h2>
+            {% if company_doc %}
+                <div class="lr-company-address">
+                    {{ company_doc.get("address_display", "") | replace('\n', '<br>') }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- 2. Dynamic Copy Heading -->
+    <div class="row">
+        <div class="col-xs-4 col-xs-offset-4">
+            <div class="lr-copy-heading">{{ copy }} Copy</div>
+        </div>
+    </div>
+
+    <!-- 3. Standard Document Fields -->
+    <div class="row">
+        <div class="col-xs-6">
+            <table class="table table-bordered lr-details">
+                <tr><th>LR Number</th><td>{{ doc.name }}</td></tr>
+                <tr><th>Date</th><td>{{ doc.get_formatted("date") or doc.get_formatted("posting_date") }}</td></tr>
+                <tr><th>Vehicle Number</th><td>{{ doc.vehicle_number }}</td></tr>
+            </table>
+        </div>
+        <div class="col-xs-6">
+            <table class="table table-bordered lr-details">
+                <tr><th>Origin</th><td>{{ doc.origin }}</td></tr>
+                <tr><th>Destination</th><td>{{ doc.destination }}</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-6">
+            <table class="table table-bordered lr-details">
+                <tr><th style="width: 100%;">Consignor</th></tr>
+                <tr><td>{{ doc.consignor_name or doc.consignor }}</td></tr>
+            </table>
+        </div>
+        <div class="col-xs-6">
+            <table class="table table-bordered lr-details">
+                <tr><th style="width: 100%;">Consignee</th></tr>
+                <tr><td>{{ doc.consignee_name or doc.consignee }}</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- 4. Items Table Loop -->
+    <div class="row" style="margin-top: 20px;">
+        <div class="col-xs-12">
+            <table class="table table-bordered lr-items">
+                <thead>
+                    <tr>
+                        <th style="width: 10%;">Sr No</th>
+                        <th style="width: 40%;">Description</th>
+                        <th style="width: 15%; text-align: right;">Qty</th>
+                        <th style="width: 15%; text-align: right;">Rate</th>
+                        <th style="width: 20%; text-align: right;">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in doc.items %}
+                    <tr>
+                        <td>{{ item.idx }}</td>
+                        <td>{{ item.description or item.item_name }}</td>
+                        <td style="text-align: right;">{{ item.get_formatted("qty") }}</td>
+                        <td style="text-align: right;">{{ item.get_formatted("rate") }}</td>
+                        <td style="text-align: right;">{{ item.get_formatted("amount") }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 5. Signatures Footer -->
+    <div class="row lr-footer">
+        <div class="col-xs-4">
+            <div class="lr-signature-box">Prepared By</div>
+        </div>
+        <div class="col-xs-4">
+            <div class="lr-signature-box">Driver Signature</div>
+        </div>
+        <div class="col-xs-4">
+            <div class="lr-signature-box">Receiver Signature</div>
+        </div>
+    </div>
+
+</div>
+
+<!-- 6. Page Breaks Between Copies -->
+{% if not loop.last %}
+<div class="page-break" style="page-break-after: always;"></div>
+{% endif %}
+
+{% endfor %}

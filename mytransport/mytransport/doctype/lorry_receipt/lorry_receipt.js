@@ -134,6 +134,41 @@ frappe.ui.form.on("Lorry Receipt", {
 	},
 	refresh: function(frm) {
 		peek_branch_number(frm, "Lorry Receipt", "lr_number");
+
+		if (!frm.is_new()) {
+			frm.add_custom_button(__('Print Copies'), function() {
+				let dialog = new frappe.ui.Dialog({
+					title: 'Select Copies to Print',
+					fields: [
+						{ fieldname: 'driver_copy', fieldtype: 'Check', label: 'Driver Copy', default: 1 },
+						{ fieldname: 'consignor_copy', fieldtype: 'Check', label: 'Consignor Copy', default: 1 },
+						{ fieldname: 'consignee_copy', fieldtype: 'Check', label: 'Consignee Copy', default: 1 },
+						{ fieldname: 'office_copy', fieldtype: 'Check', label: 'Office Copy', default: 1 }
+					],
+					primary_action_label: 'Print',
+					primary_action: function(values) {
+						let selected_copies = [];
+						if (values.driver_copy) selected_copies.push('Driver');
+						if (values.consignor_copy) selected_copies.push('Consignor');
+						if (values.consignee_copy) selected_copies.push('Consignee');
+						if (values.office_copy) selected_copies.push('Office');
+
+						if (selected_copies.length === 0) {
+							frappe.msgprint(__('Please select at least one copy to print.'));
+							return;
+						}
+
+						let copies_str = selected_copies.join(',');
+						let print_format_name = encodeURIComponent("Lorry Receipt Custom");
+						let url = `/printview?doctype=Lorry Receipt&name=${encodeURIComponent(frm.doc.name)}&format=${print_format_name}&print_copies=${copies_str}`;
+						
+						window.open(url, '_blank');
+						dialog.hide();
+					}
+				});
+				dialog.show();
+			}, __("Print"));
+		}
 	},
 	branch: function(frm) {
 		peek_branch_number(frm, "Lorry Receipt", "lr_number");

@@ -85,7 +85,8 @@ def get_previous_payments(challans, current_voucher=None):
             ev.voucher_no as voucher_no, 
             ev.date as voucher_date, 
             ac.paid_amt as amount, 
-            ev.party as vendor 
+            ev.party as vendor,
+            'Allocation' as type
         FROM `tabAllocated Challan` ac
         JOIN `tabExpense Voucher` ev ON ac.parent = ev.name
         JOIN `tabChallan` ch ON ac.challan = ch.name
@@ -101,7 +102,8 @@ def get_previous_payments(challans, current_voucher=None):
             ev.voucher_no as voucher_no, 
             ev.date as voucher_date, 
             ed.expense_amount as amount, 
-            ev.party as vendor 
+            ev.party as vendor,
+            'Expense' as type
         FROM `tabExpense Detail` ed
         JOIN `tabExpense Voucher` ev ON ed.parent = ev.name
         JOIN `tabChallan` ch ON ed.challan_ref = ch.name
@@ -129,8 +131,9 @@ def get_unpaid_challans_for_vendor(party, current_voucher=None):
     
     payment_map = {}
     for p in payments:
-        c_no = p.get("challan_no")
-        payment_map[c_no] = payment_map.get(c_no, 0) + float(p.get("amount") or 0)
+        if p.get("type") == "Allocation":
+            c_no = p.get("challan_no")
+            payment_map[c_no] = payment_map.get(c_no, 0) + float(p.get("amount") or 0)
         
     result = []
     for c in challans:
