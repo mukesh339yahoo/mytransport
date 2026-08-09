@@ -25,6 +25,7 @@
     .lr-grid-table {
         width: 100%;
         border-collapse: collapse;
+        table-layout: fixed;
     }
     .lr-grid-table th, .lr-grid-table td {
         border: 1px solid #000;
@@ -160,10 +161,10 @@
                             {% for item in doc.items %}
                             <tr>
                                 <td class="text-center" style="border-left: none; border-bottom: none;">{{ item.qty }}</td>
-                                <td style="border-bottom: none;">{{ item.packing_method or "" }}</td>
-                                <td style="border-bottom: none;">{{ item.description or item.item_name }}</td>
-                                <td class="text-right" style="border-bottom: none;">{{ item.actual_weight or "" }}</td>
-                                <td class="text-right" style="border-right: none; border-bottom: none;">{{ item.charged_weight or "" }}</td>
+                                <td style="border-bottom: none;">{{ item.get("packing_method", "") }}</td>
+                                <td style="border-bottom: none;">{{ item.get("description") or item.get("item_name") or "" }}</td>
+                                <td class="text-right" style="border-bottom: none;">{{ item.get("actual_weight", "") }}</td>
+                                <td class="text-right" style="border-right: none; border-bottom: none;">{{ item.get("charged_weight", "") }}</td>
                             </tr>
                             {% endfor %}
                             <!-- Fill empty space so vertical lines go all the way down -->
