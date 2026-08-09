@@ -6,131 +6,249 @@
 {% set company_doc = frappe.get_doc("Company", doc.company) if doc.company else None %}
 
 <style>
-    .lr-header { border-bottom: 2px solid #333; margin-bottom: 20px; padding-bottom: 10px; }
-    .lr-logo { max-height: 80px; }
-    .lr-company-name { font-size: 24px; font-weight: bold; margin: 0; }
-    .lr-company-address { font-size: 12px; color: #555; }
-    .lr-copy-heading { 
-        text-align: center; 
-        font-size: 18px; 
-        font-weight: bold; 
-        margin-bottom: 20px; 
-        text-transform: uppercase; 
-        border: 1px solid #333; 
-        padding: 5px; 
-        background-color: #f9f9f9; 
+    .lr-page {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 11px;
+        color: #000;
+        background-color: #fff;
+        line-height: 1.3;
+        margin: 0;
+        padding: 0;
     }
-    .lr-details th, .lr-details td { padding: 5px; border: 1px solid #ddd; }
-    .lr-details th { width: 40%; background-color: #fafafa; }
-    .lr-items th { background-color: #f0f0f0; }
-    .lr-footer { margin-top: 40px; }
-    .lr-signature-box { border-top: 1px solid #333; padding-top: 5px; text-align: center; margin-top: 50px; font-weight: bold; }
+    
+    .lr-border {
+        border: 1px solid #000;
+    }
+    
+    .lr-border-bottom { border-bottom: 1px solid #000; }
+    
+    .lr-grid-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .lr-grid-table th, .lr-grid-table td {
+        border: 1px solid #000;
+        padding: 4px;
+        vertical-align: top;
+    }
+    
+    .lr-copy-heading {
+        text-align: right;
+        font-size: 14px;
+        font-weight: bold;
+        text-transform: uppercase;
+        margin-bottom: 5px;
+    }
+    
+    .lr-company-name {
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+        margin: 5px 0;
+        text-transform: uppercase;
+    }
+    
+    .lr-header-details {
+        font-size: 11px;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    
+    .lr-box-title {
+        font-weight: bold;
+        border-bottom: 1px solid #000;
+        padding: 4px;
+        text-transform: uppercase;
+    }
+    
+    .signature-line {
+        border-top: 1px solid #000;
+        width: 80%;
+        margin: 40px auto 0 auto;
+        padding-top: 5px;
+        text-align: center;
+        font-size: 10px;
+    }
+    
+    .text-center { text-align: center; }
+    .text-right { text-align: right; }
+    .text-left { text-align: left; }
+    .bold { font-weight: bold; }
 </style>
 
-<!-- Loop through selected copies -->
 {% for copy in selected_copies %}
 <div class="lr-page">
+    <div class="lr-copy-heading">{{ copy }} Copy</div>
     
-    <!-- 1. Company Header (Brand & Details) -->
-    <div class="row lr-header text-center">
-        <div class="col-xs-12">
-            {% if company_doc and company_doc.company_logo %}
-                <img src="{{ company_doc.company_logo }}" class="lr-logo" alt="{{ doc.company }}">
-            {% endif %}
-            <h2 class="lr-company-name">{{ doc.company or "Company Name" }}</h2>
-            {% if company_doc %}
-                <div class="lr-company-address">
-                    {{ company_doc.get("address_display", "") | replace('\n', '<br>') }}
-                </div>
-            {% endif %}
-        </div>
-    </div>
-
-    <!-- 2. Dynamic Copy Heading -->
-    <div class="row">
-        <div class="col-xs-4 col-xs-offset-4">
-            <div class="lr-copy-heading">{{ copy }} Copy</div>
-        </div>
-    </div>
-
-    <!-- 3. Standard Document Fields -->
-    <div class="row">
-        <div class="col-xs-6">
-            <table class="table table-bordered lr-details">
-                <tr><th>LR Number</th><td>{{ doc.name }}</td></tr>
-                <tr><th>Date</th><td>{{ doc.get_formatted("date") or doc.get_formatted("posting_date") }}</td></tr>
-                <tr><th>Vehicle Number</th><td>{{ doc.vehicle_number }}</td></tr>
+    <!-- Outer Grid Wrapper -->
+    <div class="lr-border">
+        
+        <!-- HEADER SECTION -->
+        <div class="lr-border-bottom" style="padding: 10px;">
+            <table style="width: 100%; border: none;">
+                <tr>
+                    <td style="width: 25%; font-size: 10px; vertical-align: top; border: none;">
+                        <div><span class="bold">GSTIN:</span> {{ company_doc.gst_category if company_doc else "" }}</div>
+                        <div><span class="bold">Branch:</span> {{ doc.branch or "" }}</div>
+                    </td>
+                    <td style="width: 50%; text-align: center; vertical-align: top; border: none;">
+                        <div class="lr-company-name">{{ doc.company or "TRANSPORT COMPANY NAME" }}</div>
+                        <div class="lr-header-details">
+                            {% if company_doc %}
+                                {{ company_doc.get("address_display", "") | replace('\n', ', ') }}<br>
+                            {% endif %}
+                            <span class="bold">Ph:</span> {{ company_doc.phone_no if company_doc else "" }} | 
+                            <span class="bold">Email:</span> {{ company_doc.email if company_doc else "" }}
+                        </div>
+                    </td>
+                    <td style="width: 25%; font-size: 10px; text-align: right; vertical-align: top; border: none;">
+                        <!-- Additional meta or logo could go here -->
+                    </td>
+                </tr>
             </table>
         </div>
-        <div class="col-xs-6">
-            <table class="table table-bordered lr-details">
-                <tr><th>Origin</th><td>{{ doc.origin }}</td></tr>
-                <tr><th>Destination</th><td>{{ doc.destination }}</td></tr>
+        
+        <!-- DOCUMENT META -->
+        <table class="lr-grid-table" style="border-top: none; border-left: none; border-right: none;">
+            <tr>
+                <td style="width: 25%; border-left: none; border-top: none;"><span class="bold">L.R. No.:</span> {{ doc.name }}</td>
+                <td style="width: 25%; border-top: none;"><span class="bold">Date:</span> {{ doc.get_formatted("date") or doc.get_formatted("posting_date") }}</td>
+                <td style="width: 25%; border-top: none;"><span class="bold">Challan No.:</span> {{ doc.challan_no or "" }}</td>
+                <td style="width: 25%; border-right: none; border-top: none;"><span class="bold">Vehicle No.:</span> {{ doc.vehicle_number }}</td>
+            </tr>
+        </table>
+        
+        <!-- CONSIGNOR & CONSIGNEE BOXES -->
+        <table class="lr-grid-table" style="border-top: none; border-left: none; border-right: none;">
+            <tr>
+                <td style="width: 50%; padding: 0; border-left: none;">
+                    <div class="lr-box-title">From (Consignor)</div>
+                    <div style="padding: 5px; min-height: 80px;">
+                        <div class="bold">{{ doc.consignor_name or doc.consignor }}</div>
+                        <div>{{ doc.consignor_address or "" | replace('\n', '<br>') }}</div>
+                        <div style="margin-top: 5px;"><span class="bold">GSTIN:</span> {{ doc.consignor_gstin or "" }}</div>
+                    </div>
+                </td>
+                <td style="width: 50%; padding: 0; border-right: none;">
+                    <div class="lr-box-title">To (Consignee)</div>
+                    <div style="padding: 5px; min-height: 80px;">
+                        <div class="bold">{{ doc.consignee_name or doc.consignee }}</div>
+                        <div>{{ doc.consignee_address or "" | replace('\n', '<br>') }}</div>
+                        <div><span class="bold">Destination:</span> {{ doc.destination }}</div>
+                        <div style="margin-top: 5px;"><span class="bold">GSTIN:</span> {{ doc.consignee_gstin or "" }}</div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        
+        <!-- CORE GOODS TABLE & FREIGHT BLOCK -->
+        <table class="lr-grid-table" style="border-top: none; border-left: none; border-right: none; border-bottom: none;">
+            <tr>
+                <!-- Items Column -->
+                <td style="width: 70%; padding: 0; border: none; border-right: 1px solid #000;">
+                    <table class="lr-grid-table" style="border: none; height: 100%;">
+                        <thead>
+                            <tr>
+                                <th style="width: 15%; border-top: none; border-left: none;">No. of Packages</th>
+                                <th style="width: 15%; border-top: none;">Packing Method</th>
+                                <th style="width: 40%; border-top: none;">Description of Goods</th>
+                                <th style="width: 15%; border-top: none;">Actual Weight</th>
+                                <th style="width: 15%; border-top: none; border-right: none;">Charged Weight</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in doc.items %}
+                            <tr>
+                                <td class="text-center" style="border-left: none; border-bottom: none;">{{ item.qty }}</td>
+                                <td style="border-bottom: none;">{{ item.packing_method or "" }}</td>
+                                <td style="border-bottom: none;">{{ item.description or item.item_name }}</td>
+                                <td class="text-right" style="border-bottom: none;">{{ item.actual_weight or "" }}</td>
+                                <td class="text-right" style="border-right: none; border-bottom: none;">{{ item.charged_weight or "" }}</td>
+                            </tr>
+                            {% endfor %}
+                            <!-- Fill empty space so vertical lines go all the way down -->
+                            <tr>
+                                <td style="border-left: none; border-bottom: none; height: 100px;"></td>
+                                <td style="border-bottom: none;"></td>
+                                <td style="border-bottom: none;"></td>
+                                <td style="border-bottom: none;"></td>
+                                <td style="border-right: none; border-bottom: none;"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+                
+                <!-- Freight Column -->
+                <td style="width: 30%; padding: 0; border: none;">
+                    <table class="lr-grid-table" style="border: none;">
+                        <tr>
+                            <td class="bold" style="border-top: none; border-left: none;">Freight</td>
+                            <td class="text-right" style="border-top: none; border-right: none;">{{ doc.get_formatted("basic_freight") or "0.00" }}</td>
+                        </tr>
+                        <tr>
+                            <td class="bold" style="border-left: none;">Loading/Unloading</td>
+                            <td class="text-right" style="border-right: none;">{{ doc.get_formatted("hamali_charges") or "0.00" }}</td>
+                        </tr>
+                        <tr>
+                            <td class="bold" style="border-left: none;">Service Charges</td>
+                            <td class="text-right" style="border-right: none;">{{ doc.get_formatted("bilty_charges") or "0.00" }}</td>
+                        </tr>
+                        <tr>
+                            <td class="bold" style="border-left: none;">Detention</td>
+                            <td class="text-right" style="border-right: none;">{{ doc.get_formatted("detention_charges") or "0.00" }}</td>
+                        </tr>
+                        <tr>
+                            <td class="bold" style="border-left: none;">Other Charges</td>
+                            <td class="text-right" style="border-right: none;">{{ doc.get_formatted("other_charges") or "0.00" }}</td>
+                        </tr>
+                        <tr>
+                            <td class="bold" style="border-left: none; border-bottom: none;">G.S.T.</td>
+                            <td class="text-right" style="border-right: none; border-bottom: none;">{{ doc.get_formatted("gst_amount") or "0.00" }}</td>
+                        </tr>
+                        <tr>
+                            <td class="bold" style="border-left: none; font-size: 12px; border-bottom: none; border-top: 2px solid #000;">Total Amount</td>
+                            <td class="text-right bold" style="border-right: none; font-size: 12px; border-bottom: none; border-top: 2px solid #000;">{{ doc.get_formatted("total_amount") or "0.00" }}</td>
+                        </tr>
+                    </table>
+                    
+                    <div style="padding: 10px; text-align: center; border-top: 1px solid #000;">
+                        <div class="bold" style="margin-bottom: 5px;">Payment Status</div>
+                        <!-- Status Label Box -->
+                        <div style="border: 1px solid #000; display: inline-block; padding: 4px 12px; margin-bottom: 3px; font-weight: bold; text-transform: uppercase;">
+                            {{ "To Pay" if doc.payment_type == "To Pay" else ("Paid" if doc.payment_type == "Paid" else ("T.B.B. / To Be Billed" if doc.payment_type in ["TBB", "To Be Billed"] else doc.payment_type or "To Pay")) }}
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        
+        <!-- FOOTER SECTION -->
+        <div style="padding: 10px; border-top: 1px solid #000;">
+            <table style="width: 100%; border: none;">
+                <tr>
+                    <td style="width: 33%; vertical-align: bottom; font-size: 9px; border: none; padding-left: 0;">
+                        <span class="bold">Terms & Conditions:</span><br>
+                        1. Goods transported at owner's risk.<br>
+                        2. Subject to {{ doc.origin or "Local" }} Jurisdiction.<br>
+                        3. All claims must be made within 7 days.
+                    </td>
+                    <td style="width: 22%; vertical-align: bottom; border: none;">
+                        <div class="signature-line">Consignor's Signature</div>
+                    </td>
+                    <td style="width: 22%; vertical-align: bottom; border: none;">
+                        <div class="signature-line">Driver's Signature/Thumb Impression</div>
+                    </td>
+                    <td style="width: 23%; vertical-align: bottom; border: none;">
+                        <div class="signature-line">For {{ doc.company or "Company" }}<br>(Authorized Signatory)</div>
+                    </td>
+                </tr>
             </table>
         </div>
+        
     </div>
-
-    <div class="row">
-        <div class="col-xs-6">
-            <table class="table table-bordered lr-details">
-                <tr><th style="width: 100%;">Consignor</th></tr>
-                <tr><td>{{ doc.consignor_name or doc.consignor }}</td></tr>
-            </table>
-        </div>
-        <div class="col-xs-6">
-            <table class="table table-bordered lr-details">
-                <tr><th style="width: 100%;">Consignee</th></tr>
-                <tr><td>{{ doc.consignee_name or doc.consignee }}</td></tr>
-            </table>
-        </div>
-    </div>
-
-    <!-- 4. Items Table Loop -->
-    <div class="row" style="margin-top: 20px;">
-        <div class="col-xs-12">
-            <table class="table table-bordered lr-items">
-                <thead>
-                    <tr>
-                        <th style="width: 10%;">Sr No</th>
-                        <th style="width: 40%;">Description</th>
-                        <th style="width: 15%; text-align: right;">Qty</th>
-                        <th style="width: 15%; text-align: right;">Rate</th>
-                        <th style="width: 20%; text-align: right;">Amount</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for item in doc.items %}
-                    <tr>
-                        <td>{{ item.idx }}</td>
-                        <td>{{ item.description or item.item_name }}</td>
-                        <td style="text-align: right;">{{ item.get_formatted("qty") }}</td>
-                        <td style="text-align: right;">{{ item.get_formatted("rate") }}</td>
-                        <td style="text-align: right;">{{ item.get_formatted("amount") }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- 5. Signatures Footer -->
-    <div class="row lr-footer">
-        <div class="col-xs-4">
-            <div class="lr-signature-box">Prepared By</div>
-        </div>
-        <div class="col-xs-4">
-            <div class="lr-signature-box">Driver Signature</div>
-        </div>
-        <div class="col-xs-4">
-            <div class="lr-signature-box">Receiver Signature</div>
-        </div>
-    </div>
-
 </div>
 
-<!-- 6. Page Breaks Between Copies -->
 {% if not loop.last %}
 <div class="page-break" style="page-break-after: always;"></div>
 {% endif %}
-
 {% endfor %}
