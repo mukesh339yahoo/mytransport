@@ -113,7 +113,7 @@
             <tr>
                 <td style="width: 25%; border-left: none; border-top: none;"><span class="bold">L.R. No.:</span> {{ doc.name }}</td>
                 <td style="width: 25%; border-top: none;"><span class="bold">Date:</span> {{ doc.get_formatted("date") or doc.get_formatted("posting_date") }}</td>
-                <td style="width: 25%; border-top: none;"><span class="bold">Challan No.:</span> {{ doc.challan_no or "" }}</td>
+                <td style="width: 25%; border-top: none;"><span class="bold">From:</span> {{ doc.from_city or "" }}</td>
                 <td style="width: 25%; border-right: none; border-top: none;"><span class="bold">Vehicle No.:</span> {{ doc.vehicle_number }}</td>
             </tr>
         </table>
@@ -167,12 +167,12 @@
                             </tr>
                             {% endfor %}
                             <!-- Fill empty space so vertical lines go all the way down -->
-                            <tr>
-                                <td style="border-left: none; border-bottom: none; height: 100px;"></td>
-                                <td style="border-bottom: none;"></td>
-                                <td style="border-bottom: none;"></td>
-                                <td style="border-bottom: none;"></td>
-                                <td style="border-right: none; border-bottom: none;"></td>
+                            <tr style="height: 100%;">
+                                <td style="border-left: none; border-bottom: none; height: 100px;">&nbsp;</td>
+                                <td style="border-bottom: none;">&nbsp;</td>
+                                <td style="border-bottom: none;">&nbsp;</td>
+                                <td style="border-bottom: none;">&nbsp;</td>
+                                <td style="border-right: none; border-bottom: none;">&nbsp;</td>
                             </tr>
                         </tbody>
                     </table>
